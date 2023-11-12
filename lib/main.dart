@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guitar_app/app_navigation.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,31 +10,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Guitar App',
       theme: ThemeData(
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         colorScheme: const ColorScheme.dark(primary: Colors.deepOrange),
         useMaterial3: true,
       ),
-      home: const HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text("Home page"),
-      ),
-      body: const Center(
-        child: Text("Hello world"),
-      ),
+      //debugShowCheckedModeBanner: false, // remove the DEBUG banner
+      routerConfig: AppNavigation.router,
     );
   }
 }
