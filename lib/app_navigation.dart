@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:guitar_app/firebase_auth_services.dart';
+import 'package:guitar_app/login_screen.dart';
 import 'package:guitar_app/placeholder.dart';
+import 'package:guitar_app/register_screen.dart';
 import 'package:guitar_app/scaffold_nested.dart';
 
 class AppNavigation {
   AppNavigation._();
-
   // Private navigators
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final _shellNavigatorSearch =
@@ -56,6 +59,13 @@ class AppNavigation {
                     ),
                   ),
                 ],
+                redirect: (BuildContext context, GoRouterState state) {
+                  if (Auth().currentUser == null) {
+                    return '/login';
+                  } else {
+                    return null;
+                  }
+                },
               ),
             ],
           ),
@@ -169,6 +179,18 @@ class AppNavigation {
       //     key: state.pageKey,
       //   ),
       // )
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/login',
+        name: "Login",
+        builder: (context, state) => LoginScreen(),
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/register',
+        name: "Register",
+        builder: (context, state) => RegisterScreen(),
+      )
     ],
   );
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "856167678817",
+    "project_id": "guitar-app-7556d",
+    "storage_bucket": "guitar-app-7556d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:856167678817:android:bc3975de4d3eb39f99fb20",
+        "android_client_info": {
+          "package_name": "com.tosmemi.guitar_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyHNc03WL65MlB-hS83-hnzGlTuE29zQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
