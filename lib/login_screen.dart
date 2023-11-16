@@ -25,14 +25,27 @@ class LoginScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: TextField(
-                controller: _controllerEmail,
+              child: Container(
+                width: 250,
+                child: TextField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(), hintText: 'Email'),
+                  controller: _controllerEmail,
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: TextField(
-                controller: _controllerPassword,
+              child: Container(
+                width: 250,
+                child: TextField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(), hintText: 'Password'),
+                  controller: _controllerPassword,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                ),
               ),
             ),
             Padding(
@@ -42,7 +55,7 @@ class LoginScreen extends StatelessWidget {
                     LogIn(_controllerEmail.text, _controllerPassword.text);
                     context.go('/search');
                   },
-                  child: Text('lol')),
+                  child: Text('login')),
             ),
             Padding(
               padding: const EdgeInsets.all(12.0),
