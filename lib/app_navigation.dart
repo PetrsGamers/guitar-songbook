@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:guitar_app/firebase_auth_services.dart';
 import 'package:guitar_app/login_screen.dart';
 import 'package:guitar_app/placeholder.dart';
+import 'package:guitar_app/profile_screen.dart';
 import 'package:guitar_app/register_screen.dart';
 import 'package:guitar_app/scaffold_nested.dart';
 
@@ -107,19 +108,17 @@ class AppNavigation {
             routes: <RouteBase>[
               GoRoute(
                 path: "/profile",
-                name: "Profile",
-                builder: (BuildContext context, GoRouterState state) =>
-                    PlaceholderScreen(content: "base profile screen"),
+                builder: (context, state) => ProfileScreen(),
                 routes: [
                   GoRoute(
-                    path: "details", // this gets display in the url
+                    path: ":id", // this gets display in the url
                     name:
                         "profile_details", // this is what can be used in context.goNamed()
                     pageBuilder: (context, state) {
                       return CustomTransitionPage<void>(
                         key: state.pageKey,
-                        child: PlaceholderScreen(
-                            content: "Profile detail sub-screen"),
+                        child:
+                            ProfileScreen(userId: state.pathParameters["id"]),
                         transitionsBuilder: (
                           context,
                           animation,
