@@ -16,6 +16,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _controllerEmail.text = "ted@gmail.com";
+    _controllerPassword.text = "tedted";
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),

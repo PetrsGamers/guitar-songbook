@@ -59,13 +59,13 @@ class AppNavigation {
                     ),
                   ),
                 ],
-                redirect: (BuildContext context, GoRouterState state) {
-                  if (Auth().currentUser == null) {
-                    return '/login';
-                  } else {
-                    return null;
-                  }
-                },
+                // redirect: (BuildContext context, GoRouterState state) {
+                //   if (Auth().currentUser == null) {
+                //     return '/login';
+                //   } else {
+                //     return null;
+                //   }
+                // },
               ),
             ],
           ),
