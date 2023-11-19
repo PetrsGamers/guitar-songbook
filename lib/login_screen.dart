@@ -53,6 +53,9 @@ class LoginScreen extends StatelessWidget {
               child: ElevatedButton(
                   onPressed: () {
                     LogIn(_controllerEmail.text, _controllerPassword.text);
+                    print(_controllerEmail.text);
+                    print(_controllerPassword.text);
+
                     context.go('/search');
                   },
                   child: Text('login')),

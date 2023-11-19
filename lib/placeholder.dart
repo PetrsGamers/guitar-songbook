@@ -24,6 +24,7 @@ class PlaceholderScreen extends StatelessWidget {
         body: Center(
           child: Column(
             children: [
+              SearchBox(),
               Text(content),
               Text(user?.email ?? 'nouser'),
               ElevatedButton(
@@ -35,7 +36,7 @@ class PlaceholderScreen extends StatelessWidget {
                   child: const Text("Push a stack screen (details or sth)")),
               ElevatedButton(
                   onPressed: () {
-                    Auth().signOut();
+                    signOut();
                     context.go('/login');
                   },
                   child: Text('logout'))

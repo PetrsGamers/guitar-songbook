@@ -25,6 +25,17 @@ class AppNavigation {
     initialLocation: "/search",
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
+    redirect: (BuildContext context, GoRouterState state) {
+      // Get the current user
+      var currentUser = FirebaseAuth.instance.currentUser;
+
+      // Redirect to login screen if not logged in and not already on the login screen
+      if (currentUser == null && state.fullPath != '/login') {
+        return '/login';
+      }
+      // No redirection needed
+      return null;
+    },
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -59,13 +70,6 @@ class AppNavigation {
                     ),
                   ),
                 ],
-                redirect: (BuildContext context, GoRouterState state) {
-                  if (Auth().currentUser == null) {
-                    return '/login';
-                  } else {
-                    return null;
-                  }
-                },
               ),
             ],
           ),
