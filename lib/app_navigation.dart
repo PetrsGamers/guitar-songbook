@@ -10,6 +10,7 @@ import 'package:guitar_app/scaffold_nested.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'main.dart';
 import 'auth_notfier.dart';
+import 'package:guitar_app/search_screen_detail.dart';
 
 // Private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -67,11 +68,12 @@ final routerProvider = Provider<GoRouter>((ref) {
                     // this is very important, use this when you want to hide
                     // the navbar and make the screen "fullscreen"
                     parentNavigatorKey: _rootNavigatorKey,
-                    path: 'details',
+                    path: ':id',
                     name: 'Search details',
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
-                      child: SearchScreen(content: "Search detail content"),
+                      child: SearchScreenDetail(
+                          songId: state.pathParameters["id"]),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) =>
                               FadeTransition(opacity: animation, child: child),

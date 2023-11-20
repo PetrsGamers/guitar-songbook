@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:guitar_app/songs_class.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -80,6 +81,11 @@ class _SearchBoxState extends State<SearchBox> {
                   elevation: 6,
                   margin: const EdgeInsets.all(10),
                   child: ListTile(
+                    onTap: () {
+                      print('heyo');
+                      print(_filteredSongs[index].text);
+                      context.go('/search/${_filteredSongs[index].id}');
+                    },
                     title: Text(_filteredSongs[index].name),
                     subtitle: Text(_filteredSongs[index].author),
                     trailing:
@@ -99,7 +105,7 @@ class _SearchBoxState extends State<SearchBox> {
     QuerySnapshot querySnapshot = await songs.get();
 
     final allSongs = querySnapshot.docs
-        .map((doc) => Song.fromMap(doc.data() as Map<String, dynamic>))
+        .map((doc) => Song.fromMap(doc.id, doc.data() as Map<String, dynamic>))
         .where((song) => song.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
 
