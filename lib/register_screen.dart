@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,6 +16,19 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    // TODO: create user properly with auth_id
+    Future<void> addUser(email, bio) {
+      // Call the user's CollectionReference to add a new user
+      return users
+          .add({
+            'email': email,
+            'bio': bio,
+          })
+          .then((value) => print("User Added"))
+          .catchError((error) => print("Failed to add user: $error"));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Register'),
@@ -51,6 +65,7 @@ class RegisterScreen extends StatelessWidget {
                     Auth().registerUser(
                         email: _controllerEmail.text,
                         password: _controllerPassword.text);
+                    addUser(_controllerEmail.text, "ahoj :)");
                     context.go('/login');
                   },
                   child: Text('register')),

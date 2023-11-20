@@ -1,92 +1,83 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'firebase_auth_services.dart';
+import 'package:guitar_app/app_user.dart';
+import 'package:guitar_app/profile.dart';
 
-// placeholder screen, replace with your own screen implementation
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key, this.userId});
   final String? userId;
 
   @override
-  Widget build(BuildContext context) {
-    bool viewingSelf = userId == null;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Profile"),
-        backgroundColor: Colors.green,
-      ),
-      body: Stack(
-        clipBehavior: Clip.none,
-        children: <Widget>[
-          Container(
-            height: 140,
-            color: Colors.grey,
-          ),
-          Positioned(
-            top: 80,
-            right: 40,
-            child: CircleAvatar(
-              radius: 60, // The size of the avatar
-              backgroundImage: NetworkImage(
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Google_favicon.png/640px-Google_favicon.png'), // Your image goes here
-              backgroundColor: Colors.transparent,
-            ),
-          ),
-          Padding(
-              padding:
-                  EdgeInsets.only(top: 140), // pad the top profile background
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Username_1992", style: TextStyle(fontSize: 32)),
-                  SongListPreview(
-                      viewingSelf: viewingSelf, listType: ListType.created),
-                  SongListPreview(
-                      viewingSelf: viewingSelf, listType: ListType.favorites)
-                ],
-              ))
-        ],
-      ),
-    );
-  }
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class SongListPreview extends StatelessWidget {
-  const SongListPreview({super.key, this.viewingSelf, required this.listType});
+class _ProfileScreenState extends State<ProfileScreen> {
+  Future<AppUser> getUserById(String documentId) async {
+    var firestore = FirebaseFirestore.instance;
+    var usersCollection = firestore.collection('users');
 
-  final bool? viewingSelf;
-  final ListType listType;
+    var documentSnapshot = await usersCollection.doc(documentId).get();
+
+    if (documentSnapshot.exists) {
+      return AppUser.fromMap(documentSnapshot.data() as Map<String, dynamic>);
+    } else {
+      // Handle the case where the document does not exist
+      throw Exception('User not found');
+    }
+  }
+
+  Future<AppUser> getUserByNickname(String nickname) async {
+    var firestore = FirebaseFirestore.instance;
+    var usersCollection = firestore.collection('users');
+
+    var querySnapshot = await usersCollection
+        .where('name', isEqualTo: nickname) // Adjusted to query by nickname
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      var userDoc = querySnapshot.docs.first;
+      return AppUser.fromMap(userDoc.data() as Map<String, dynamic>);
+    } else {
+      // Handle the case where no user is found
+      throw Exception('User not found');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    String widgetTitle;
-    if (viewingSelf == true && listType == ListType.created) {
-      widgetTitle = "Songs created by you";
-    } else if (viewingSelf == true && listType == ListType.favorites) {
-      widgetTitle = "Your favorite songs";
-    } else if (listType == ListType.created) {
-      widgetTitle = "Songs created by user";
-    } else {
-      widgetTitle = "User's favorite songs";
+    bool viewingSelf = widget.userId == null;
+    if (widget.userId == null) {
+      return Text(
+          "TODO: Implement self profile once it is possible to fetch ID from Auth");
     }
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            child: Row(
-              children: [Text(widgetTitle), Icon(Icons.arrow_forward_ios)],
-            ),
-          ),
-          Text("song1"),
-          Text("song2"),
-          Text("song3"),
-        ],
-      ),
-    );
+    print("user id: ${widget.userId}");
+    //print("object")
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("Profile"),
+          backgroundColor: Colors.green,
+        ),
+        //body: Profile(viewingSelf: viewingSelf),
+        body: FutureBuilder<AppUser>(
+          future: getUserById(widget.userId!),
+          builder: (BuildContext context, AsyncSnapshot<AppUser> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // Show a loading indicator while waiting for the future to complete
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              // Handle the error case
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData) {
+              // The future is complete and returned data
+              AppUser user = snapshot.data!;
+              return Profile(viewingSelf: viewingSelf, user: user);
+            } else {
+              // Handle the case where the future completed with no data
+              return Text('No user found');
+            }
+          },
+        ));
   }
 }
 
