@@ -7,14 +7,20 @@ class Auth {
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  Future<void> loginUser({
+  Future<bool> loginUser({
     required String email,
     required String password,
   }) async {
-    _firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return true; // Login successful
+    } catch (e) {
+      print("Login error: $e");
+      return false; // Login failed
+    }
   }
 
   Future<void> registerUser({
@@ -27,7 +33,13 @@ class Auth {
     );
   }
 
-  Future<void> signOut() async {
-    await _firebaseAuth.signOut();
+  Future<bool> signOut() async {
+    try {
+      await _firebaseAuth.signOut();
+      return true; // logout successful
+    } catch (e) {
+      print("Logout error: $e");
+      return false; // logout failed
+    }
   }
 }

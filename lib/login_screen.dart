@@ -2,20 +2,22 @@ import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:guitar_app/auth_notfier.dart';
+import 'package:guitar_app/main.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'firebase_auth_services.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   LoginScreen({Key? key}) : super(key: key);
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
-  Future<void> LogIn(email, password) async {
-    await Auth().loginUser(email: email, password: password);
-  }
+  // Future<bool> logIn(String email, String password) async {}
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authController = ref.watch(authProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
@@ -51,14 +53,17 @@ class LoginScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: ElevatedButton(
-                  onPressed: () {
-                    LogIn(_controllerEmail.text, _controllerPassword.text);
-                    print(_controllerEmail.text);
-                    print(_controllerPassword.text);
-
+                onPressed: () async {
+                  if (await Auth().loginUser(
+                          email: _controllerEmail.text,
+                          password: _controllerPassword.text) ==
+                      true) {
+                    authController.signIn();
                     context.go('/search');
-                  },
-                  child: Text('login')),
+                  }
+                },
+                child: Text('login'),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(12.0),
