@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:guitar_app/firebase_auth_services.dart';
 import 'package:guitar_app/login_screen.dart';
+import 'package:guitar_app/placeholder.dart';
 import 'package:guitar_app/search_screen.dart';
 import 'package:guitar_app/register_screen.dart';
 import 'package:guitar_app/scaffold_nested.dart';
@@ -80,7 +81,7 @@ class AppNavigation {
                 path: "/add_song",
                 name: "Add song",
                 builder: (BuildContext context, GoRouterState state) =>
-                    SearchScreen(content: "base add_song screen"),
+                    PlaceholderScreen(content: "base add_song screen"),
                 routes: [
                   GoRoute(
                     path: "details",
@@ -88,8 +89,8 @@ class AppNavigation {
                     pageBuilder: (context, state) {
                       return CustomTransitionPage<void>(
                         key: state.pageKey,
-                        child:
-                            SearchScreen(content: "Add_song detail sub-screen"),
+                        child: PlaceholderScreen(
+                            content: "Add_song detail sub-screen"),
                         transitionsBuilder: (
                           context,
                           animation,
@@ -112,7 +113,7 @@ class AppNavigation {
                 path: "/profile",
                 name: "Profile",
                 builder: (BuildContext context, GoRouterState state) =>
-                    SearchScreen(content: "base profile screen"),
+                    PlaceholderScreen(content: "base profile screen"),
                 routes: [
                   GoRoute(
                     path: "details", // this gets display in the url
@@ -121,8 +122,8 @@ class AppNavigation {
                     pageBuilder: (context, state) {
                       return CustomTransitionPage<void>(
                         key: state.pageKey,
-                        child:
-                            SearchScreen(content: "Profile detail sub-screen"),
+                        child: PlaceholderScreen(
+                            content: "Profile detail sub-screen"),
                         transitionsBuilder: (
                           context,
                           animation,
@@ -146,7 +147,7 @@ class AppNavigation {
                 path: "/settings",
                 name: "Settings",
                 builder: (BuildContext context, GoRouterState state) =>
-                    SearchScreen(content: "base settings screen"),
+                    PlaceholderScreen(content: "base settings screen"),
                 routes: [
                   GoRoute(
                     path: "details",
@@ -154,8 +155,8 @@ class AppNavigation {
                     pageBuilder: (context, state) {
                       return CustomTransitionPage<void>(
                         key: state.pageKey,
-                        child:
-                            SearchScreen(content: "Settings detail sub-screen"),
+                        child: PlaceholderScreen(
+                            content: "Settings detail sub-screen"),
                         transitionsBuilder: (
                           context,
                           animation,
