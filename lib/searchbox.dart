@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:guitar_app/songs_class.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -80,6 +81,9 @@ class _SearchBoxState extends State<SearchBox> {
                   elevation: 6,
                   margin: const EdgeInsets.all(10),
                   child: ListTile(
+                    onTap: () {
+                      context.go('/search/${_filteredSongs[index].id}');
+                    },
                     title: Text(_filteredSongs[index].name),
                     subtitle: Text(_filteredSongs[index].author),
                     trailing:
