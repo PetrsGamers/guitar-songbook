@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:guitar_app/firebase_auth_services.dart';
 import 'package:guitar_app/login_screen.dart';
 import 'package:guitar_app/placeholder.dart';
+import 'package:guitar_app/search_screen.dart';
 import 'package:guitar_app/register_screen.dart';
 import 'package:guitar_app/scaffold_nested.dart';
 
@@ -25,6 +26,17 @@ class AppNavigation {
     initialLocation: "/search",
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
+    // redirect: (BuildContext context, GoRouterState state) {
+    //   // Get the current user
+    //   var currentUser = FirebaseAuth.instance.currentUser;
+    //
+    //   // Redirect to login screen if not logged in and not already on the login screen
+    //   if (currentUser == null && state.fullPath != '/login') {
+    //     return '/login';
+    //   }
+    //   // No redirection needed
+    //   return null;
+    // },
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -40,7 +52,7 @@ class AppNavigation {
                 path: "/search",
                 name: "Search",
                 builder: (BuildContext context, GoRouterState state) =>
-                    PlaceholderScreen(content: "base search content"),
+                    SearchScreen(content: "base search content"),
                 routes: [
                   GoRoute(
                     // https://stackoverflow.com/questions/76783122
@@ -51,21 +63,13 @@ class AppNavigation {
                     name: 'Search details',
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
-                      child:
-                          PlaceholderScreen(content: "Search detail content"),
+                      child: SearchScreen(content: "Search detail content"),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) =>
                               FadeTransition(opacity: animation, child: child),
                     ),
                   ),
                 ],
-                redirect: (BuildContext context, GoRouterState state) {
-                  if (Auth().currentUser == null) {
-                    return '/login';
-                  } else {
-                    return null;
-                  }
-                },
               ),
             ],
           ),
