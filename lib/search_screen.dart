@@ -2,7 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:guitar_app/login_screen.dart';
+import 'package:guitar_app/songs_class.dart';
+import 'package:provider/provider.dart';
+import 'Songs_service.dart';
 import 'firebase_auth_services.dart';
+import 'searchbox.dart';
 
 // placeholder screen, replace with your own screen implementation
 class PlaceholderScreen extends StatelessWidget {
