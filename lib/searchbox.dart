@@ -82,6 +82,8 @@ class _SearchBoxState extends State<SearchBox> {
                   margin: const EdgeInsets.all(10),
                   child: ListTile(
                     onTap: () {
+                      print('heyo');
+                      print(_filteredSongs[index].text);
                       context.go('/search/${_filteredSongs[index].id}');
                     },
                     title: Text(_filteredSongs[index].name),
@@ -103,7 +105,7 @@ class _SearchBoxState extends State<SearchBox> {
     QuerySnapshot querySnapshot = await songs.get();
 
     final allSongs = querySnapshot.docs
-        .map((doc) => Song.fromMap(doc.data() as Map<String, dynamic>))
+        .map((doc) => Song.fromMap(doc.id, doc.data() as Map<String, dynamic>))
         .where((song) => song.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
 

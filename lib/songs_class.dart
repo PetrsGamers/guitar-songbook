@@ -10,12 +10,12 @@ class Song {
       required this.name,
       required this.id});
 
-  factory Song.fromMap(Map<String, dynamic> map) {
+  factory Song.fromMap(String id, Map<String, dynamic> map) {
     return Song(
-      author: map['author'] ?? '', // Provide default value if null
-      text: map['text'] ?? '', // Provide default value if null
+      author: map['author'] ?? '',
+      text: map['text'] ?? '',
       name: map['name'] ?? '',
-      id: map['id'] ?? '', // Provide default value if null
+      id: id,
     );
   }
 }
