@@ -51,7 +51,7 @@ class AppNavigation {
                 path: "/search",
                 name: "Search",
                 builder: (BuildContext context, GoRouterState state) =>
-                    PlaceholderScreen(content: "base search content"),
+                    SearchScreen(content: "base search content"),
                 routes: [
                   GoRoute(
                     // https://stackoverflow.com/questions/76783122
@@ -62,8 +62,7 @@ class AppNavigation {
                     name: 'Search details',
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
-                      child:
-                          PlaceholderScreen(content: "Search detail content"),
+                      child: SearchScreen(content: "Search detail content"),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) =>
                               FadeTransition(opacity: animation, child: child),
@@ -81,7 +80,7 @@ class AppNavigation {
                 path: "/add_song",
                 name: "Add song",
                 builder: (BuildContext context, GoRouterState state) =>
-                    PlaceholderScreen(content: "base add_song screen"),
+                    SearchScreen(content: "base add_song screen"),
                 routes: [
                   GoRoute(
                     path: "details",
@@ -89,8 +88,8 @@ class AppNavigation {
                     pageBuilder: (context, state) {
                       return CustomTransitionPage<void>(
                         key: state.pageKey,
-                        child: PlaceholderScreen(
-                            content: "Add_song detail sub-screen"),
+                        child:
+                            SearchScreen(content: "Add_song detail sub-screen"),
                         transitionsBuilder: (
                           context,
                           animation,
@@ -113,7 +112,7 @@ class AppNavigation {
                 path: "/profile",
                 name: "Profile",
                 builder: (BuildContext context, GoRouterState state) =>
-                    PlaceholderScreen(content: "base profile screen"),
+                    SearchScreen(content: "base profile screen"),
                 routes: [
                   GoRoute(
                     path: "details", // this gets display in the url
@@ -122,8 +121,8 @@ class AppNavigation {
                     pageBuilder: (context, state) {
                       return CustomTransitionPage<void>(
                         key: state.pageKey,
-                        child: PlaceholderScreen(
-                            content: "Profile detail sub-screen"),
+                        child:
+                            SearchScreen(content: "Profile detail sub-screen"),
                         transitionsBuilder: (
                           context,
                           animation,
@@ -147,7 +146,7 @@ class AppNavigation {
                 path: "/settings",
                 name: "Settings",
                 builder: (BuildContext context, GoRouterState state) =>
-                    PlaceholderScreen(content: "base settings screen"),
+                    SearchScreen(content: "base settings screen"),
                 routes: [
                   GoRoute(
                     path: "details",
@@ -155,8 +154,8 @@ class AppNavigation {
                     pageBuilder: (context, state) {
                       return CustomTransitionPage<void>(
                         key: state.pageKey,
-                        child: PlaceholderScreen(
-                            content: "Settings detail sub-screen"),
+                        child:
+                            SearchScreen(content: "Settings detail sub-screen"),
                         transitionsBuilder: (
                           context,
                           animation,

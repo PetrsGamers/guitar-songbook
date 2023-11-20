@@ -8,8 +8,8 @@ import 'firebase_auth_services.dart';
 import 'searchbox.dart';
 
 // placeholder screen, replace with your own screen implementation
-class PlaceholderScreen extends StatelessWidget {
-  PlaceholderScreen({super.key, required this.content});
+class SearchScreen extends StatelessWidget {
+  SearchScreen({super.key, required this.content});
   final User? user = Auth().currentUser;
   final String content;
 
