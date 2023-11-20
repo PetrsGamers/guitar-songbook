@@ -7,36 +7,44 @@ import 'package:guitar_app/placeholder.dart';
 import 'package:guitar_app/search_screen.dart';
 import 'package:guitar_app/register_screen.dart';
 import 'package:guitar_app/scaffold_nested.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'main.dart';
+import 'auth_notfier.dart';
 
-class AppNavigation {
-  AppNavigation._();
-  // Private navigators
-  static final _rootNavigatorKey = GlobalKey<NavigatorState>();
-  static final _shellNavigatorSearch =
-      GlobalKey<NavigatorState>(debugLabel: 'shellSearch');
-  static final _shellNavigatorAddSong =
-      GlobalKey<NavigatorState>(debugLabel: 'shellAddSong');
-  static final _shellNavigatorProfile =
-      GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
-  static final _shellNavigatorSettings =
-      GlobalKey<NavigatorState>(debugLabel: 'shellSettings');
+// Private navigators
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final _shellNavigatorSearch =
+    GlobalKey<NavigatorState>(debugLabel: 'shellSearch');
+final _shellNavigatorAddSong =
+    GlobalKey<NavigatorState>(debugLabel: 'shellAddSong');
+final _shellNavigatorProfile =
+    GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
+final _shellNavigatorSettings =
+    GlobalKey<NavigatorState>(debugLabel: 'shellSettings');
 
-  // GoRouter configuration
-  static final GoRouter router = GoRouter(
-    initialLocation: "/search",
+// GoRouter configuration
+final routerProvider = Provider<GoRouter>((ref) {
+  final authController = ref.watch(authProvider);
+  return GoRouter(
+    initialLocation: "/login",
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
-    // redirect: (BuildContext context, GoRouterState state) {
-    //   // Get the current user
-    //   var currentUser = FirebaseAuth.instance.currentUser;
-    //
-    //   // Redirect to login screen if not logged in and not already on the login screen
-    //   if (currentUser == null && state.fullPath != '/login') {
-    //     return '/login';
-    //   }
-    //   // No redirection needed
-    //   return null;
-    // },
+    redirect: (context, state) {
+      /**
+       * Your Redirection Logic Code  Here..........
+       */
+      final isAuthenticated = authController.isLoggedIn;
+
+      /// [state.fullPath] will give current  route Path
+
+      if (state.fullPath == '/login') {
+        return isAuthenticated ? '/search' : null;
+      }
+
+      /// null redirects to Initial Location
+
+      return isAuthenticated ? null : '/login';
+    },
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -75,7 +83,7 @@ class AppNavigation {
           ),
 
           StatefulShellBranch(
-            navigatorKey: AppNavigation._shellNavigatorAddSong,
+            navigatorKey: _shellNavigatorAddSong,
             routes: <RouteBase>[
               GoRoute(
                 path: "/add_song",
@@ -107,7 +115,7 @@ class AppNavigation {
           ),
 
           StatefulShellBranch(
-            navigatorKey: AppNavigation._shellNavigatorProfile,
+            navigatorKey: _shellNavigatorProfile,
             routes: <RouteBase>[
               GoRoute(
                 path: "/profile",
@@ -197,4 +205,4 @@ class AppNavigation {
       )
     ],
   );
-}
+});

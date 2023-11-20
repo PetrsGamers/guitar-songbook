@@ -2,20 +2,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:guitar_app/login_screen.dart';
+import 'package:guitar_app/main.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:provider/provider.dart';
 import 'firebase_auth_services.dart';
 
 // placeholder screen, replace with your own screen implementation
-class PlaceholderScreen extends StatelessWidget {
+class PlaceholderScreen extends ConsumerWidget {
   PlaceholderScreen({super.key, required this.content});
   final User? user = Auth().currentUser;
   final String content;
 
-  Future<void> signOut() async {
-    await Auth().signOut();
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authController = ref.watch(authProvider);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Placeholder screen"),
@@ -34,9 +35,11 @@ class PlaceholderScreen extends StatelessWidget {
                   },
                   child: const Text("Push a stack screen (details or sth)")),
               ElevatedButton(
-                  onPressed: () {
-                    Auth().signOut();
-                    context.go('/login');
+                  onPressed: () async {
+                    if (await Auth().signOut() == true) {
+                      authController.signOut();
+                      context.go('/login');
+                    }
                   },
                   child: Text('logout'))
             ],

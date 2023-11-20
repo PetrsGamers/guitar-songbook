@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:guitar_app/login_screen.dart';
+import 'package:guitar_app/placeholder.dart';
 import 'package:guitar_app/songs_class.dart';
 import 'package:provider/provider.dart';
 import 'firebase_auth_services.dart';
@@ -30,19 +31,6 @@ class SearchScreen extends StatelessWidget {
               SearchBox(),
               Text(content),
               Text(user?.email ?? 'nouser'),
-              ElevatedButton(
-                  onPressed: () {
-                    // this is an example route to showcase the stack navigator working
-                    // alongside the bottom / rail navbar
-                    context.goNamed("Search details");
-                  },
-                  child: const Text("Push a stack screen (details or sth)")),
-              ElevatedButton(
-                  onPressed: () {
-                    signOut();
-                    context.go('/login');
-                  },
-                  child: Text('logout'))
             ],
           ),
         ));
