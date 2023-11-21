@@ -1,15 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:guitar_app/firebase_auth_services.dart';
 import 'package:guitar_app/login_screen.dart';
 import 'package:guitar_app/placeholder.dart';
 import 'package:guitar_app/search_screen.dart';
+import 'package:guitar_app/profile_screen.dart';
 import 'package:guitar_app/register_screen.dart';
 import 'package:guitar_app/scaffold_nested.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'main.dart';
-import 'auth_notfier.dart';
 import 'package:guitar_app/search_screen_detail.dart';
 
 // Private navigators
@@ -31,19 +29,12 @@ final routerProvider = Provider<GoRouter>((ref) {
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
     redirect: (context, state) {
-      /**
-       * Your Redirection Logic Code  Here..........
-       */
       final isAuthenticated = authController.isLoggedIn;
-
-      /// [state.fullPath] will give current  route Path
 
       if (state.fullPath == '/login') {
         return isAuthenticated ? '/search' : null;
       }
-
-      /// null redirects to Initial Location
-
+      // null represents no redirect
       return isAuthenticated ? null : '/login';
     },
     routes: [
@@ -121,19 +112,17 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: <RouteBase>[
               GoRoute(
                 path: "/profile",
-                name: "Profile",
-                builder: (BuildContext context, GoRouterState state) =>
-                    PlaceholderScreen(content: "base profile screen"),
+                builder: (context, state) => ProfileScreen(),
                 routes: [
                   GoRoute(
-                    path: "details", // this gets display in the url
+                    path: ":id", // this gets display in the url
                     name:
                         "profile_details", // this is what can be used in context.goNamed()
                     pageBuilder: (context, state) {
                       return CustomTransitionPage<void>(
                         key: state.pageKey,
-                        child: PlaceholderScreen(
-                            content: "Profile detail sub-screen"),
+                        child:
+                            ProfileScreen(userId: state.pathParameters["id"]),
                         transitionsBuilder: (
                           context,
                           animation,
@@ -183,16 +172,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-
-      /// Player
-      // GoRoute(
-      //   parentNavigatorKey: _rootNavigatorKey,
-      //   path: '/player',
-      //   name: "Player",
-      //   builder: (context, state) => PlayerView(
-      //     key: state.pageKey,
-      //   ),
-      // )
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
         path: '/login',
