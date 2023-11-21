@@ -31,7 +31,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final isAuthenticated = authController.isLoggedIn;
 
-      if (state.fullPath == '/login') {
+      if (state.fullPath == '/login' || state.fullPath == '/register') {
         return isAuthenticated ? '/search' : null;
       }
       // null represents no redirect
