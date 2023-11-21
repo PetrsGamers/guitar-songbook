@@ -23,14 +23,22 @@ class Auth {
     }
   }
 
-  Future<void> registerUser({
+  Future<bool> registerUser({
     required String email,
     required String password,
   }) async {
-    _firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      // don't you dare forget await here or anywhere else 💀💀💀
+      await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      print("User $email succesfully registered to Auth");
+      return true;
+    } catch (e) {
+      print("error registering the user: $e");
+      return false;
+    }
   }
 
   Future<bool> signOut() async {

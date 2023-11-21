@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,25 +12,21 @@ class RegisterScreen extends StatelessWidget {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
-  Future<void> Register() async {
-    await Auth().registerUser(
-        email: _controllerEmail.text, password: _controllerPassword.text);
-  }
-
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
-    // TODO: create user properly with auth_id
-    Future<void> addUser(email, bio) {
+    Future<void> addUser(name, email, bio) {
       User? currentUser = Auth().currentUser;
       if (currentUser == null) {
-        print("error adding user");
+        print("error adding user, the currentUser in Auth session is null");
         return Future(() => null);
       }
+      print("user Auth id is: ${currentUser.uid}");
       return users
           .doc(currentUser
               .uid) // create a new user with the same id as the auth_id
           .set({
+            'name': name,
             'email': email,
             'bio': bio,
           })
@@ -69,11 +67,14 @@ class RegisterScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                   onPressed: () async {
-                    await Auth().registerUser(
-                        email: _controllerEmail.text,
-                        password: _controllerPassword.text);
-                    addUser(_controllerEmail.text, "ahoj :)");
-                    context.go('/login');
+                    if (await Auth().registerUser(
+                            email: _controllerEmail.text,
+                            password: _controllerPassword.text) ==
+                        true) {
+                      await addUser("placeholder_nickname",
+                          _controllerEmail.text, "ahoj :)");
+                      context.go('/login');
+                    }
                   },
                   child: Text('register')),
             ),
