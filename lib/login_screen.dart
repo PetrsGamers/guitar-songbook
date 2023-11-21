@@ -1,8 +1,5 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:guitar_app/auth_notfier.dart';
 import 'package:guitar_app/main.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -69,7 +66,7 @@ class LoginScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(12.0),
               child: ElevatedButton(
                   onPressed: () => context.go('/register'),
-                  child: Text('register')),
+                  child: const Text('Go to register screen')),
             )
           ],
         ),
