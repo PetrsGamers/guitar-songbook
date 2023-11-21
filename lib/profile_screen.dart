@@ -1,17 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:guitar_app/app_user.dart';
+import 'package:guitar_app/firebase_auth_services.dart';
 import 'package:guitar_app/profile.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key, this.userId});
-  final String? userId;
+  String? userId;
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
   Future<AppUser> getUserById(String documentId) async {
     var firestore = FirebaseFirestore.instance;
     var usersCollection = firestore.collection('users');
@@ -21,7 +18,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (documentSnapshot.exists) {
       return AppUser.fromMap(documentSnapshot.data() as Map<String, dynamic>);
     } else {
-      // Handle the case where the document does not exist
       throw Exception('User not found');
     }
   }
@@ -30,50 +26,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var firestore = FirebaseFirestore.instance;
     var usersCollection = firestore.collection('users');
 
-    var querySnapshot = await usersCollection
-        .where('name', isEqualTo: nickname) // Adjusted to query by nickname
-        .limit(1)
-        .get();
+    var querySnapshot =
+        await usersCollection.where('name', isEqualTo: nickname).limit(1).get();
 
     if (querySnapshot.docs.isNotEmpty) {
       var userDoc = querySnapshot.docs.first;
       return AppUser.fromMap(userDoc.data() as Map<String, dynamic>);
     } else {
-      // Handle the case where no user is found
       throw Exception('User not found');
     }
   }
 
+  final User? selfUser = Auth().currentUser;
+
   @override
   Widget build(BuildContext context) {
-    bool viewingSelf = widget.userId == null;
-    if (widget.userId == null) {
-      return Text(
-          "TODO: Implement self profile once it is possible to fetch ID from Auth");
+    bool viewingSelf = userId == null;
+    if (selfUser == null) {
+      return Text("Error fetching user data");
     }
-    print("user id: ${widget.userId}");
+    userId ??= selfUser!.uid;
+    //return Text("${selfUser!.uid}");
     //print("object")
     return Scaffold(
         appBar: AppBar(
           title: const Text("Profile"),
           backgroundColor: Colors.green,
         ),
-        //body: Profile(viewingSelf: viewingSelf),
         body: FutureBuilder<AppUser>(
-          future: getUserById(widget.userId!),
+          future: getUserById(userId!),
           builder: (BuildContext context, AsyncSnapshot<AppUser> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              // Show a loading indicator while waiting for the future to complete
               return CircularProgressIndicator();
             } else if (snapshot.hasError) {
-              // Handle the error case
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (snapshot.hasData) {
-              // The future is complete and returned data
               AppUser user = snapshot.data!;
               return Profile(viewingSelf: viewingSelf, user: user);
             } else {
-              // Handle the case where the future completed with no data
               return Text('No user found');
             }
           },

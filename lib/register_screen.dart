@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,9 +20,15 @@ class RegisterScreen extends StatelessWidget {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     // TODO: create user properly with auth_id
     Future<void> addUser(email, bio) {
-      // Call the user's CollectionReference to add a new user
+      User? currentUser = Auth().currentUser;
+      if (currentUser == null) {
+        print("error adding user");
+        return Future(() => null);
+      }
       return users
-          .add({
+          .doc(currentUser
+              .uid) // create a new user with the same id as the auth_id
+          .set({
             'email': email,
             'bio': bio,
           })
@@ -61,8 +68,8 @@ class RegisterScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                  onPressed: () {
-                    Auth().registerUser(
+                  onPressed: () async {
+                    await Auth().registerUser(
                         email: _controllerEmail.text,
                         password: _controllerPassword.text);
                     addUser(_controllerEmail.text, "ahoj :)");
