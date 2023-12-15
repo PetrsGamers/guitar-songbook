@@ -41,6 +41,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
           selectedIndex: navigationShell.currentIndex,
           destinations: destinations,
           onDestinationSelected: _goBranch,
+          indicatorColor: Colors.deepOrange,
         ),
       );
     } else {
@@ -52,6 +53,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
               selectedIndex: navigationShell.currentIndex,
               onDestinationSelected: _goBranch,
               labelType: NavigationRailLabelType.all,
+              indicatorColor: Colors.deepOrange,
               destinations: destinations.map((destination) {
                 return NavigationRailDestination(
                   icon: destination.icon,
