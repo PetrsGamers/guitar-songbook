@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guitar_app/songs_class.dart';
+import 'detail_song_view.dart';
 
 class SongDetail extends StatelessWidget {
   final Song song;
@@ -14,7 +15,7 @@ class SongDetail extends StatelessWidget {
         ),
         body: Container(
           child: Column(
-            children: [Text(song.author), Text(song.text)],
+            children: [Text(song.author), DetailSongView(text: song.text)],
           ),
         ));
   }
