@@ -6,6 +6,8 @@ import 'package:guitar_app/search_screen.dart';
 import 'package:guitar_app/profile_screen.dart';
 import 'package:guitar_app/register_screen.dart';
 import 'package:guitar_app/scaffold_nested.dart';
+import 'package:guitar_app/user_created_screen.dart';
+import 'package:guitar_app/user_favorites_screen.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'main.dart';
 import 'package:guitar_app/search_screen_detail.dart';
@@ -115,24 +117,61 @@ final routerProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) => ProfileScreen(),
                 routes: [
                   GoRoute(
-                    path: ":id", // this gets display in the url
-                    name:
-                        "profile_details", // this is what can be used in context.goNamed()
-                    pageBuilder: (context, state) {
-                      return CustomTransitionPage<void>(
-                        key: state.pageKey,
-                        child:
-                            ProfileScreen(userId: state.pathParameters["id"]),
-                        transitionsBuilder: (
-                          context,
-                          animation,
-                          secondaryAnimation,
-                          child,
-                        ) =>
-                            FadeTransition(opacity: animation, child: child),
-                      );
-                    },
-                  ),
+                      path: ":id", // this gets displayed in the url
+                      name:
+                          "profile_details", // this is what can be used in context.goNamed()
+                      pageBuilder: (context, state) {
+                        return CustomTransitionPage<void>(
+                          key: state.pageKey,
+                          child:
+                              ProfileScreen(userId: state.pathParameters["id"]),
+                          transitionsBuilder: (
+                            context,
+                            animation,
+                            secondaryAnimation,
+                            child,
+                          ) =>
+                              FadeTransition(opacity: animation, child: child),
+                        );
+                      },
+                      routes: [
+                        GoRoute(
+                            path: "favorites",
+                            name: "favorites",
+                            pageBuilder: (context, state) {
+                              return CustomTransitionPage<void>(
+                                key: state.pageKey,
+                                child: UserFavoritesScreen(
+                                    userId: state.pathParameters["id"]),
+                                transitionsBuilder: (
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                  child,
+                                ) =>
+                                    FadeTransition(
+                                        opacity: animation, child: child),
+                              );
+                            }),
+                        GoRoute(
+                            path: "created",
+                            name: "created",
+                            pageBuilder: (context, state) {
+                              return CustomTransitionPage<void>(
+                                key: state.pageKey,
+                                child: UserCreatedScreen(
+                                    userId: state.pathParameters["id"]),
+                                transitionsBuilder: (
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                  child,
+                                ) =>
+                                    FadeTransition(
+                                        opacity: animation, child: child),
+                              );
+                            }),
+                      ]),
                 ],
               ),
             ],
