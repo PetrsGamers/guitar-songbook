@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:guitar_app/app_user.dart';
+import 'package:guitar_app/created_preview.dart';
+import 'package:guitar_app/favorite_preview.dart';
 import 'package:guitar_app/profile_screen.dart';
 import 'package:guitar_app/song_list_preview.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({super.key, required this.viewingSelf, required this.user});
-
-  final bool viewingSelf;
+  const Profile({super.key, required this.user});
   final AppUser user;
 
   @override
@@ -41,10 +41,8 @@ class Profile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(user.name, style: const TextStyle(fontSize: 32)),
-                SongListPreview(
-                    viewingSelf: viewingSelf, listType: ListType.created),
-                SongListPreview(
-                    viewingSelf: viewingSelf, listType: ListType.favorites)
+                FavoritePreview(userId: user.id),
+                CreatedPreview(userId: user.id)
               ],
             ))
       ],

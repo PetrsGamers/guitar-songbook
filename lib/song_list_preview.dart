@@ -30,9 +30,6 @@ class SongListPreview extends StatelessWidget {
               children: [Text(widgetTitle), Icon(Icons.arrow_forward_ios)],
             ),
           ),
-          Text("song1"),
-          Text("song2"),
-          Text("song3"),
         ],
       ),
     );

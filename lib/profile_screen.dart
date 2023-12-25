@@ -7,7 +7,7 @@ import 'package:guitar_app/profile.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key, this.userId});
-  String? userId;
+  final String? userId;
 
   Future<AppUser> getUserById(String documentId) async {
     var firestore = FirebaseFirestore.instance;
@@ -16,7 +16,8 @@ class ProfileScreen extends StatelessWidget {
     var documentSnapshot = await usersCollection.doc(documentId).get();
 
     if (documentSnapshot.exists) {
-      return AppUser.fromMap(documentSnapshot.data() as Map<String, dynamic>);
+      return AppUser.fromMap(
+          documentId, documentSnapshot.data() as Map<String, dynamic>);
     } else {
       throw Exception('User not found');
     }
@@ -31,40 +32,41 @@ class ProfileScreen extends StatelessWidget {
 
     if (querySnapshot.docs.isNotEmpty) {
       var userDoc = querySnapshot.docs.first;
-      return AppUser.fromMap(userDoc.data() as Map<String, dynamic>);
+      return AppUser.fromMap(
+          userDoc.id, userDoc.data() as Map<String, dynamic>);
     } else {
       throw Exception('User not found');
     }
   }
 
-  final User? selfUser = Auth().currentUser;
+  final User? currentUser = Auth().currentUser;
 
   @override
   Widget build(BuildContext context) {
-    bool viewingSelf = userId == null;
-    if (selfUser == null) {
-      return Text("Error fetching user data");
+    String userID;
+    if (userId == null) {
+      userID = currentUser!.uid;
+    } else {
+      userID = userId!;
     }
-    userId ??= selfUser!.uid;
-    //return Text("${selfUser!.uid}");
-    //print("object")
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Profile"),
           backgroundColor: Colors.green,
         ),
         body: FutureBuilder<AppUser>(
-          future: getUserById(userId!),
+          future: getUserById(userID),
           builder: (BuildContext context, AsyncSnapshot<AppUser> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (snapshot.hasData) {
               AppUser user = snapshot.data!;
-              return Profile(viewingSelf: viewingSelf, user: user);
+              return Profile(user: user);
             } else {
-              return Text('No user found');
+              return const Text('No user found');
             }
           },
         ));
