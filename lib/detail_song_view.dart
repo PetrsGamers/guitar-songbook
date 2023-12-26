@@ -10,25 +10,35 @@ class DetailSongView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text1 = separateText(text);
-    final distance = charDistancesBetweenBrackets(text);
-    final textik = addSpacesCountWithDistances(text1[0], distance);
-    return Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start, // Align children to the start
+    final linesstring = text.replaceAll("\\n", "\n"); // set right newlines
+    List<String> lines = linesstring.split('\n'); //split by new lines
+    List<Widget> textWidgets = []; // Store widgets to display
+    print(lines);
+    for (var line in lines) {
+      final text1 = separateText(line);
+      final distance = charDistancesBetweenBrackets(line);
+      final textik = addSpacesCountWithDistances(text1[0], distance);
+      textWidgets.add(
+        Text(
+          textik,
+          style: TextStyle(fontFamily: "Monospace"),
+        ),
+      );
+      textWidgets.add(
+        Text(
+          text1[1],
+          style: TextStyle(fontFamily: "Monospace"),
+        ),
+      );
+    }
 
-        children: [
-          Text(
-            textik,
-            style: TextStyle(fontFamily: "Monospace"),
-          ),
-          Text(
-            text1[1],
-            style: TextStyle(fontFamily: "Monospace"),
-          )
-        ]);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: textWidgets.isNotEmpty ? textWidgets : [Text("")],
+    );
   }
 
+  // function to separate text into two parts
   List<String> separateText(String inputText) {
     RegExp exp =
         RegExp(r'\[(.*?)\]'); // Regular expression to find text within brackets
@@ -41,13 +51,11 @@ class DetailSongView extends StatelessWidget {
       textInBrackets += '${match.group(1)} ';
     }
 
-    textOutsideBrackets = inputText.replaceAllMapped(
-        exp, (match) => ''); // Remove text within brackets
-    print(textInBrackets.trim());
-    print(textOutsideBrackets.trim());
+    textOutsideBrackets = inputText.replaceAllMapped(exp, (match) => '');
     return [textInBrackets.trim(), textOutsideBrackets.trim()];
   }
 
+  // function to count the distance between two chords
   List<int> charDistancesBetweenBrackets(String text) {
     List<int> distances = [];
     int start = -1;
@@ -64,19 +72,22 @@ class DetailSongView extends StatelessWidget {
     return distances;
   }
 
+  // function to add spaces to space it evenly above the text
   String addSpacesCountWithDistances(String input, List<int> distances) {
     List<String> chars = input.split(' ');
     String result = '';
     int index = 0;
-    print("inpout " + '${input}');
-    print(distances);
     for (String char in chars) {
       if (char.isNotEmpty) {
-        result += char + '${' ' * distances[index]}';
-        index = (index + 1) % distances.length;
+        if (char.length > 1) {
+          result += char + '${' ' * (distances[index] - char.length + 1)}';
+          index = (index + 1) % distances.length;
+        } else {
+          result += char + '${' ' * distances[index]}';
+          index = (index + 1) % distances.length;
+        }
       }
     }
-    print(result);
-    return result.trim(); // Trim to remove extra space at the end
+    return result.trim();
   }
 }
