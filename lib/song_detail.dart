@@ -1,28 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:guitar_app/songs_class.dart';
 import 'detail_song_view.dart';
+import 'favourite_checkbox.dart';
+import 'firebase_auth_services.dart';
 
-class SongDetail extends StatelessWidget {
+class SongDetail extends StatefulWidget {
   final Song song;
   const SongDetail({Key? key, required this.song}) : super(key: key);
 
   @override
+  _SongDetailState createState() => _SongDetailState();
+}
+
+class _SongDetailState extends State<SongDetail> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(song.name),
+        title: Text(widget.song.name),
         backgroundColor: Colors.deepOrange,
       ),
       body: Container(
-        padding: EdgeInsets.all(8.0), // Adjust padding here as needed
+        padding: EdgeInsets.all(8.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment
-              .start, // Align widgets to the start of the column
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(song.author),
-            SizedBox(
-                height: 8.0), // Add a sized box for vertical spacing if needed
-            DetailSongView(text: song.text),
+            Text(widget.song.author),
+            Row(
+              children: [
+                Text('Favourite ?'),
+                FavouriteCheckbox(songId: widget.song.id),
+              ],
+            ),
+            Expanded(
+              child: DetailSongView(text: widget.song.text),
+            ),
           ],
         ),
       ),
