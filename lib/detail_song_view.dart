@@ -59,7 +59,11 @@ class DetailSongView extends StatelessWidget {
   List<int> charDistancesBetweenBrackets(String text) {
     List<int> distances = [];
     int start = -1;
-
+    if (text.indexOf('[') != 0) {
+      distances.add(text.indexOf('['));
+    } else {
+      distances.add(0);
+    }
     for (int i = 0; i < text.length; i++) {
       if (text[i] == ']') {
         start = i;
@@ -77,17 +81,19 @@ class DetailSongView extends StatelessWidget {
     List<String> chars = input.split(' ');
     String result = '';
     int index = 0;
+    int prevcharlenght = 1;
     for (String char in chars) {
       if (char.isNotEmpty) {
-        if (char.length > 1) {
-          result += char + '${' ' * (distances[index] - char.length + 1)}';
+        if (prevcharlenght > 1) {
+          result += '${' ' * (distances[index] - prevcharlenght + 1)}' + char;
           index = (index + 1) % distances.length;
         } else {
-          result += char + '${' ' * distances[index]}';
+          result += '${' ' * (distances[index])}' + char;
           index = (index + 1) % distances.length;
         }
+        prevcharlenght = char.length;
       }
     }
-    return result.trim();
+    return result;
   }
 }
