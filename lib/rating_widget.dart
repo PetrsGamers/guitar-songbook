@@ -35,7 +35,7 @@ class _RatingWidgetState extends State<RatingsubWidget> {
       future: fetchUserRating(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // Or any loading indicator
+          return CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
@@ -194,8 +194,8 @@ class _RatingWidgetState extends State<RatingsubWidget> {
           .get();
 
       final ratingData = {
-        'author': authorRef, // Replace with the actual user ID
-        'rating': rating, // Replace with the actual rating value
+        'author': authorRef,
+        'rating': rating,
       };
       if (existingRating.docs.isEmpty) {
         await ratingCollectionRef.add(ratingData);
@@ -234,8 +234,7 @@ class _RatingWidgetState extends State<RatingsubWidget> {
       int count = 0;
 
       querySnapshot.docs.forEach((doc) {
-        final rating =
-            doc.data()['rating']; // Replace 'ranking' with your field name
+        final rating = doc.data()['rating'];
         if (rating != null && rating is double) {
           totalRanking += rating;
           count++;
