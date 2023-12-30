@@ -4,6 +4,8 @@ class Song {
   String name;
   String id;
 
+  double? rating;
+
   Song(
       {required this.author,
       required this.text,
