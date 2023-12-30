@@ -104,9 +104,7 @@ class _AnnotateState extends State<Annotate> {
       //widget.listMap[lineIndex].toString(),
       widget.generateString(lineLength, widget.listMap[lineIndex]),
       style: const TextStyle(
-        backgroundColor: Colors.red,
-        fontSize: 22,
-      ), // TODO: add monospace font family
+          backgroundColor: Colors.red, fontSize: 22, fontFamily: "Monospace"),
     );
   }
 
@@ -119,7 +117,8 @@ class _AnnotateState extends State<Annotate> {
       spans.add(
         TextSpan(
           text: character,
-          style: const TextStyle(fontSize: 22.0, color: Colors.white),
+          style: const TextStyle(
+              fontSize: 22.0, color: Colors.white, fontFamily: "Monospace"),
           recognizer: TapGestureRecognizer()
             ..onTap = () {
               // Show the Chord Modal or handle the tap

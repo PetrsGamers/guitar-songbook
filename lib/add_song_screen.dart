@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:guitar_app/add_metadata.dart';
 import 'package:guitar_app/add_text.dart';
 import 'package:guitar_app/annotate.dart';
@@ -38,22 +39,23 @@ class _AddSongScreenState extends State<AddSongScreen> {
   }
 
   void sumbitSongToServerCallback(
-      String songName, String musician, String BPM, String year) {
+      String songName, String musician, String bpm, String year) {
     // 1) parse the data into db-friendly format
     String serializedAnnotatedText = serializeLyrics();
     // 2) save the data properly
     CollectionReference songs = FirebaseFirestore.instance.collection('songs');
-    songs
-        .add({
-          'name': songName,
-          'author': musician,
-          'bpm': BPM,
-          'year': year,
-          'user': Auth().currentUser!.uid,
-          'text': serializedAnnotatedText
-        })
-        .then((value) => print("New song added"))
-        .catchError((error) => print("Failed to add song: $error"));
+    songs.add({
+      'name': songName,
+      'author': musician,
+      'bpm': bpm,
+      'year': year,
+      'user': Auth().currentUser!.uid,
+      'text': serializedAnnotatedText
+    }).then((DocumentReference doc) {
+      print("New song added");
+      // redirect user to the detail screen of the song
+      context.go("/search/${doc.id}");
+    }).catchError((error) => print("Failed to add song: $error"));
 
     // 3) clear out state
     setState(() {
