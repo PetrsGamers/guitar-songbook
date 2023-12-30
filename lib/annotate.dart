@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:guitar_app/chord.dart';
 
-class AnnotateScreen extends StatefulWidget {
-  AnnotateScreen({super.key, required this.text})
+class Annotate extends StatefulWidget {
+  Annotate(
+      {super.key,
+      required this.text,
+      required this.nextScreenCallback,
+      required this.saveAnnotations})
       : listMap = _createListMapFromText(text);
   final String text;
+  final Function(bool) nextScreenCallback;
+  final Function(List<Map<int, String>>) saveAnnotations;
 
   final List<Map<int, String>> listMap;
   static List<Map<int, String>> _createListMapFromText(String text) {
@@ -44,10 +50,10 @@ class AnnotateScreen extends StatefulWidget {
   }
 
   @override
-  State<AnnotateScreen> createState() => _AnnotateScreenState();
+  State<Annotate> createState() => _AnnotateState();
 }
 
-class _AnnotateScreenState extends State<AnnotateScreen> {
+class _AnnotateState extends State<Annotate> {
   void annotateChar(lineIndex, charIndex, chord) {
     setState(() {
       if (widget.listMap[lineIndex][charIndex] == chord) {
@@ -76,21 +82,20 @@ class _AnnotateScreenState extends State<AnnotateScreen> {
       textList.add(buildTappableLyricsLine(line, lineIndex, context));
       lineIndex++;
     }
+    // add button with callbacks at the end of the Widget list
+    textList.add(ElevatedButton(
+        onPressed: () {
+          widget.nextScreenCallback(true);
+          widget.saveAnnotations(widget.listMap);
+        },
+        child: const Text("Proceed to add song metadata")));
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Chord Annotation'),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: textList,
-          ),
-        ),
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: textList),
     );
   }
 
@@ -127,7 +132,6 @@ class _AnnotateScreenState extends State<AnnotateScreen> {
         ),
       );
     }
-
     return RichText(
       text: TextSpan(
         children: spans,

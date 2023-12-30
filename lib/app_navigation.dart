@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:guitar_app/add_metadata.dart';
 import 'package:guitar_app/add_song_screen.dart';
-import 'package:guitar_app/annotate_screen.dart';
+import 'package:guitar_app/annotate.dart';
 import 'package:guitar_app/login_screen.dart';
 import 'package:guitar_app/placeholder.dart';
 import 'package:guitar_app/search_screen.dart';
@@ -86,7 +87,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: "/add_song",
                 name: "Add song",
                 builder: (BuildContext context, GoRouterState state) =>
-                    const AnnotateScreen(),
+                    const AddSongScreen(),
                 routes: [
                   GoRoute(
                     path: "details",
