@@ -38,8 +38,8 @@ class _AddSongScreenState extends State<AddSongScreen> {
     return lines.join('\n');
   }
 
-  void sumbitSongToServerCallback(
-      String songName, String musician, String bpm, String year) {
+  void sumbitSongToServerCallback(String songName, String musician, String bpm,
+      String year, String songKey) {
     // 1) parse the data into db-friendly format
     String serializedAnnotatedText = serializeLyrics();
     // 2) save the data properly
@@ -50,7 +50,8 @@ class _AddSongScreenState extends State<AddSongScreen> {
       'bpm': bpm,
       'year': year,
       'user': Auth().currentUser!.uid,
-      'text': serializedAnnotatedText
+      'text': serializedAnnotatedText,
+      'key': songKey
     }).then((DocumentReference doc) {
       print("New song added");
       // redirect user to the detail screen of the song

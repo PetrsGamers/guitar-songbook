@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:guitar_app/chord.dart';
 
 class AddMetadata extends StatefulWidget {
   const AddMetadata(
       {super.key, required this.nextScreenCallback, required this.onSubmit});
   final Function(bool) nextScreenCallback;
-  final Function(String, String, String, String) onSubmit;
+  final Function(String, String, String, String, String) onSubmit;
 
   @override
   State<AddMetadata> createState() => _AddMetadataState();
 }
 
 class _AddMetadataState extends State<AddMetadata> {
+  String dropdownSongKeyValue = Chord.circleOfFifths.first;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _controllerSongName = TextEditingController();
   final TextEditingController _controllerMusician = TextEditingController();
@@ -76,6 +78,20 @@ class _AddMetadataState extends State<AddMetadata> {
                   border: OutlineInputBorder(),
                   hintText: 'Year (release date)'),
               controller: _controllerYear),
+          DropdownButton(
+              value: dropdownSongKeyValue,
+              items: Chord.circleOfFifths
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  dropdownSongKeyValue = value!;
+                });
+              }),
           Row(
             children: [
               ElevatedButton(
@@ -97,7 +113,8 @@ class _AddMetadataState extends State<AddMetadata> {
                           _controllerSongName.text,
                           _controllerMusician.text,
                           _controllerBPM.text,
-                          _controllerYear.text);
+                          _controllerYear.text,
+                          dropdownSongKeyValue);
                       widget.nextScreenCallback(true);
                     }
                   },
