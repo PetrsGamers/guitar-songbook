@@ -67,7 +67,7 @@ class _CommentScreenState extends State<CommentScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: openCommentWindow,
         child: Icon(Icons.add),
-        backgroundColor: Colors.deepOrange, // Set FAB background color
+        backgroundColor: Colors.deepOrange,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
@@ -80,7 +80,7 @@ class _CommentScreenState extends State<CommentScreen> {
       Map<String, dynamic> commentData = comment.data() as Map<String, dynamic>;
       DocumentReference userRef = commentData['author'];
 
-      //DocumentSnapshot userSnapshot = await userRef.id;
+
       print(userRef.id);
       final userSnapshot = await FirebaseFirestore.instance
           .collection('users')
@@ -89,7 +89,7 @@ class _CommentScreenState extends State<CommentScreen> {
       Map<String, dynamic>? userData = userSnapshot.data();
       print(commentData);
       print(userData);
-      // // Build the comment widget with user details
+      // Build the comment widget with user details
       commentWidgets.add(
         Container(
           decoration: BoxDecoration(
@@ -143,9 +143,8 @@ class _CommentScreenState extends State<CommentScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.close, color: Colors.red), // Close icon
-                        SizedBox(width: 4.0), // Space between icon and text
-                      ],
+                        Icon(Icons.close, color: Colors.red),
+                        SizedBox(width: 4.0),
                     ),
                   ),
                 ),
@@ -182,7 +181,7 @@ class _CommentScreenState extends State<CommentScreen> {
                   ElevatedButton(
                     onPressed: () {
                       String commentText =
-                          textController.text.trim(); // Get text from TextField
+                          textController.text.trim();
                       if (commentText.isNotEmpty) {
                         print('Comment sent: $commentText');
                         _sendComment(commentText);
@@ -207,9 +206,7 @@ class _CommentScreenState extends State<CommentScreen> {
     );
   }
 
-  Future<void> _deleteComment(commentref) async {
-    commentref.delete();
-  }
+
 
   Future<void> _sendComment(text) async {
     try {
@@ -234,13 +231,8 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 
   String _formatTimestamp(Timestamp timestamp) {
-    // Convert Firebase Timestamp to DateTime
     DateTime dateTime = timestamp.toDate();
-
-    // Format the DateTime using intl package's DateFormat
-    // Example: 'MMMM d, y - HH:mm' will display as 'January 1, 2023 - 15:30'
     String formattedTime = DateFormat('MMMM d, y - HH:mm').format(dateTime);
-
     return formattedTime;
   }
 }
