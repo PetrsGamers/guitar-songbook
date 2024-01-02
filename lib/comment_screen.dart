@@ -80,7 +80,6 @@ class _CommentScreenState extends State<CommentScreen> {
       Map<String, dynamic> commentData = comment.data() as Map<String, dynamic>;
       DocumentReference userRef = commentData['author'];
 
-
       print(userRef.id);
       final userSnapshot = await FirebaseFirestore.instance
           .collection('users')
@@ -140,12 +139,10 @@ class _CommentScreenState extends State<CommentScreen> {
                       commentRef.delete();
                       print('Delete comment');
                     },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.close, color: Colors.red),
-                        SizedBox(width: 4.0),
-                    ),
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      Icon(Icons.close, color: Colors.red),
+                      SizedBox(width: 4.0),
+                    ]),
                   ),
                 ),
             ],
@@ -180,8 +177,7 @@ class _CommentScreenState extends State<CommentScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      String commentText =
-                          textController.text.trim();
+                      String commentText = textController.text.trim();
                       if (commentText.isNotEmpty) {
                         print('Comment sent: $commentText');
                         _sendComment(commentText);
@@ -205,8 +201,6 @@ class _CommentScreenState extends State<CommentScreen> {
       },
     );
   }
-
-
 
   Future<void> _sendComment(text) async {
     try {
