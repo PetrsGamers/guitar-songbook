@@ -1,10 +1,7 @@
-import 'dart:html';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:go_router/go_router.dart';
 import 'package:guitar_app/rating_widget.dart';
-import 'package:guitar_app/ratings_class.dart';
 import 'package:guitar_app/songs_class.dart';
 import 'detail_song_view.dart';
 import 'favourite_checkbox.dart';
@@ -42,6 +39,11 @@ class _SongDetailState extends State<SongDetail> {
               ],
             ),
             RatingsubWidget(song: widget.song),
+            ElevatedButton(
+                onPressed: () {
+                  context.go('/search/${widget.song.id}/comments');
+                },
+                child: Text("Comments")),
             Expanded(
               child: DetailSongView(text: widget.song.text),
             ),
