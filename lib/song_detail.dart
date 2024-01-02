@@ -1,10 +1,6 @@
-import 'dart:html';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:guitar_app/rating_widget.dart';
-import 'package:guitar_app/ratings_class.dart';
 import 'package:guitar_app/songs_class.dart';
 import 'detail_song_view.dart';
 import 'favourite_checkbox.dart';
@@ -16,10 +12,10 @@ class SongDetail extends StatefulWidget {
   const SongDetail({Key? key, required this.song}) : super(key: key);
 
   @override
-  _SongDetailState createState() => _SongDetailState();
+  SongDetailState createState() => SongDetailState();
 }
 
-class _SongDetailState extends State<SongDetail> {
+class SongDetailState extends State<SongDetail> {
   final User? currentUser = Auth().currentUser;
 
   @override
@@ -43,7 +39,8 @@ class _SongDetailState extends State<SongDetail> {
             ),
             RatingsubWidget(song: widget.song),
             Expanded(
-              child: DetailSongView(text: widget.song.text),
+              child: DetailSongView(
+                  text: widget.song.text, songKey: widget.song.key),
             ),
           ],
         ),

@@ -80,8 +80,8 @@ class _AddMetadataState extends State<AddMetadata> {
               controller: _controllerYear),
           DropdownButton(
               value: dropdownSongKeyValue,
-              items: Chord.circleOfFifths
-                  .map<DropdownMenuItem<String>>((String value) {
+              items:
+                  Chord.songKeys.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -107,8 +107,6 @@ class _AddMetadataState extends State<AddMetadata> {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text(
                               'Submitting Data, thanks for contributing :)')));
-                      // TODO: callback that saves the data into state
-                      // TODO: OR a way to pass the data alongside into callback
                       widget.onSubmit(
                           _controllerSongName.text,
                           _controllerMusician.text,
