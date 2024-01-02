@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:guitar_app/add_metadata.dart';
 import 'package:guitar_app/add_song_screen.dart';
 import 'package:guitar_app/annotate.dart';
+import 'package:guitar_app/comment_screen.dart';
 import 'package:guitar_app/login_screen.dart';
 import 'package:guitar_app/placeholder.dart';
 import 'package:guitar_app/search_screen.dart';
@@ -60,21 +61,39 @@ final routerProvider = Provider<GoRouter>((ref) {
                     SearchScreen(content: "base search content"),
                 routes: [
                   GoRoute(
-                    // https://stackoverflow.com/questions/76783122
-                    // this is very important, use this when you want to hide
-                    // the navbar and make the screen "fullscreen"
-                    parentNavigatorKey: _rootNavigatorKey,
-                    path: ':id',
-                    name: 'Search details',
-                    pageBuilder: (context, state) => CustomTransitionPage<void>(
-                      key: state.pageKey,
-                      child: SearchScreenDetail(
-                          songId: state.pathParameters["id"]),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) =>
-                              FadeTransition(opacity: animation, child: child),
-                    ),
-                  ),
+                      // https://stackoverflow.com/questions/76783122
+                      // this is very important, use this when you want to hide
+                      // the navbar and make the screen "fullscreen"
+                      parentNavigatorKey: _rootNavigatorKey,
+                      path: ':id',
+                      name: 'Search details',
+                      pageBuilder: (context, state) =>
+                          CustomTransitionPage<void>(
+                            key: state.pageKey,
+                            child: SearchScreenDetail(
+                                songId: state.pathParameters["id"]),
+                            transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) =>
+                                FadeTransition(
+                                    opacity: animation, child: child),
+                          ),
+                      routes: [
+                        GoRoute(
+                          parentNavigatorKey: _rootNavigatorKey,
+                          path: 'comments',
+                          name: 'Comments',
+                          pageBuilder: (context, state) =>
+                              CustomTransitionPage<void>(
+                            key: state.pageKey,
+                            child: CommentScreen(
+                                songId: state.pathParameters["id"]),
+                            transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) =>
+                                FadeTransition(
+                                    opacity: animation, child: child),
+                          ),
+                        ),
+                      ]),
                 ],
               ),
             ],

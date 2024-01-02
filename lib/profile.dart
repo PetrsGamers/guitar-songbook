@@ -12,7 +12,6 @@ import 'package:image_picker/image_picker.dart';
 class Profile extends StatefulWidget {
   const Profile({super.key, required this.user});
   final AppUser user;
-
   @override
   State<Profile> createState() => _ProfileState();
 }

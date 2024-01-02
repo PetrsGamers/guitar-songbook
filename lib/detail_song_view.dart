@@ -41,7 +41,7 @@ class DetailSongView extends StatelessWidget {
   // function to separate text into two parts
   List<String> separateText(String inputText) {
     RegExp exp =
-        RegExp(r'\[(.*?)\]'); // Regular expression to find text within brackets
+        RegExp(r'\{(.*?)\}'); // Regular expression to find text within brackets
     Iterable<Match> matches = exp.allMatches(inputText);
 
     String textInBrackets = '';
@@ -59,15 +59,15 @@ class DetailSongView extends StatelessWidget {
   List<int> charDistancesBetweenBrackets(String text) {
     List<int> distances = [];
     int start = -1;
-    if (text.indexOf('[') != 0) {
-      distances.add(text.indexOf('['));
+    if (text.indexOf('{') != 0) {
+      distances.add(text.indexOf('}'));
     } else {
       distances.add(0);
     }
     for (int i = 0; i < text.length; i++) {
-      if (text[i] == ']') {
+      if (text[i] == '}') {
         start = i;
-      } else if (text[i] == '[' && start != -1) {
+      } else if (text[i] == '{' && start != -1) {
         distances.add(i - start - 2);
         start = -1;
       }
