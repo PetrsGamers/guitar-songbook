@@ -98,10 +98,14 @@ class _AnnotateState extends State<Annotate> {
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: textList),
+      child: Expanded(
+        child: SingleChildScrollView(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: textList),
+        ),
+      ),
     );
   }
 

@@ -17,6 +17,37 @@ class SongDetail extends StatefulWidget {
 
 class SongDetailState extends State<SongDetail> {
   final User? currentUser = Auth().currentUser;
+  ScrollController _scrollController = ScrollController();
+  bool _isScrolling = false;
+
+  void _startAutoScroll() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: 5),
+      curve: Curves.linear,
+    );
+  }
+
+  void _stopAutoScroll() {
+    _scrollController.animateTo(
+      _scrollController.position.pixels,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        setState(() {
+          _isScrolling = false;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +56,38 @@ class SongDetailState extends State<SongDetail> {
         title: Text(widget.song.name),
         backgroundColor: Colors.deepOrange,
       ),
-      body: Container(
-        padding: EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(widget.song.author),
-            Row(
-              children: [
-                Text('Favourite ?'),
-                FavouriteCheckbox(songId: widget.song.id),
-              ],
-            ),
-            RatingsubWidget(song: widget.song),
-            Expanded(
-              child: DetailSongView(
-                  text: widget.song.text, songKey: widget.song.key),
-            ),
-          ],
+      body: SingleChildScrollView(
+        controller: _scrollController,
+        child: Container(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(widget.song.author),
+              Row(
+                children: [
+                  Text('Favourite ?'),
+                  FavouriteCheckbox(songId: widget.song.id),
+                ],
+              ),
+              RatingsubWidget(song: widget.song),
+              DetailSongView(text: widget.song.text, songKey: widget.song.key),
+            ],
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _isScrolling = !_isScrolling;
+            if (_isScrolling) {
+              _startAutoScroll();
+            } else {
+              _stopAutoScroll();
+            }
+          });
+        },
+        child: _isScrolling ? Icon(Icons.pause) : Icon(Icons.play_arrow),
       ),
     );
   }
