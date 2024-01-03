@@ -19,7 +19,9 @@ class _AddSongScreenState extends State<AddSongScreen> {
   List<Map<int, String>> annotationsList = [];
 
   String serializeLyrics() {
-    List<String> lines = text.split('\n');
+    // clean the text from curly braces
+    String cleanText = text.replaceAll(RegExp(r'[{}]', multiLine: true), '');
+    List<String> lines = cleanText.split('\n');
 
     for (int i = 0; i < lines.length; i++) {
       if (i < annotationsList.length) {
@@ -30,7 +32,7 @@ class _AddSongScreenState extends State<AddSongScreen> {
           int index = sortedIndices[j];
           String chord = annotations[index]!;
           lines[i] = lines[i].substring(0, index) +
-              '[$chord]' +
+              '{$chord}' +
               lines[i].substring(index);
         }
       }
@@ -38,8 +40,8 @@ class _AddSongScreenState extends State<AddSongScreen> {
     return lines.join('\n');
   }
 
-  void sumbitSongToServerCallback(
-      String songName, String musician, String bpm, String year) {
+  void sumbitSongToServerCallback(String songName, String musician, String bpm,
+      String year, String songKey) {
     // 1) parse the data into db-friendly format
     String serializedAnnotatedText = serializeLyrics();
     // 2) save the data properly
@@ -50,7 +52,8 @@ class _AddSongScreenState extends State<AddSongScreen> {
       'bpm': bpm,
       'year': year,
       'user': Auth().currentUser!.uid,
-      'text': serializedAnnotatedText
+      'text': serializedAnnotatedText,
+      'key': songKey
     }).then((DocumentReference doc) {
       print("New song added");
       // redirect user to the detail screen of the song
