@@ -13,7 +13,32 @@ class Chord {
     "A#",
     "H"
   ];
-
+  static List<String> songKeys = [
+    "C",
+    "Cm",
+    "C#",
+    "C#m",
+    "D",
+    "Dm",
+    "D#",
+    "D#m",
+    "E",
+    "Em",
+    "F",
+    "Fm",
+    "F#",
+    "F#m",
+    "G",
+    "Gm",
+    "G#",
+    "G#m",
+    "A",
+    "Am",
+    "A#",
+    "A#m",
+    "H",
+    "Hm"
+  ];
   final String chord;
   bool isMinor = false;
   bool isSeventh = false;
@@ -31,7 +56,7 @@ class Chord {
 
   void transpose(int semitones) {
     if (baseChord != null) {
-      final int initialIndex = circleOfFifths.indexOf(baseChord![0]);
+      final int initialIndex = circleOfFifths.indexOf(baseChord!);
       final int transposedIndex =
           (initialIndex + semitones) % circleOfFifths.length;
       baseChord = circleOfFifths[transposedIndex];

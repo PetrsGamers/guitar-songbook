@@ -7,14 +7,14 @@ class Annotate extends StatefulWidget {
       {super.key,
       required this.text,
       required this.nextScreenCallback,
-      required this.saveAnnotations})
-      : listMap = _createListMapFromText(text);
+      required this.saveAnnotations});
+  //: listMap = _createListMapFromText(text);
   final String text;
   final Function(bool) nextScreenCallback;
   final Function(List<Map<int, String>>) saveAnnotations;
 
-  final List<Map<int, String>> listMap;
-  static List<Map<int, String>> _createListMapFromText(String text) {
+  List<Map<int, String>>? listMap = null;
+  List<Map<int, String>> _createListMapFromText(String text) {
     List<String> lines = text.split('\n');
 
     List<Map<int, String>> listMap = lines.map((line) {
@@ -56,12 +56,13 @@ class Annotate extends StatefulWidget {
 class _AnnotateState extends State<Annotate> {
   void annotateChar(lineIndex, charIndex, chord) {
     setState(() {
-      if (widget.listMap[lineIndex][charIndex] == chord) {
+      if (widget.listMap != null &&
+          widget.listMap![lineIndex][charIndex] == chord) {
         // if the same chord is selected again, remove it
-        widget.listMap[lineIndex].remove(charIndex);
+        widget.listMap![lineIndex].remove(charIndex);
         return;
       }
-      widget.listMap[lineIndex][charIndex] = chord;
+      widget.listMap![lineIndex][charIndex] = chord;
     });
     // debug print
     // print("new chordAnnotations map states: ");
@@ -71,13 +72,18 @@ class _AnnotateState extends State<Annotate> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // Dummy lyrics for testing
-    final String lyrics = widget.text;
+  void initState() {
+    if (widget.listMap == null || widget.listMap!.isEmpty) {
+      widget.listMap = widget._createListMapFromText(widget.text);
+    }
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     int lineIndex = 0;
     List<Widget> textList = [];
-    for (final line in lyrics.split("\n")) {
+    for (final line in widget.text.split("\n")) {
       textList.add(buildAnnotationLine(lineIndex, line.length));
       textList.add(buildTappableLyricsLine(line, lineIndex, context));
       lineIndex++;
@@ -86,23 +92,29 @@ class _AnnotateState extends State<Annotate> {
     textList.add(ElevatedButton(
         onPressed: () {
           widget.nextScreenCallback(true);
-          widget.saveAnnotations(widget.listMap);
+          widget.saveAnnotations(widget.listMap!);
         },
         child: const Text("Proceed to add song metadata")));
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: textList),
+      child: Expanded(
+        child: SingleChildScrollView(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: textList),
+        ),
+      ),
     );
   }
 
   Widget buildAnnotationLine(int lineIndex, int lineLength) {
     return Text(
       //widget.listMap[lineIndex].toString(),
-      widget.generateString(lineLength, widget.listMap[lineIndex]),
+      widget.listMap != null
+          ? widget.generateString(lineLength, widget.listMap![lineIndex])
+          : "",
       style: const TextStyle(
           backgroundColor: Colors.red, fontSize: 22, fontFamily: "Monospace"),
     );

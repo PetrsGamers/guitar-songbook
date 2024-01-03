@@ -2,6 +2,7 @@ class Song {
   String author;
   String text;
   String name;
+  String key;
   String id;
 
   double? rating;
@@ -10,6 +11,7 @@ class Song {
       {required this.author,
       required this.text,
       required this.name,
+      required this.key,
       required this.id});
 
   factory Song.fromMap(String id, Map<String, dynamic> map) {
@@ -17,6 +19,7 @@ class Song {
       author: map['author'] ?? '',
       text: map['text'] ?? '',
       name: map['name'] ?? '',
+      key: map['key'] ?? '',
       id: id,
     );
   }

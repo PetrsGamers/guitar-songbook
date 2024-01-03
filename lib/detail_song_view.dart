@@ -1,23 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:guitar_app/chord.dart';
 
-class DetailSongView extends StatelessWidget {
+class DetailSongView extends StatefulWidget {
   const DetailSongView({
     Key? key,
     required this.text,
+    required this.songKey,
   }) : super(key: key);
 
   final String text;
+  final String songKey;
+  static int circleOfFifthsLen = 12;
+
+  @override
+  State<DetailSongView> createState() => _DetailSongViewState();
+}
+
+class _DetailSongViewState extends State<DetailSongView> {
+  late Chord songKeyChord = Chord(widget.songKey);
+  int transposition = 0;
+
+  String formatTransposition() {
+    if (transposition > 0) {
+      return "+${transposition.toString()}";
+    }
+    return transposition.toString();
+  }
+
+  String transposeSong(int semitones, List<String> chordsAndText) {
+    final String chordString = chordsAndText[0];
+    if (semitones == 0) {
+      return chordString;
+    }
+    String result = "";
+    for (String chord in chordString.split(" ")) {
+      Chord ch = Chord(chord);
+      ch.transpose(semitones);
+      result += "$ch ";
+    }
+    return result;
+    // convert to objects
+    // transpose each cord object
+    // return list of transposed chords
+  }
 
   @override
   Widget build(BuildContext context) {
-    final linesstring = text.replaceAll("\\n", "\n"); // set right newlines
-    List<String> lines = linesstring.split('\n'); //split by new lines
+    final linesString =
+        widget.text.replaceAll("\\n", "\n"); // set right newlines
+    List<String> lines = linesString.split('\n'); //split by new lines
     List<Widget> textWidgets = []; // Store widgets to display
-    print(lines);
+    textWidgets.add(Row(
+      children: [
+        ElevatedButton(
+            onPressed: () {
+              setState(() {
+                transposition =
+                    (transposition - 1) % DetailSongView.circleOfFifthsLen;
+                songKeyChord.transpose(-1);
+              });
+            },
+            child: const Icon(Icons.arrow_downward)),
+        Text(songKeyChord.toString()),
+        const Text(
+            "  "), // TODO: temp solution, replace with padding and proper axis alignment
+        Text(formatTransposition()),
+        ElevatedButton(
+            onPressed: () {
+              setState(() {
+                transposition =
+                    (transposition + 1) % DetailSongView.circleOfFifthsLen;
+                songKeyChord.transpose(1);
+              });
+            },
+            child: const Icon(Icons.arrow_upward))
+      ],
+    ));
     for (var line in lines) {
       final text1 = separateText(line);
+      final transposedChords = transposeSong(transposition, text1);
       final distance = charDistancesBetweenBrackets(line);
-      final textik = addSpacesCountWithDistances(text1[0], distance);
+      final textik = addSpacesCountWithDistances(transposedChords, distance);
       textWidgets.add(
         Text(
           textik,

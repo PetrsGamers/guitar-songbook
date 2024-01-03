@@ -33,8 +33,8 @@ class _AddTextState extends State<AddText> {
       Expanded(
           child: TextField(
         inputFormatters: [
-          FilteringTextInputFormatter.deny(RegExp(r'[/\\\[\]]')),
-          LineLengthLimitingTextInputFormatter(20),
+          FilteringTextInputFormatter.deny(RegExp(r'[/\\{\}]')),
+          LineLengthLimitingTextInputFormatter(30),
         ],
         controller: _textController,
         decoration: const InputDecoration(

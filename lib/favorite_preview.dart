@@ -33,13 +33,7 @@ class FavoritePreview extends StatelessWidget {
 
         if (songDoc.exists) {
           songs.add(
-            Song(
-              id: songDoc.id,
-              name: songDoc.data()!['name'] ?? '',
-              author: songDoc.data()!['author'] ?? '',
-              text: songDoc.data()!['text'] ?? '',
-            ),
-          );
+              Song.fromMap(songDoc.id, songDoc.data() as Map<String, dynamic>));
         }
       }
       return songs;
