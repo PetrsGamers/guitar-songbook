@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:guitar_app/add_metadata.dart';
-import 'package:guitar_app/add_song_screen.dart';
-import 'package:guitar_app/annotate.dart';
+import 'package:guitar_app/screens/create/widgets/add_metadata.dart';
+import 'package:guitar_app/screens/create/create_song_screen.dart';
+import 'package:guitar_app/screens/create/widgets/annotate.dart';
 import 'package:guitar_app/comment_screen.dart';
-import 'package:guitar_app/login_screen.dart';
-import 'package:guitar_app/placeholder.dart';
-import 'package:guitar_app/search_screen.dart';
-import 'package:guitar_app/profile_screen.dart';
-import 'package:guitar_app/register_screen.dart';
+import 'package:guitar_app/screens/auth/login_screen.dart';
+import 'package:guitar_app/settings_screen.dart';
+import 'package:guitar_app/screens/search/search_screen.dart';
+import 'package:guitar_app/screens//profile/profile_screen.dart';
+import 'package:guitar_app/screens/auth/register_screen.dart';
 import 'package:guitar_app/scaffold_nested.dart';
-import 'package:guitar_app/user_created_screen.dart';
-import 'package:guitar_app/user_favorites_screen.dart';
+import 'package:guitar_app/screens/profile/widgets/user_created_screen.dart';
+import 'package:guitar_app/screens/profile/widgets/user_favorites_screen.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'main.dart';
 import 'package:guitar_app/search_screen_detail.dart';
@@ -106,7 +106,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: "/add_song",
                 name: "Add song",
                 builder: (BuildContext context, GoRouterState state) =>
-                    const AddSongScreen(),
+                    const CreateSongScreen(),
                 routes: [
                   GoRoute(
                     path: "details",
@@ -114,7 +114,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                     pageBuilder: (context, state) {
                       return CustomTransitionPage<void>(
                         key: state.pageKey,
-                        child: PlaceholderScreen(
+                        child: SettingsScreen(
                             content: "Add_song detail sub-screen"),
                         transitionsBuilder: (
                           context,
@@ -207,7 +207,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: "/settings",
                 name: "Settings",
                 builder: (BuildContext context, GoRouterState state) =>
-                    PlaceholderScreen(content: "base settings screen"),
+                    SettingsScreen(content: "base settings screen"),
                 routes: [
                   GoRoute(
                     path: "details",
@@ -215,7 +215,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                     pageBuilder: (context, state) {
                       return CustomTransitionPage<void>(
                         key: state.pageKey,
-                        child: PlaceholderScreen(
+                        child: SettingsScreen(
                             content: "Settings detail sub-screen"),
                         transitionsBuilder: (
                           context,

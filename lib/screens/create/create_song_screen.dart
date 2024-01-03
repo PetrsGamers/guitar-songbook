@@ -1,19 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:guitar_app/add_metadata.dart';
-import 'package:guitar_app/add_text.dart';
-import 'package:guitar_app/annotate.dart';
-import 'package:guitar_app/firebase_auth_services.dart';
+import 'package:guitar_app/screens/create/widgets/add_metadata.dart';
+import 'package:guitar_app/screens/create/widgets/add_text.dart';
+import 'package:guitar_app/screens/create/widgets/annotate.dart';
+import 'package:guitar_app/firebase/firebase_auth_services.dart';
 
-class AddSongScreen extends StatefulWidget {
-  const AddSongScreen({Key? key}) : super(key: key);
+class CreateSongScreen extends StatefulWidget {
+  const CreateSongScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddSongScreen> createState() => _AddSongScreenState();
+  State<CreateSongScreen> createState() => _CreateSongScreenState();
 }
 
-class _AddSongScreenState extends State<AddSongScreen> {
+class _CreateSongScreenState extends State<CreateSongScreen> {
   int subScreenIndex = 0;
   String text = "";
   List<Map<int, String>> annotationsList = [];

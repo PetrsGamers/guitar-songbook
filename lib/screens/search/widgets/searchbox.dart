@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:guitar_app/songs_class.dart';
+import 'package:guitar_app/entities/songs_class.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'firebase_auth_services.dart';
+import '../../../firebase/firebase_auth_services.dart';
 
 class SearchBox extends StatefulWidget {
   const SearchBox({super.key});

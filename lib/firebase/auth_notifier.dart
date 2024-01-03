@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:guitar_app/firebase_auth_services.dart';
+import 'package:guitar_app/firebase/firebase_auth_services.dart';
 
 class AuthController with ChangeNotifier {
 //Within this section, you can integrate authentication methods

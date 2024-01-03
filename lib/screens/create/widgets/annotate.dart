@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:guitar_app/chord.dart';
+import 'package:guitar_app/entities/chord.dart';
 
 class Annotate extends StatefulWidget {
   Annotate(

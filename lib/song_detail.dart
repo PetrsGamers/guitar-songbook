@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:guitar_app/rating_widget.dart';
-import 'package:guitar_app/songs_class.dart';
+import 'package:guitar_app/entities/songs_class.dart';
 import 'detail_song_view.dart';
 import 'favourite_checkbox.dart';
-import 'firebase_auth_services.dart';
+import 'firebase/firebase_auth_services.dart';
 
 class SongDetail extends StatefulWidget {
   final Song song;
@@ -40,6 +40,7 @@ class SongDetailState extends State<SongDetail> {
   @override
   void initState() {
     super.initState();
+    //TODO buggy initial scroll to botom of song
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {

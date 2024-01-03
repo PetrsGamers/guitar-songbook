@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:guitar_app/login_screen.dart';
-import 'package:guitar_app/placeholder.dart';
-import 'package:guitar_app/songs_class.dart';
+import 'package:guitar_app/screens/auth/login_screen.dart';
+import 'package:guitar_app/settings_screen.dart';
+import 'package:guitar_app/entities/songs_class.dart';
 import 'package:provider/provider.dart';
-import 'firebase_auth_services.dart';
-import 'searchbox.dart';
+import '../../firebase/firebase_auth_services.dart';
+import 'widgets/searchbox.dart';
 
 // placeholder screen, replace with your own screen implementation
 class SearchScreen extends StatelessWidget {

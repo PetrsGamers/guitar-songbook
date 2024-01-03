@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guitar_app/app_user.dart';
-import 'package:guitar_app/firebase_auth_services.dart';
-import 'package:guitar_app/profile.dart';
+import 'package:guitar_app/entities/app_user.dart';
+import 'package:guitar_app/firebase/firebase_auth_services.dart';
+import 'package:guitar_app/screens/profile/widgets/profile.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key, this.userId});

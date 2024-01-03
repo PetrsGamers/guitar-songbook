@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:guitar_app/ratings_class.dart';
-import 'package:guitar_app/songs_class.dart';
+import 'package:guitar_app/entities/ratings_class.dart';
+import 'package:guitar_app/entities/songs_class.dart';
 
-import 'firebase_auth_services.dart';
+import 'firebase/firebase_auth_services.dart';
 
 class RatingsubWidget extends StatefulWidget {
   final Song song;

@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:guitar_app/main.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'firebase_auth_services.dart';
+import '../../firebase/firebase_auth_services.dart';
 
 class LoginScreen extends ConsumerWidget {
   LoginScreen({Key? key}) : super(key: key);

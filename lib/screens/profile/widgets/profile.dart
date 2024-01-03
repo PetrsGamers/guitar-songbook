@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:guitar_app/app_user.dart';
-import 'package:guitar_app/created_preview.dart';
-import 'package:guitar_app/favorite_preview.dart';
-import 'package:guitar_app/firebase_auth_services.dart';
+import 'package:guitar_app/entities/app_user.dart';
+import 'package:guitar_app/screens/profile/widgets/created_preview.dart';
+import 'package:guitar_app/screens/profile/widgets/favorite_preview.dart';
+import 'package:guitar_app/firebase/firebase_auth_services.dart';
 import 'package:guitar_app/helpers.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';

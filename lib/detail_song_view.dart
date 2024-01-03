@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guitar_app/chord.dart';
+import 'package:guitar_app/entities/chord.dart';
 
 class DetailSongView extends StatefulWidget {
   const DetailSongView({

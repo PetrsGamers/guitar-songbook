@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:guitar_app/chord.dart';
+import 'package:guitar_app/entities/chord.dart';
 
 class AddMetadata extends StatefulWidget {
   const AddMetadata(
