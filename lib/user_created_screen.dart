@@ -29,15 +29,23 @@ class CreatedSongsScreen extends StatelessWidget {
               child: Text('User data not found'),
             );
           }
-
-          List<String> favoriteSongIds =
-              List<String>.from(userDocSnapshot.data!.get('created') ?? []);
+          List<String> createdSongIds;
+          if ((userDocSnapshot.data!.data() as Map<String, dynamic>)
+                  .containsKey('created') ==
+              false) {
+            createdSongIds = [];
+          } else {
+            createdSongIds =
+                List<String>.from(userDocSnapshot.data!.get('created'));
+          }
 
           return StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('songs')
-                .where(FieldPath.documentId, whereIn: favoriteSongIds)
-                .snapshots(),
+            stream: createdSongIds.isNotEmpty
+                ? FirebaseFirestore.instance
+                    .collection('songs')
+                    .where(FieldPath.documentId, whereIn: createdSongIds)
+                    .snapshots()
+                : null, // Return null stream if createdSongIds is empty
             builder: (BuildContext context,
                 AsyncSnapshot<QuerySnapshot> songsSnapshot) {
               if (songsSnapshot.connectionState == ConnectionState.waiting) {
@@ -46,7 +54,7 @@ class CreatedSongsScreen extends StatelessWidget {
 
               if (!songsSnapshot.hasData || songsSnapshot.data == null) {
                 return const Center(
-                  child: Text('Favorite songs not found'),
+                  child: Text('Created songs not found'),
                 );
               }
 

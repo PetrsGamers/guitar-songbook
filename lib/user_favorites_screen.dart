@@ -30,14 +30,23 @@ class FavoriteSongsScreen extends StatelessWidget {
             );
           }
 
-          List<String> favoriteSongIds =
-              List<String>.from(userDocSnapshot.data!.get('favorites') ?? []);
+          List<String> favoriteSongIds;
+          if ((userDocSnapshot.data!.data() as Map<String, dynamic>)
+                  .containsKey('created') ==
+              false) {
+            favoriteSongIds = [];
+          } else {
+            favoriteSongIds =
+                List<String>.from(userDocSnapshot.data!.get('created'));
+          }
 
           return StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('songs')
-                .where(FieldPath.documentId, whereIn: favoriteSongIds)
-                .snapshots(),
+            stream: favoriteSongIds.isNotEmpty
+                ? FirebaseFirestore.instance
+                    .collection('songs')
+                    .where(FieldPath.documentId, whereIn: favoriteSongIds)
+                    .snapshots()
+                : null, // Return null stream if favoriteSongIds is empty
             builder: (BuildContext context,
                 AsyncSnapshot<QuerySnapshot> songsSnapshot) {
               if (songsSnapshot.connectionState == ConnectionState.waiting) {
