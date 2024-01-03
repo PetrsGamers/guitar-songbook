@@ -1,7 +1,10 @@
 class Song {
   String author;
+  String userId;
   String text;
   String name;
+  String bpm;
+  String year;
   String key;
   String id;
 
@@ -12,6 +15,9 @@ class Song {
       required this.text,
       required this.name,
       required this.key,
+      required this.userId,
+      required this.bpm,
+      required this.year,
       required this.id});
 
   factory Song.fromMap(String id, Map<String, dynamic> map) {
@@ -20,6 +26,9 @@ class Song {
       text: map['text'] ?? '',
       name: map['name'] ?? '',
       key: map['key'] ?? '',
+      userId: map['userId'] ?? '',
+      bpm: map['bpm'] ?? '',
+      year: map['year'] ?? '',
       id: id,
     );
   }

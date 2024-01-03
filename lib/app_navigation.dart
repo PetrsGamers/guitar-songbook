@@ -163,7 +163,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                             pageBuilder: (context, state) {
                               return CustomTransitionPage<void>(
                                 key: state.pageKey,
-                                child: UserFavoritesScreen(
+                                child: FavoriteSongsScreen(
                                     userId: state.pathParameters["id"]),
                                 transitionsBuilder: (
                                   context,
@@ -181,7 +181,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                             pageBuilder: (context, state) {
                               return CustomTransitionPage<void>(
                                 key: state.pageKey,
-                                child: UserCreatedScreen(
+                                child: CreatedSongsScreen(
                                     userId: state.pathParameters["id"]),
                                 transitionsBuilder: (
                                   context,

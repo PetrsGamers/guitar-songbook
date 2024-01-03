@@ -45,34 +45,36 @@ class FavoritePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getUserFavorites(userId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            return Column(
-              children: [
-                ListTile(
-                    onTap: () => context.push("/profile/${userId}/favorites"),
-                    title: Text("User favorites"),
-                    trailing: Icon(Icons.arrow_forward_ios)),
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      var song = snapshot.data![index];
-                      return ListTile(
-                        onTap: () => context.push("/search/${song.id}"),
-                        title: Text('Name: ${song.name}'),
-                        subtitle: Text('Author: ${song.author}'),
-                      );
-                    })
-              ],
-            );
-          }
-        });
+    return Center(
+      child: FutureBuilder(
+          future: getUserFavorites(userId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return Column(
+                children: [
+                  ListTile(
+                      onTap: () => context.push("/profile/${userId}/favorites"),
+                      title: Text("User favorites"),
+                      trailing: Icon(Icons.arrow_forward_ios)),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        var song = snapshot.data![index];
+                        return ListTile(
+                          onTap: () => context.push("/search/${song.id}"),
+                          title: Text('Name: ${song.name}'),
+                          subtitle: Text('Author: ${song.author}'),
+                        );
+                      })
+                ],
+              );
+            }
+          }),
+    );
   }
 }

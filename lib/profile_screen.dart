@@ -55,20 +55,22 @@ class ProfileScreen extends StatelessWidget {
           title: const Text("Profile"),
           backgroundColor: Colors.green,
         ),
-        body: FutureBuilder<AppUser>(
-          future: getUserById(userID),
-          builder: (BuildContext context, AsyncSnapshot<AppUser> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (snapshot.hasData) {
-              AppUser user = snapshot.data!;
-              return Profile(user: user);
-            } else {
-              return const Text('No user found');
-            }
-          },
+        body: Center(
+          child: FutureBuilder<AppUser>(
+            future: getUserById(userID),
+            builder: (BuildContext context, AsyncSnapshot<AppUser> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (snapshot.hasData) {
+                AppUser user = snapshot.data!;
+                return Profile(user: user);
+              } else {
+                return const Text('No user found');
+              }
+            },
+          ),
         ));
   }
 }
