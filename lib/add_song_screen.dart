@@ -51,7 +51,7 @@ class _AddSongScreenState extends State<AddSongScreen> {
       'author': musician,
       'bpm': bpm,
       'year': year,
-      'user': Auth().currentUser!.uid,
+      'userId': Auth().currentUser!.uid,
       'text': serializedAnnotatedText,
       'key': songKey
     }).then((DocumentReference doc) {
