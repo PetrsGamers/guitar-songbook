@@ -123,7 +123,7 @@ class _DetailSongViewState extends State<DetailSongView> {
     List<int> distances = [];
     int start = -1;
     if (text.indexOf('{') != 0) {
-      distances.add(text.indexOf('}'));
+      distances.add(text.indexOf('}') - 2);
     } else {
       distances.add(0);
     }
