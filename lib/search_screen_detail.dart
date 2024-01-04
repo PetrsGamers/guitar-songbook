@@ -16,10 +16,11 @@ class SearchScreenDetail extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         } else if (snapshot.hasError) {
+          // TODO vymazat else(s)
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData) {
-          Song song = snapshot.data!;
-          return SongDetail(song: song);
+          // TODO tady též
+          return SongDetail(song: snapshot.data!);
         } else {
           return Text('No song found');
         }
