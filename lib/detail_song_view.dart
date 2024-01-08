@@ -34,14 +34,16 @@ class _DetailSongViewState extends State<DetailSongView> {
     }
     String result = "";
     for (String chord in chordString.split(" ")) {
+      if (!RegExp(r'^[ABCDEFGH]#?m?7?$').hasMatch(chord)) {
+        // if a proper chord isn't parsed, ignore it
+        print("ignoruju $chord");
+        continue;
+      }
       Chord ch = Chord(chord);
       ch.transpose(semitones);
       result += "$ch ";
     }
     return result;
-    // convert to objects
-    // transpose each cord object
-    // return list of transposed chords
   }
 
   @override
@@ -57,19 +59,23 @@ class _DetailSongViewState extends State<DetailSongView> {
               setState(() {
                 transposition =
                     (transposition - 1) % DetailSongView.circleOfFifthsLen;
+                if (widget.songKey == "") {
+                  return;
+                }
                 songKeyChord.transpose(-1);
               });
             },
             child: const Icon(Icons.arrow_downward)),
         Text(songKeyChord.toString()),
-        const Text(
-            "  "), // TODO: temp solution, replace with padding and proper axis alignment
         Text(formatTransposition()),
         ElevatedButton(
             onPressed: () {
               setState(() {
                 transposition =
                     (transposition + 1) % DetailSongView.circleOfFifthsLen;
+                if (widget.songKey == "") {
+                  return;
+                }
                 songKeyChord.transpose(1);
               });
             },
@@ -77,34 +83,35 @@ class _DetailSongViewState extends State<DetailSongView> {
       ],
     ));
     for (var line in lines) {
-      final text1 = separateText(line);
-      final transposedChords = transposeSong(transposition, text1);
+      final separatedText = separateText(line);
+      final transposedChords = transposeSong(transposition, separatedText);
       final distance = charDistancesBetweenBrackets(line);
-      final textik = addSpacesCountWithDistances(transposedChords, distance);
+      final annotationTextWithSpaces =
+          addSpacesCountWithDistances(transposedChords, distance);
       textWidgets.add(
         Text(
-          textik,
-          style: TextStyle(fontFamily: "Monospace"),
+          annotationTextWithSpaces,
+          style: const TextStyle(fontFamily: "Monospace"),
         ),
       );
       textWidgets.add(
         Text(
-          text1[1],
-          style: TextStyle(fontFamily: "Monospace"),
+          separatedText[1],
+          style: const TextStyle(fontFamily: "Monospace"),
         ),
       );
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: textWidgets.isNotEmpty ? textWidgets : [Text("")],
+      children: textWidgets.isNotEmpty ? textWidgets : [const Text("")],
     );
   }
 
   // function to separate text into two parts
   List<String> separateText(String inputText) {
     RegExp exp =
-        RegExp(r'\{(.*?)\}'); // Regular expression to find text within brackets
+        RegExp(r'{(.*?)\}'); // Regular expression to find text within brackets
     Iterable<Match> matches = exp.allMatches(inputText);
 
     String textInBrackets = '';
@@ -135,7 +142,6 @@ class _DetailSongViewState extends State<DetailSongView> {
         start = -1;
       }
     }
-    print(distances);
     return distances;
   }
 
@@ -144,17 +150,17 @@ class _DetailSongViewState extends State<DetailSongView> {
     List<String> chars = input.split(' ');
     String result = '';
     int index = 0;
-    int prevcharlenght = 1;
+    int prevCharLen = 1;
     for (String char in chars) {
       if (char.isNotEmpty) {
-        if (prevcharlenght > 1) {
-          result += '${' ' * (distances[index] - prevcharlenght + 1)}' + char;
+        if (prevCharLen > 1) {
+          result += ' ' * (distances[index] - prevCharLen + 1) + char;
           index = (index + 1) % distances.length;
         } else {
-          result += '${' ' * (distances[index])}' + char;
+          result += ' ' * (distances[index]) + char;
           index = (index + 1) % distances.length;
         }
-        prevcharlenght = char.length;
+        prevCharLen = char.length;
       }
     }
     return result;

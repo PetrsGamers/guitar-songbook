@@ -42,8 +42,13 @@ class Chord {
   final String chord;
   bool isMinor = false;
   bool isSeventh = false;
-  String? baseChord;
+  String baseChord = "";
   Chord(this.chord) {
+    if (!RegExp(r'^[ABCDEFGH]#?m?7?$').hasMatch(chord)) {
+      baseChord = "X";
+      // throw ArgumentError.value(
+      //     "Passing invalid value to the Chord class constructor: $chord");
+    }
     if (chord.contains("m")) {
       isMinor = true;
     }
@@ -55,12 +60,10 @@ class Chord {
   }
 
   void transpose(int semitones) {
-    if (baseChord != null) {
-      final int initialIndex = circleOfFifths.indexOf(baseChord!);
-      final int transposedIndex =
-          (initialIndex + semitones) % circleOfFifths.length;
-      baseChord = circleOfFifths[transposedIndex];
-    }
+    final int initialIndex = circleOfFifths.indexOf(baseChord);
+    final int transposedIndex =
+        (initialIndex + semitones) % circleOfFifths.length;
+    baseChord = circleOfFifths[transposedIndex];
   }
 
   @override
