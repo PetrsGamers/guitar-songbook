@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:guitar_app/helpers.dart';
+import 'package:guitar_app/common/helpers.dart';
 
 class AddText extends StatefulWidget {
   const AddText(

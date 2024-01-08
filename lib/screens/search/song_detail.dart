@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:guitar_app/rating_widget.dart';
-import 'package:guitar_app/entities/songs_class.dart';
+import 'package:guitar_app/screens/search/widgets/rating_widget.dart';
+import 'package:guitar_app/entities/songs.dart';
 import 'detail_song_view.dart';
-import 'favourite_checkbox.dart';
-import 'firebase/firebase_auth_services.dart';
+import 'widgets/favourite_checkbox.dart';
+import '../../firebase/firebase_auth_services.dart';
 
 class SongDetail extends StatefulWidget {
   final Song song;

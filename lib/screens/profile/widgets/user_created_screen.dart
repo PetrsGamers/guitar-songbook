@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
-import 'package:guitar_app/entities/songs_class.dart';
+import 'package:guitar_app/entities/songs.dart';
 
 class CreatedSongsScreen extends StatelessWidget {
   const CreatedSongsScreen({super.key, required this.userId});

@@ -5,7 +5,7 @@ import 'package:guitar_app/entities/app_user.dart';
 import 'package:guitar_app/screens/profile/widgets/created_preview.dart';
 import 'package:guitar_app/screens/profile/widgets/favorite_preview.dart';
 import 'package:guitar_app/firebase/firebase_auth_services.dart';
-import 'package:guitar_app/helpers.dart';
+import 'package:guitar_app/common/helpers.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 

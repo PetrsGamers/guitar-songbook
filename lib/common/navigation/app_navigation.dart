@@ -3,18 +3,18 @@ import 'package:go_router/go_router.dart';
 import 'package:guitar_app/screens/create/widgets/add_metadata.dart';
 import 'package:guitar_app/screens/create/create_song_screen.dart';
 import 'package:guitar_app/screens/create/widgets/annotate.dart';
-import 'package:guitar_app/comment_screen.dart';
+import 'package:guitar_app/screens/search/comment_screen.dart';
 import 'package:guitar_app/screens/auth/login_screen.dart';
-import 'package:guitar_app/settings_screen.dart';
+import 'package:guitar_app/screens/settings/settings_screen.dart';
 import 'package:guitar_app/screens/search/search_screen.dart';
 import 'package:guitar_app/screens//profile/profile_screen.dart';
 import 'package:guitar_app/screens/auth/register_screen.dart';
-import 'package:guitar_app/scaffold_nested.dart';
+import 'package:guitar_app/common/navigation/scaffold_nested.dart';
 import 'package:guitar_app/screens/profile/widgets/user_created_screen.dart';
 import 'package:guitar_app/screens/profile/widgets/user_favorites_screen.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'main.dart';
-import 'package:guitar_app/search_screen_detail.dart';
+import '../../main.dart';
+import 'package:guitar_app/screens/search/search_screen_detail.dart';
 
 // Private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();

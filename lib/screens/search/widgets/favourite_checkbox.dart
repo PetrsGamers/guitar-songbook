@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'firebase/firebase_auth_services.dart';
+import '../../../firebase/firebase_auth_services.dart';
 
 class FavouriteCheckbox extends StatefulWidget {
   final String songId;

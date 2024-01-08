@@ -5,7 +5,7 @@ import 'package:guitar_app/screens/auth/login_screen.dart';
 import 'package:guitar_app/main.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart';
-import 'firebase/firebase_auth_services.dart';
+import '../../firebase/firebase_auth_services.dart';
 
 // placeholder screen, replace with your own screen implementation
 class SettingsScreen extends ConsumerWidget {

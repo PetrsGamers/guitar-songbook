@@ -3,10 +3,10 @@ import 'dart:js_interop_unsafe';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guitar_app/entities/songs_class.dart';
+import 'package:guitar_app/entities/songs.dart';
 import 'package:intl/intl.dart';
 
-import 'firebase/firebase_auth_services.dart';
+import '../../firebase/firebase_auth_services.dart';
 
 class CommentScreen extends StatefulWidget {
   final songId;
