@@ -112,7 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: Container(
                 width: 300,
                 child: TextField(
@@ -157,19 +157,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                  onPressed: () async {
-                    register();
-                  },
-                  child: Text('register')),
+              child: SizedBox(
+                width: 300,
+                child: ElevatedButton(
+                    onPressed: () async {
+                      register();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('register'),
+                    )),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                  onPressed: () {
-                    context.go('/login');
-                  },
-                  child: Text('Go back to login screen')),
+              child: SizedBox(
+                width: 300,
+                child: OutlinedButton(
+                    onPressed: () {
+                      context.go('/login');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Go back to login screen'),
+                    )),
+              ),
             )
           ],
         ),

@@ -17,6 +17,9 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // TODO: remove this autologin
+    _controllerEmail.text = "c@c.com";
+    _controllerPassword.text = "cccccc";
     final authController = ref.watch(authProvider);
     void login() async {
       try {
@@ -43,7 +46,7 @@ class LoginScreen extends ConsumerWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(16.0),
               child: Container(
                 width: 250,
                 child: TextField(
@@ -58,7 +61,7 @@ class LoginScreen extends ConsumerWidget {
               child: Container(
                 width: 250,
                 child: TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(), hintText: 'Password'),
                   controller: _controllerPassword,
                   obscureText: true,
@@ -70,18 +73,32 @@ class LoginScreen extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: ElevatedButton(
-                onPressed: () async {
-                  login();
-                },
-                child: Text('login'),
+              child: SizedBox(
+                width: 250,
+                child: ElevatedButton(
+                  // TODO: remove this autologin
+                  autofocus: true,
+                  onPressed: () async {
+                    login();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('login'),
+                  ),
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: ElevatedButton(
-                  onPressed: () => context.go('/register'),
-                  child: const Text('Go to register screen')),
+              child: SizedBox(
+                width: 250,
+                child: OutlinedButton(
+                    onPressed: () => context.go('/register'),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Go to register screen'),
+                    )),
+              ),
             )
           ],
         ),
