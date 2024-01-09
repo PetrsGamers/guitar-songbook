@@ -60,9 +60,11 @@ class ProfileScreen extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<AppUser> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
+              }
+              if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
-              } else if (snapshot.hasData) {
+              }
+              if (snapshot.hasData) {
                 AppUser user = snapshot.data!;
                 return Profile(user: user);
               } else {

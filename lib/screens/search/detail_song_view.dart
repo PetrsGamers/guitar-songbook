@@ -91,13 +91,13 @@ class _DetailSongViewState extends State<DetailSongView> {
       textWidgets.add(
         Text(
           annotationTextWithSpaces,
-          style: const TextStyle(fontFamily: "Monospace"),
+          style: const TextStyle(fontFamily: "Monospace", fontSize: 17),
         ),
       );
       textWidgets.add(
         Text(
           separatedText[1],
-          style: const TextStyle(fontFamily: "Monospace"),
+          style: const TextStyle(fontFamily: "Monospace", fontSize: 17),
         ),
       );
     }

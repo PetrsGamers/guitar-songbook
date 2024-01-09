@@ -36,7 +36,8 @@ class _RatingWidgetState extends State<RatingsubWidget> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
-        } else if (snapshot.hasError) {
+        }
+        if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
           if (!snapshot.hasData || snapshot.data == null) {
@@ -45,23 +46,34 @@ class _RatingWidgetState extends State<RatingsubWidget> {
             userRating = snapshot.data!;
           }
           return Container(
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ElevatedButton(
-                  onPressed: openRatingWindow,
-                  child: Text("Rate a song"),
-                ),
+                if (userRating?.number == -1)
+                  ElevatedButton(
+                    onPressed: _openRatingWindow,
+                    child: Text("Rate a song"),
+                  ),
                 if (userRating?.number != -1)
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("Your rating: ${userRating!.number.toString()}"),
-                      Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
+                      ElevatedButton(
+                        onPressed: _openRatingWindow,
+                        child: Row(
+                          children: [
+                            Text(
+                                "Your rating: ${userRating!.number.toString()}"),
+                            Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 if ('${fullRanking}' != 'NaN')
                   Row(
                     children: [
-                      Text('Users rating of the song :  ${fullRanking}'),
+                      Text('User\'s rating of the song :  ${fullRanking}'),
                       Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
                     ],
                   ),
@@ -136,7 +148,7 @@ class _RatingWidgetState extends State<RatingsubWidget> {
     }
   }
 
-  void openRatingWindow() {
+  void _openRatingWindow() {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
