@@ -22,17 +22,9 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Search song screen"),
+          title: const Text("Search song"),
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        body: Center(
-          child: Column(
-            children: [
-              SearchBox(),
-              Text(content),
-              Text(user?.email ?? 'nouser'),
-            ],
-          ),
-        ));
+        body: const Center(child: SearchBox()));
   }
 }

@@ -19,22 +19,26 @@ class SettingsScreen extends ConsumerWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Settings screen"),
-          backgroundColor: Theme.of(context).primaryColor,
+          title: const Text("Settings"),
         ),
         body: Center(
           child: Column(
             children: [
-              Text(content),
-              Text(user?.email ?? 'nouser'),
-              ElevatedButton(
-                  onPressed: () async {
-                    if (await Auth().signOut() == true) {
-                      authController.signOut();
-                      context.go('/login');
-                    }
-                  },
-                  child: Text('logout'))
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child:
+                    Text("Currently logged in as: ${user?.email ?? 'nouser'}"),
+              ),
+              ListTile(
+                onTap: () async {
+                  if (await Auth().signOut() == true) {
+                    authController.signOut();
+                    context.go('/login');
+                  }
+                },
+                title: const Text('Log out'),
+                trailing: const Icon(Icons.logout),
+              )
             ],
           ),
         ));

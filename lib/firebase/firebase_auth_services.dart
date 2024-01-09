@@ -28,7 +28,6 @@ class Auth {
     required String password,
   }) async {
     try {
-      // don't you dare forget await here or anywhere else 💀💀💀
       await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
