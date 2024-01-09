@@ -46,27 +46,32 @@ class _RatingWidgetState extends State<RatingsubWidget> {
             userRating = snapshot.data!;
           }
           return Container(
-            child: Wrap(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (userRating?.number == -1)
                   ElevatedButton(
-                    onPressed: openRatingWindow,
+                    onPressed: _openRatingWindow,
                     child: Text("Rate a song"),
                   ),
                 if (userRating?.number != -1)
-                  Wrap(
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       ElevatedButton(
-                        onPressed: openRatingWindow,
-                        child: Row(children: [
-                          Text("Your rating: ${userRating!.number.toString()}"),
-                          Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons'))
-                        ]),
+                        onPressed: _openRatingWindow,
+                        child: Row(
+                          children: [
+                            Text(
+                                "Your rating: ${userRating!.number.toString()}"),
+                            Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 if ('${fullRanking}' != 'NaN')
-                  Wrap(
+                  Row(
                     children: [
                       Text('User\'s rating of the song :  ${fullRanking}'),
                       Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
@@ -143,7 +148,7 @@ class _RatingWidgetState extends State<RatingsubWidget> {
     }
   }
 
-  void openRatingWindow() {
+  void _openRatingWindow() {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {

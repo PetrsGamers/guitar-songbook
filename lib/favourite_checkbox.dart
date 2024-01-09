@@ -24,14 +24,14 @@ class _FavouriteCheckboxState extends State<FavouriteCheckbox> {
 
   Future<void> fetchUserFavourites() async {
     try {
-      DocumentSnapshot usersnapshot = await FirebaseFirestore.instance
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(currentUser?.uid)
           .get();
 
-      if (usersnapshot.exists) {
+      if (userSnapshot.exists) {
         final Map<String, dynamic>? userData =
-            usersnapshot.data() as Map<String, dynamic>?;
+            userSnapshot.data() as Map<String, dynamic>?;
 
         if (userData != null) {
           final List<dynamic>? favoriteIds =
@@ -39,7 +39,6 @@ class _FavouriteCheckboxState extends State<FavouriteCheckbox> {
           print(favoriteIds);
           if (favoriteIds != null) {
             for (var favoriteId in favoriteIds) {
-              // Assuming 'favoriteId' is the song ID and 'songId' is the current song's ID
               if (favoriteId == widget.songId) {
                 setState(() {
                   isChecked = true; // Mark as checked if it matches

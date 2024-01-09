@@ -63,7 +63,7 @@ class _DetailSongViewState extends State<DetailSongView> {
             child: const Icon(Icons.arrow_downward)),
         Text(songKeyChord.toString()),
         const Text(
-            "  "), // TODO: temp solution, replace with padding and proper axis alignment
+            "  "), // TODO: temp solution, replace with padding and proper axis alignment, centre widget edit spaces
         Text(formatTransposition()),
         ElevatedButton(
             onPressed: () {
