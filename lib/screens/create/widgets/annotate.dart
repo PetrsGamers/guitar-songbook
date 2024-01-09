@@ -83,21 +83,32 @@ class _AnnotateState extends State<Annotate> {
       textList.add(buildTappableLyricsLine(line, lineIndex, context));
       lineIndex++;
     }
-    // add button with callbacks at the end of the Widget list
-    textList.add(ElevatedButton(
-        onPressed: () {
-          widget.nextScreenCallback(true);
-          widget.saveAnnotations(listMap);
-        },
-        child: const Text("Proceed to add song metadata")));
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: textList),
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Align(
+                alignment: Alignment.center,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: textList),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16, bottom: 46),
+            child: ElevatedButton(
+                onPressed: () {
+                  widget.nextScreenCallback(true);
+                  widget.saveAnnotations(listMap);
+                },
+                child: const Text("Proceed to add song metadata")),
+          )
+        ],
       ),
     );
   }
@@ -105,8 +116,7 @@ class _AnnotateState extends State<Annotate> {
   Widget buildAnnotationLine(int lineIndex, int lineLength) {
     return Text(
       listMap.isNotEmpty ? _generateString(lineLength, listMap[lineIndex]) : "",
-      style: const TextStyle(
-          backgroundColor: Colors.red, fontSize: 22, fontFamily: "Monospace"),
+      style: const TextStyle(fontSize: 20, fontFamily: "Monospace"),
     );
   }
 
@@ -120,7 +130,7 @@ class _AnnotateState extends State<Annotate> {
         TextSpan(
           text: character,
           style: const TextStyle(
-              fontSize: 22.0, color: Colors.white, fontFamily: "Monospace"),
+              fontSize: 20.0, color: Colors.white, fontFamily: "Monospace"),
           recognizer: TapGestureRecognizer()
             ..onTap = () {
               showModalBottomSheet(

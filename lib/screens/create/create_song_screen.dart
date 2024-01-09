@@ -53,7 +53,7 @@ class _CreateSongScreenState extends State<CreateSongScreen> {
       'year': year,
       'userId': Auth().currentUser!.uid,
       'text': serializedAnnotatedText,
-      'key': songKey
+      'key': songKey,
     }).then((DocumentReference doc) {
       print("New song added");
       // add the song id to the user's list of created songs
@@ -111,7 +111,7 @@ class _CreateSongScreenState extends State<CreateSongScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add new song - step ${subScreenIndex + 1}/3'),
+        title: Text('Add new song - Step ${subScreenIndex + 1} / 3'),
       ),
       body: Center(
           child: <Widget>[

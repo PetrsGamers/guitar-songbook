@@ -29,29 +29,38 @@ class _AddTextState extends State<AddText> {
   @override
   Widget build(BuildContext context) {
     return Center(
+        child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+      child: SizedBox(
+        width: 400,
         child: Column(children: [
-      Expanded(
-          child: TextField(
-        inputFormatters: [
-          FilteringTextInputFormatter.deny(RegExp(r'[/\\{\}]')),
-          LineLengthLimitingTextInputFormatter(30),
-        ],
-        controller: _textController,
-        decoration: const InputDecoration(
-          hintText: "Write down the song lyrics here",
-        ),
-        scrollPadding: const EdgeInsets.all(20.0),
-        keyboardType: TextInputType.multiline,
-        autofocus: true,
-        minLines: 4,
-        maxLines: null,
-      )),
-      ElevatedButton(
-          onPressed: () {
-            widget.saveText(_textController.text);
-            widget.nextScreenCallback(true);
-          },
-          child: const Text("Proceed to annotate lyrics with chords"))
-    ]));
+          Expanded(
+              child: TextField(
+            inputFormatters: [
+              FilteringTextInputFormatter.deny(RegExp(r'[/\\{\}]')),
+              LineLengthLimitingTextInputFormatter(40),
+            ],
+            controller: _textController,
+            decoration: const InputDecoration(
+              hintText: "Write down the song lyrics here",
+            ),
+            scrollPadding: const EdgeInsets.all(20.0),
+            keyboardType: TextInputType.multiline,
+            autofocus: true,
+            minLines: 4,
+            maxLines: null,
+          )),
+          Padding(
+            padding: const EdgeInsets.only(top: 16, bottom: 46),
+            child: ElevatedButton(
+                onPressed: () {
+                  widget.saveText(_textController.text);
+                  widget.nextScreenCallback(true);
+                },
+                child: const Text("Proceed to annotate lyrics with chords")),
+          )
+        ]),
+      ),
+    ));
   }
 }
