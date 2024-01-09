@@ -82,7 +82,7 @@ class _ProfileState extends State<Profile> {
       children: <Widget>[
         Container(
           height: 140,
-          color: Colors.lightGreen,
+          color: Theme.of(context).canvasColor,
         ),
         Positioned(
           top: 80,
@@ -126,8 +126,6 @@ class _ProfileState extends State<Profile> {
                                 ],
                               ))
                     }
-                  else
-                    {print("ignoring tap")}
                 },
               ),
             ),
@@ -139,7 +137,12 @@ class _ProfileState extends State<Profile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.user.name, style: const TextStyle(fontSize: 32)),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Text(widget.user.name,
+                      style: const TextStyle(fontSize: 34)),
+                ),
                 FavoritePreview(userId: widget.user.id),
                 CreatedPreview(userId: widget.user.id)
               ],

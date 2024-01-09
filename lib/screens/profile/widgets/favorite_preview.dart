@@ -67,7 +67,7 @@ class FavoritePreview extends StatelessWidget {
                         var song = snapshot.data![index];
                         return ListTile(
                           onTap: () => context.push("/search/${song.id}"),
-                          title: Text('Name: ${song.name}'),
+                          title: Text(song.name),
                           subtitle: Text('Author: ${song.author}'),
                         );
                       })

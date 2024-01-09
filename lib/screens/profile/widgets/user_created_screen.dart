@@ -72,7 +72,7 @@ class CreatedSongsScreen extends StatelessWidget {
                       context.push("/search/${song.id}");
                     },
                     title: Text(song.name),
-                    subtitle: Text('${userDocSnapshot.data!.get('name')}'),
+                    subtitle: Text(song.author),
                     // Add additional information as needed
                   );
                 },

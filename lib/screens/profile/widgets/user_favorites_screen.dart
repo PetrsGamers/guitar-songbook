@@ -23,21 +23,20 @@ class FavoriteSongsScreen extends StatelessWidget {
           if (userDocSnapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
-
           if (!userDocSnapshot.hasData || userDocSnapshot.data == null) {
-            return Center(
+            return const Center(
               child: Text('User data not found'),
             );
           }
 
           List<String> favoriteSongIds;
           if ((userDocSnapshot.data!.data() as Map<String, dynamic>)
-                  .containsKey('created') ==
+                  .containsKey('favorites') ==
               false) {
             favoriteSongIds = [];
           } else {
             favoriteSongIds =
-                List<String>.from(userDocSnapshot.data!.get('created'));
+                List<String>.from(userDocSnapshot.data!.get('favorites'));
           }
 
           return StreamBuilder(
@@ -50,11 +49,11 @@ class FavoriteSongsScreen extends StatelessWidget {
             builder: (BuildContext context,
                 AsyncSnapshot<QuerySnapshot> songsSnapshot) {
               if (songsSnapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
 
               if (!songsSnapshot.hasData || songsSnapshot.data == null) {
-                return Center(
+                return const Center(
                   child: Text('Favorite songs not found'),
                 );
               }
@@ -73,8 +72,7 @@ class FavoriteSongsScreen extends StatelessWidget {
                       context.push("/search/${song.id}");
                     },
                     title: Text(song.name),
-                    subtitle: Text(
-                        '${song.author} - ${userDocSnapshot.data!.get('name')}'),
+                    subtitle: Text(song.author),
                     // Add additional information as needed
                   );
                 },
