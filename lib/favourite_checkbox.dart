@@ -94,13 +94,21 @@ class _FavouriteCheckboxState extends State<FavouriteCheckbox> {
 
   @override
   Widget build(BuildContext context) {
-    return Checkbox(
-      value: isChecked,
-      onChanged: (bool? newValue) {
-        if (newValue != null) {
-          updateFavourites(newValue);
-        }
-      },
+    return Container(
+      child: Row(
+        children: [
+          if (!isChecked) Text('Add to favourite?'),
+          if (isChecked) Text('Favourite'),
+          Checkbox(
+            value: isChecked,
+            onChanged: (bool? newValue) {
+              if (newValue != null) {
+                updateFavourites(newValue);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

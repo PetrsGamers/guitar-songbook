@@ -36,7 +36,8 @@ class _RatingWidgetState extends State<RatingsubWidget> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
-        } else if (snapshot.hasError) {
+        }
+        if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
           if (!snapshot.hasData || snapshot.data == null) {
@@ -45,23 +46,29 @@ class _RatingWidgetState extends State<RatingsubWidget> {
             userRating = snapshot.data!;
           }
           return Container(
-            child: Row(
+            child: Wrap(
               children: [
-                ElevatedButton(
-                  onPressed: openRatingWindow,
-                  child: Text("Rate a song"),
-                ),
+                if (userRating?.number == -1)
+                  ElevatedButton(
+                    onPressed: openRatingWindow,
+                    child: Text("Rate a song"),
+                  ),
                 if (userRating?.number != -1)
-                  Row(
+                  Wrap(
                     children: [
-                      Text("Your rating: ${userRating!.number.toString()}"),
-                      Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
+                      ElevatedButton(
+                        onPressed: openRatingWindow,
+                        child: Row(children: [
+                          Text("Your rating: ${userRating!.number.toString()}"),
+                          Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons'))
+                        ]),
+                      ),
                     ],
                   ),
                 if ('${fullRanking}' != 'NaN')
-                  Row(
+                  Wrap(
                     children: [
-                      Text('Users rating of the song :  ${fullRanking}'),
+                      Text('User\'s rating of the song :  ${fullRanking}'),
                       Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
                     ],
                   ),

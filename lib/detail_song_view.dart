@@ -84,13 +84,13 @@ class _DetailSongViewState extends State<DetailSongView> {
       textWidgets.add(
         Text(
           textik,
-          style: TextStyle(fontFamily: "Monospace"),
+          style: TextStyle(fontFamily: "Monospace", fontSize: 17),
         ),
       );
       textWidgets.add(
         Text(
           text1[1],
-          style: TextStyle(fontFamily: "Monospace"),
+          style: TextStyle(fontFamily: "Monospace", fontSize: 17),
         ),
       );
     }
