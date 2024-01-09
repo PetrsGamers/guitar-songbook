@@ -3,6 +3,7 @@ import 'dart:js_interop_unsafe';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:guitar_app/songs_class.dart';
 import 'package:intl/intl.dart';
 
@@ -39,8 +40,9 @@ class _CommentScreenState extends State<CommentScreen> {
             return Text('Error: ${snapshot.error}'); // Show error message
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Text(
-                'No comments yet'); // Display when no comments are available
+            return Center(
+              child: Text('No comments yet'),
+            ); // Display when no comments are available
           }
 
           // Process comments and user details
@@ -93,10 +95,10 @@ class _CommentScreenState extends State<CommentScreen> {
         Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(5.0),
           ),
           margin: EdgeInsets.all(8.0),
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(5.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -123,10 +125,15 @@ class _CommentScreenState extends State<CommentScreen> {
                       style: TextStyle(fontSize: 16.0),
                     ),
                     SizedBox(height: 4.0),
-                    Text(
-                      userData?['name'] ?? '',
-                      style: TextStyle(color: Colors.grey),
-                    ),
+                    GestureDetector(
+                      onTap: () {
+                        context.go('/profile/${userRef.id}');
+                      },
+                      child: Text(
+                        userData?['name'] ?? '',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    )
                   ],
                 ),
               ),
