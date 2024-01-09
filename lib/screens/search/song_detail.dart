@@ -55,34 +55,73 @@ class SongDetailState extends State<SongDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.song.name),
+        title: Column(
+          children: [
+            Center(
+              child: Text(
+                widget.song.name,
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ),
+            Center(
+              child: Text(
+                widget.song.author,
+                style: TextStyle(fontSize: 14.0),
+              ),
+            ),
+          ],
+        ),
         backgroundColor: Colors.deepOrange,
       ),
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Container(
           padding: EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(widget.song.author),
-              Row(
-                children: [
-                  Text('Favourite ?'),
-                  FavouriteCheckbox(songId: widget.song.id),
-                ],
-              ),
-              RatingsubWidget(song: widget.song),
-              ElevatedButton(
-                  onPressed: () {
-                    context.go('/search/${widget.song.id}/comments');
-                  },
-                  child: Text("Comments")),
-              DetailSongView(
-                text: widget.song.text,
-                songKey: widget.song.key,
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Rating Widget
+                    RatingsubWidget(song: widget.song),
+                    // Comments Button
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            context.go('/search/${widget.song.id}/comments');
+                          },
+                          child: Text("Comments"),
+                        ),
+                        FavouriteCheckbox(songId: widget.song.id),
+                      ],
+                    ),
+                  ],
+                ),
+                // Favourite Checkbox
+                // Centered song details
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(width: 1),
+                        DetailSongView(
+                          text: widget.song.text,
+                          songKey: widget.song.key,
+                        ),
+                        SizedBox(width: 1),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
