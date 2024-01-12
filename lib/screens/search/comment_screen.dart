@@ -1,4 +1,3 @@
-import 'dart:js_interop_unsafe';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +32,8 @@ class _CommentScreenState extends State<CommentScreen> {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Show loading indicator
+            return Center(
+                child: CircularProgressIndicator()); // Show loading indicator
           }
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}'); // Show error message
@@ -107,8 +107,23 @@ class _CommentScreenState extends State<CommentScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(userData?['picture'] ?? ''),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(userData?['picture'] ?? ''),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      context.go('/profile/${userRef.id}');
+                    },
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        userData?['name'] ?? '',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
                   ),
                   Text(
                     _formatTimestamp(commentData['time']),
@@ -119,41 +134,27 @@ class _CommentScreenState extends State<CommentScreen> {
               SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Wrap(
                   children: [
                     Text(
                       commentData['text'] ?? '',
                       style: TextStyle(fontSize: 16.0),
                     ),
-                    SizedBox(height: 4.0),
-                    GestureDetector(
-                      onTap: () {
-                        context.go('/profile/${userRef.id}');
-                      },
-                      child: Text(
-                        userData?['name'] ?? '',
-                        style: TextStyle(color: Colors.grey),
+                    if (userRef.id == currentUser?.uid)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            final commentRef = comment.reference;
+                            commentRef.delete();
+                            print('Delete comment');
+                          },
+                          child: Icon(Icons.close, color: Colors.red),
+                        ),
                       ),
-                    )
                   ],
                 ),
               ),
-              if (userRef.id == currentUser?.uid)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      final commentRef = comment.reference;
-                      commentRef.delete();
-                      print('Delete comment');
-                    },
-                    child: Row(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(Icons.close, color: Colors.red),
-                      SizedBox(width: 4.0),
-                    ]),
-                  ),
-                ),
             ],
           ),
         ),
@@ -202,6 +203,7 @@ class _CommentScreenState extends State<CommentScreen> {
                     },
                     child: Text("Close"),
                   ),
+                  SizedBox(height: 32.0),
                 ],
               ),
             ],
