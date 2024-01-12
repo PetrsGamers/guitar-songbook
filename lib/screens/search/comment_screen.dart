@@ -75,6 +75,9 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 
   Future<List<Widget>> _getUserComments(List<DocumentSnapshot> comments) async {
+    comments.sort(
+        (a, b) => (b['time'] as Timestamp).compareTo(a['time'] as Timestamp));
+
     List<Widget> commentWidgets = [];
 
     for (DocumentSnapshot comment in comments) {
