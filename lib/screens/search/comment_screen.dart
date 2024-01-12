@@ -1,11 +1,10 @@
-import 'dart:js_interop_unsafe';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:guitar_app/entities/songs.dart';
+import 'package:go_router/go_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-
 import '../../firebase/firebase_auth_services.dart';
 
 class CommentScreen extends StatefulWidget {
@@ -33,14 +32,16 @@ class _CommentScreenState extends State<CommentScreen> {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Show loading indicator
+            return Center(
+                child: CircularProgressIndicator()); // Show loading indicator
           }
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}'); // Show error message
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Text(
-                'No comments yet'); // Display when no comments are available
+            return Center(
+              child: Text('No comments yet'),
+            ); // Display when no comments are available
           }
 
           // Process comments and user details
@@ -74,6 +75,9 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 
   Future<List<Widget>> _getUserComments(List<DocumentSnapshot> comments) async {
+    comments.sort(
+        (a, b) => (b['time'] as Timestamp).compareTo(a['time'] as Timestamp));
+
     List<Widget> commentWidgets = [];
 
     for (DocumentSnapshot comment in comments) {
@@ -93,18 +97,33 @@ class _CommentScreenState extends State<CommentScreen> {
         Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(5.0),
           ),
           margin: EdgeInsets.all(8.0),
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(5.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(userData?['picture'] ?? ''),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(userData?['picture'] ?? ''),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      context.go('/profile/${userRef.id}');
+                    },
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        userData?['name'] ?? '',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
                   ),
                   Text(
                     _formatTimestamp(commentData['time']),
@@ -115,36 +134,27 @@ class _CommentScreenState extends State<CommentScreen> {
               SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Wrap(
                   children: [
                     Text(
                       commentData['text'] ?? '',
                       style: TextStyle(fontSize: 16.0),
                     ),
-                    SizedBox(height: 4.0),
-                    Text(
-                      userData?['name'] ?? '',
-                      style: TextStyle(color: Colors.grey),
-                    ),
+                    if (userRef.id == currentUser?.uid)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            final commentRef = comment.reference;
+                            commentRef.delete();
+                            print('Delete comment');
+                          },
+                          child: Icon(Icons.close, color: Colors.red),
+                        ),
+                      ),
                   ],
                 ),
               ),
-              if (userRef.id == currentUser?.uid)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      final commentRef = comment.reference;
-                      commentRef.delete();
-                      print('Delete comment');
-                    },
-                    child: Row(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(Icons.close, color: Colors.red),
-                      SizedBox(width: 4.0),
-                    ]),
-                  ),
-                ),
             ],
           ),
         ),
@@ -193,6 +203,7 @@ class _CommentScreenState extends State<CommentScreen> {
                     },
                     child: Text("Close"),
                   ),
+                  SizedBox(height: 32.0),
                 ],
               ),
             ],
