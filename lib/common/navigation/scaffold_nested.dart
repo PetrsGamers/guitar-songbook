@@ -31,7 +31,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
       NavigationDestination(icon: Icon(Icons.search), label: "Search songs"),
       NavigationDestination(icon: Icon(Icons.add), label: "Create song"),
       NavigationDestination(icon: Icon(Icons.person), label: "Profile"),
-      NavigationDestination(icon: Icon(Icons.settings), label: "settings")
+      NavigationDestination(icon: Icon(Icons.settings), label: "Settings")
     ];
     if (currentWidth < 600) {
       // show bottom navbar on mobile devices

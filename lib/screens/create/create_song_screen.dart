@@ -111,7 +111,7 @@ class _CreateSongScreenState extends State<CreateSongScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add new song - Step ${subScreenIndex + 1} / 3'),
+        title: Text('Create new song - Step ${subScreenIndex + 1} / 3'),
       ),
       body: Center(
           child: <Widget>[
