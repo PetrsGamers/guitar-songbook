@@ -39,13 +39,22 @@ class SettingsScreen extends ConsumerWidget {
                 title: const Text('Log out'),
                 trailing: const Icon(Icons.logout),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("© All rights reserved"),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("created by PetrsGamer and Tejd"),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.end, // Align content to the bottom
+
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text("© 2024 All rights reserved 😉"),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text("created by PetrsGamer and Tejd"),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
