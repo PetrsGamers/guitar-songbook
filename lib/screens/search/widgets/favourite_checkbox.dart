@@ -9,10 +9,10 @@ class FavouriteCheckbox extends StatefulWidget {
   const FavouriteCheckbox({Key? key, required this.songId}) : super(key: key);
 
   @override
-  _FavouriteCheckboxState createState() => _FavouriteCheckboxState();
+  FavouriteCheckboxState createState() => FavouriteCheckboxState();
 }
 
-class _FavouriteCheckboxState extends State<FavouriteCheckbox> {
+class FavouriteCheckboxState extends State<FavouriteCheckbox> {
   final User? currentUser = Auth().currentUser;
   late bool isChecked = false;
 
@@ -36,7 +36,6 @@ class _FavouriteCheckboxState extends State<FavouriteCheckbox> {
         if (userData != null) {
           final List<dynamic>? favoriteIds =
               userData['favorites'] as List<dynamic>?;
-          print(favoriteIds);
           if (favoriteIds != null) {
             for (var favoriteId in favoriteIds) {
               if (favoriteId == widget.songId) {
@@ -81,7 +80,6 @@ class _FavouriteCheckboxState extends State<FavouriteCheckbox> {
             .update({
           'favorites': FieldValue.arrayRemove([widget.songId])
         });
-        print('halo');
         setState(() {
           isChecked = newValue; // Update the local state
         });
@@ -93,21 +91,19 @@ class _FavouriteCheckboxState extends State<FavouriteCheckbox> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          if (!isChecked) Text('Add to favourite?'),
-          if (isChecked) Text('Favourite'),
-          Checkbox(
-            value: isChecked,
-            onChanged: (bool? newValue) {
-              if (newValue != null) {
-                updateFavourites(newValue);
-              }
-            },
-          ),
-        ],
-      ),
+    return Row(
+      children: [
+        if (!isChecked) const Text('Add to favourite?'),
+        if (isChecked) const Text('Favourite'),
+        Checkbox(
+          value: isChecked,
+          onChanged: (bool? newValue) {
+            if (newValue != null) {
+              updateFavourites(newValue);
+            }
+          },
+        ),
+      ],
     );
   }
 }

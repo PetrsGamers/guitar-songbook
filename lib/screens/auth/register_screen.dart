@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import '../../firebase/firebase_auth_services.dart';
 
 class RegisterScreen extends StatefulWidget {
-  RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -69,10 +70,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Future<void> addUser(name, email, bio) {
       User? currentUser = Auth().currentUser;
       if (currentUser == null) {
-        print("error adding user, the currentUser in Auth session is null");
+        log("error adding user, the currentUser in Auth session is null");
         return Future(() => null);
       }
-      print("user Auth id is: ${currentUser.uid}");
+      log("user Auth id is: ${currentUser.uid}");
       return users
           .doc(currentUser
               .uid) // create a new user with the same id as the auth_id
@@ -81,8 +82,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             'email': email,
             'bio': bio,
           })
-          .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
+          .then((value) => log("User Added"))
+          .catchError((error) => log("Failed to add user: $error"));
     }
 
     void register() async {
@@ -93,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           password: _controllerPassword.text,
         );
       } catch (e) {
-        print("error registering the user: $e");
+        log("error registering the user: $e");
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("$e"),
         ));
@@ -106,18 +107,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: const Text('Register'),
       ),
       body: Center(
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Container(
+              child: SizedBox(
                 width: 300,
                 child: TextField(
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     hintText: 'Username',
                     labelText: 'User name',
                     errorText:
@@ -125,8 +126,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     suffixIcon: isUsernameAvailable == null
                         ? null
                         : isUsernameAvailable!
-                            ? Icon(Icons.check_circle, color: Colors.green)
-                            : Icon(Icons.error, color: Colors.red),
+                            ? const Icon(Icons.check_circle,
+                                color: Colors.green)
+                            : const Icon(Icons.error, color: Colors.red),
                   ),
                   controller: _controllerUsername,
                 ),
@@ -134,10 +136,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
+              child: SizedBox(
                 width: 300,
                 child: TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(), hintText: 'Email'),
                   controller: _controllerEmail,
                 ),
@@ -145,10 +147,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
+              child: SizedBox(
                 width: 300,
                 child: TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(), hintText: 'Password'),
                   controller: _controllerPassword,
                   onSubmitted: (_) => {register()},
@@ -163,8 +165,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onPressed: () async {
                       register();
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text('register'),
                     )),
               ),
@@ -177,8 +179,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onPressed: () {
                       context.go('/login');
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text('Go back to login screen'),
                     )),
               ),

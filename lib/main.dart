@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:guitar_app/common/app_theme.dart';
@@ -6,8 +5,6 @@ import 'package:guitar_app/common/navigation/app_navigation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'firebase/auth_notifier.dart';
 import 'firebase/firebase_options.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'common/navigation/app_navigation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +12,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 final authProvider = ChangeNotifierProvider((ref) => AuthController());

@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +6,10 @@ import 'package:go_router/go_router.dart';
 import 'package:guitar_app/main.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../firebase/firebase_auth_services.dart';
-
 class LoginScreen extends ConsumerWidget {
   LoginScreen({Key? key}) : super(key: key);
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-
-  // Future<bool> logIn(String email, String password) async {}
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,7 +24,7 @@ class LoginScreen extends ConsumerWidget {
           password: _controllerPassword.text,
         );
       } catch (e) {
-        print("Login error: $e");
+        log("Login error: $e");
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("$e"),
         ));
@@ -40,17 +36,17 @@ class LoginScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
       body: Center(
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Container(
+              child: SizedBox(
                 width: 250,
                 child: TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(), hintText: 'Email'),
                   controller: _controllerEmail,
                 ),
@@ -58,7 +54,7 @@ class LoginScreen extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: Container(
+              child: SizedBox(
                 width: 250,
                 child: TextField(
                   decoration: const InputDecoration(

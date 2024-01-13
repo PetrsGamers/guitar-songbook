@@ -48,10 +48,10 @@ class CustomAppTheme {
             backgroundColor: Colors.deepOrange,
             titleTextStyle: TextStyle(color: Colors.white, fontSize: 22)),
         dialogBackgroundColor: Colors.grey[900],
-        listTileTheme: ListTileThemeData(
+        listTileTheme: const ListTileThemeData(
             iconColor: Colors.deepOrange,
             contentPadding: EdgeInsets.symmetric(horizontal: 24)),
-        floatingActionButtonTheme:
-            FloatingActionButtonThemeData(backgroundColor: Colors.deepOrange));
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: Colors.deepOrange));
   }
 }

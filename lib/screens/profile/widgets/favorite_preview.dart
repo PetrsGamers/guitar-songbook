@@ -57,9 +57,9 @@ class FavoritePreview extends StatelessWidget {
               return Column(
                 children: [
                   ListTile(
-                      onTap: () => context.push("/profile/${userId}/favorites"),
-                      title: Text("User favorites"),
-                      trailing: Icon(Icons.arrow_forward_ios)),
+                      onTap: () => context.push("/profile/$userId/favorites"),
+                      title: const Text("User favorites"),
+                      trailing: const Icon(Icons.arrow_forward_ios)),
                   ListView.builder(
                       shrinkWrap: true,
                       itemCount: snapshot.data!.length,

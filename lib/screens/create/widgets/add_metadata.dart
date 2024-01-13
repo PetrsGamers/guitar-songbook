@@ -49,90 +49,102 @@ class _AddMetadataState extends State<AddMetadata> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 32),
-      child: SizedBox(
-        width: 400,
-        child: Column(
-          children: [
-            Form(
-                key: _formKey,
-                child: Column(children: [
-                  TextFormField(
-                      validator: validateInputDefault,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(), hintText: 'Song Name'),
-                      controller: _controllerSongName),
-                  TextFormField(
-                      validator: validateInputDefault,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Musician / band'),
-                      controller: _controllerMusician),
-                  TextFormField(
-                      validator: validateBPM,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(), hintText: 'Song BPM'),
-                      controller: _controllerBPM),
-                  TextFormField(
-                      validator: validateYear,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Year (release date)'),
-                      controller: _controllerYear),
-                  SizedBox(
-                    width: 400,
-                    child: DropdownButton(
-                        value: dropdownSongKeyValue,
-                        items: Chord.songKeys
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            dropdownSongKeyValue = value!;
-                          });
-                        }),
-                  )
-                ])),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(top: 16, bottom: 46),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  OutlinedButton(
-                      onPressed: () {
-                        widget.nextScreenCallback(false);
-                      },
-                      child: const Text("Cancel everything")),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                              content: Text(
-                                  'Submitting Data, thanks for contributing :)')));
-                          widget.onSubmit(
-                              _controllerSongName.text,
-                              _controllerMusician.text,
-                              _controllerBPM.text,
-                              _controllerYear.text,
-                              dropdownSongKeyValue);
-                          widget.nextScreenCallback(true);
-                        }
-                      },
-                      child: const Text("Submit song!")),
-                ],
-              ),
-            )
-          ],
+    return SingleChildScrollView(
+      child: Align(
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 32),
+          child: SizedBox(
+            width: 400,
+            child: Column(
+              children: [
+                Form(
+                    key: _formKey,
+                    child: Column(children: [
+                      TextFormField(
+                          validator: validateInputDefault,
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Song Name'),
+                          controller: _controllerSongName),
+                      TextFormField(
+                          validator: validateInputDefault,
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Musician / band'),
+                          controller: _controllerMusician),
+                      TextFormField(
+                          validator: validateBPM,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Song BPM'),
+                          controller: _controllerBPM),
+                      TextFormField(
+                          validator: validateYear,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Year (release date)'),
+                          controller: _controllerYear),
+                      SizedBox(
+                        width: 400,
+                        child: DropdownButton(
+                            value: dropdownSongKeyValue,
+                            items: Chord.songKeys
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                dropdownSongKeyValue = value!;
+                              });
+                            }),
+                      )
+                    ])),
+                //const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 46),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      OutlinedButton(
+                          onPressed: () {
+                            widget.nextScreenCallback(false);
+                          },
+                          child: const Text("Cancel everything")),
+                      ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Submitting Data, thanks for contributing :)')));
+                              widget.onSubmit(
+                                  _controllerSongName.text,
+                                  _controllerMusician.text,
+                                  _controllerBPM.text,
+                                  _controllerYear.text,
+                                  dropdownSongKeyValue);
+                              widget.nextScreenCallback(true);
+                            }
+                          },
+                          child: const Text("Submit song!")),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

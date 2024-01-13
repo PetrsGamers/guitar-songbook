@@ -4,14 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:guitar_app/entities/songs.dart';
 
 class FavoriteSongsScreen extends StatelessWidget {
-  FavoriteSongsScreen({super.key, required this.userId});
+  const FavoriteSongsScreen({super.key, required this.userId});
   final String? userId;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Favorite Songs'),
+        title: const Text('Favorite Songs'),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -21,7 +21,7 @@ class FavoriteSongsScreen extends StatelessWidget {
         builder: (BuildContext context,
             AsyncSnapshot<DocumentSnapshot> userDocSnapshot) {
           if (userDocSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (!userDocSnapshot.hasData || userDocSnapshot.data == null) {
             return const Center(

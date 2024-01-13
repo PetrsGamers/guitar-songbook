@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:guitar_app/screens/create/widgets/add_metadata.dart';
 import 'package:guitar_app/screens/create/create_song_screen.dart';
-import 'package:guitar_app/screens/create/widgets/annotate.dart';
 import 'package:guitar_app/screens/search/comment_screen.dart';
 import 'package:guitar_app/screens/auth/login_screen.dart';
 import 'package:guitar_app/screens/settings/settings_screen.dart';
@@ -107,26 +105,6 @@ final routerProvider = Provider<GoRouter>((ref) {
                 name: "Add song",
                 builder: (BuildContext context, GoRouterState state) =>
                     const CreateSongScreen(),
-                routes: [
-                  GoRoute(
-                    path: "details",
-                    name: "add_song details",
-                    pageBuilder: (context, state) {
-                      return CustomTransitionPage<void>(
-                        key: state.pageKey,
-                        child: SettingsScreen(
-                            content: "Add_song detail sub-screen"),
-                        transitionsBuilder: (
-                          context,
-                          animation,
-                          secondaryAnimation,
-                          child,
-                        ) =>
-                            FadeTransition(opacity: animation, child: child),
-                      );
-                    },
-                  ),
-                ],
               ),
             ],
           ),
@@ -207,27 +185,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: "/settings",
                 name: "Settings",
                 builder: (BuildContext context, GoRouterState state) =>
-                    SettingsScreen(content: "base settings screen"),
-                routes: [
-                  GoRoute(
-                    path: "details",
-                    name: "details",
-                    pageBuilder: (context, state) {
-                      return CustomTransitionPage<void>(
-                        key: state.pageKey,
-                        child: SettingsScreen(
-                            content: "Settings detail sub-screen"),
-                        transitionsBuilder: (
-                          context,
-                          animation,
-                          secondaryAnimation,
-                          child,
-                        ) =>
-                            FadeTransition(opacity: animation, child: child),
-                      );
-                    },
-                  ),
-                ],
+                    SettingsScreen(),
               ),
             ],
           ),
@@ -243,7 +201,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootNavigatorKey,
         path: '/register',
         name: "Register",
-        builder: (context, state) => RegisterScreen(),
+        builder: (context, state) => const RegisterScreen(),
       )
     ],
   );

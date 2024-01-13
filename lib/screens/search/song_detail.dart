@@ -18,13 +18,13 @@ class SongDetail extends StatefulWidget {
 
 class SongDetailState extends State<SongDetail> {
   final User? currentUser = Auth().currentUser;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   bool _isScrolling = false;
 
   void _startAutoScroll() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: Duration(seconds: 5),
+      duration: const Duration(seconds: 5),
       curve: Curves.linear,
     );
   }
@@ -32,7 +32,7 @@ class SongDetailState extends State<SongDetail> {
   void _stopAutoScroll() {
     _scrollController.animateTo(
       _scrollController.position.pixels,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
@@ -60,13 +60,13 @@ class SongDetailState extends State<SongDetail> {
             Center(
               child: Text(
                 widget.song.name,
-                style: TextStyle(fontSize: 20.0),
+                style: const TextStyle(fontSize: 20.0),
               ),
             ),
             Center(
               child: Text(
                 widget.song.author,
-                style: TextStyle(fontSize: 14.0),
+                style: const TextStyle(fontSize: 14.0),
               ),
             ),
           ],
@@ -76,7 +76,7 @@ class SongDetailState extends State<SongDetail> {
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Container(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -94,7 +94,7 @@ class SongDetailState extends State<SongDetail> {
                           onPressed: () {
                             context.go('/search/${widget.song.id}/comments');
                           },
-                          child: Text("Comments"),
+                          child: const Text("Comments"),
                         ),
                         FavouriteCheckbox(songId: widget.song.id),
                       ],
@@ -110,12 +110,12 @@ class SongDetailState extends State<SongDetail> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        SizedBox(width: 1),
+                        const SizedBox(width: 1),
                         DetailSongView(
                           text: widget.song.text,
                           songKey: widget.song.key,
                         ),
-                        SizedBox(width: 1),
+                        const SizedBox(width: 1),
                       ],
                     ),
                   ),
@@ -136,7 +136,9 @@ class SongDetailState extends State<SongDetail> {
             }
           });
         },
-        child: _isScrolling ? Icon(Icons.pause) : Icon(Icons.play_arrow),
+        child: _isScrolling
+            ? const Icon(Icons.pause)
+            : const Icon(Icons.play_arrow),
       ),
     );
   }
