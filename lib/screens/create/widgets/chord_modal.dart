@@ -16,30 +16,46 @@ class ChordModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Text('Select Chord for $lineIndex "$character", index: $charIndex:'),
-          for (String chord in Chord.circleOfFifths)
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              // generate major and minor chord buttons
-              ElevatedButton(
-                onPressed: () {
-                  annotateChar(lineIndex, charIndex, chord);
-                  Navigator.pop(context);
-                },
-                child: Text(chord),
+    return ListView(children: [
+      Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Text('Select chord again to remove the annotation.'),
+            ),
+            for (String chord in Chord.circleOfFifths)
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // generate major and minor chord buttons
+                      SizedBox(
+                        width: 90,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            annotateChar(lineIndex, charIndex, chord);
+                            Navigator.pop(context);
+                          },
+                          child: Text(chord),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 90,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              annotateChar(lineIndex, charIndex, "${chord}m");
+                              Navigator.pop(context);
+                            },
+                            child: Text("${chord}m")),
+                      )
+                    ]),
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    annotateChar(lineIndex, charIndex, "${chord}m");
-                    Navigator.pop(context);
-                  },
-                  child: Text("${chord}m"))
-            ]),
-        ],
+          ],
+        ),
       ),
-    );
+    ]);
   }
 }
