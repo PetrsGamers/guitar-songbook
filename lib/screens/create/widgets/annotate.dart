@@ -103,6 +103,9 @@ class _AnnotateState extends State<Annotate> {
             padding: const EdgeInsets.only(top: 16, bottom: 46),
             child: ElevatedButton(
                 onPressed: () {
+                  // no need to check if user has provided some anntations,
+                  // afterall it's a music book, it is possible to insert
+                  // just lyrics
                   widget.nextScreenCallback(true);
                   widget.saveAnnotations(listMap);
                 },

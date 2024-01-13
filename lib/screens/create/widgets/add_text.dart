@@ -54,6 +54,11 @@ class _AddTextState extends State<AddText> {
             padding: const EdgeInsets.only(top: 16, bottom: 46),
             child: ElevatedButton(
                 onPressed: () {
+                  if (_textController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Provide some text")));
+                    return;
+                  }
                   widget.saveText(_textController.text);
                   widget.nextScreenCallback(true);
                 },
