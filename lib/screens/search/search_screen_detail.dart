@@ -14,12 +14,12 @@ class SearchScreenDetail extends StatelessWidget {
       future: getSongbyId(songId),
       builder: (BuildContext context, AsyncSnapshot<Song> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          // TODO vymazat else(s)
+          return Center(child: const CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (snapshot.hasData) {
-          // TODO tady též
+        }
+        if (snapshot.hasData) {
           return SongDetail(song: snapshot.data!);
         } else {
           return const Text('No song found');

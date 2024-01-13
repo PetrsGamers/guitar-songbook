@@ -27,7 +27,7 @@ class RatingWidgetState extends State<RatingsubWidget> {
   @override
   void initState() {
     super.initState();
-    _userRatingFuture = fetchUserRating();
+    _userRatingFuture = fetchUserRating()!;
     updateFullRating();
   }
 
@@ -51,32 +51,60 @@ class RatingWidgetState extends State<RatingsubWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (userRating?.number == -1)
-                ElevatedButton(
-                  onPressed: _openRatingWindow,
-                  child: const Text("Rate a song"),
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                      child: Center(
+                        child: ElevatedButton(
+                          onPressed: _openRatingWindow,
+                          child: const Text("Rate a song"),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               if (userRating?.number != -1)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    ElevatedButton(
-                      onPressed: _openRatingWindow,
-                      child: Row(
-                        children: [
-                          Text("Your rating: ${userRating!.number.toString()}"),
-                          const Icon(
-                              IconData(0xe5f9, fontFamily: 'MaterialIcons')),
-                        ],
+                    Padding(
+                      padding: const EdgeInsets.only(top: .0, bottom: 8.0),
+                      child: Center(
+                        child: ElevatedButton(
+                          onPressed: _openRatingWindow,
+                          child: Row(
+                            children: [
+                              Text(
+                                  "Your rating: ${userRating!.number.toString()}"),
+                              const Icon(IconData(0xe5f9,
+                                  fontFamily: 'MaterialIcons')),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
-              if ('$fullRanking' != 'NaN')
-                Row(
-                  children: [
-                    Text('User\'s rating of the song :  $fullRanking'),
-                    const Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
-                  ],
+              if ('$fullRanking' != 'NaN' && fullRanking.toInt() >= 1)
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 18.0),
+                  child: Row(
+                    children: [
+                      Text('User\'s rating: $fullRanking'),
+                      const Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
+                    ],
+                  ),
+                ),
+              if (!('$fullRanking' != 'NaN' && fullRanking.toInt() >= 1))
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(''),
+                    ],
+                  ),
                 ),
             ],
           );
@@ -174,7 +202,6 @@ class RatingWidgetState extends State<RatingsubWidget> {
               ),
               onRatingUpdate: (rating) {
                 updateRating(rating);
-                updateFullRating();
                 Navigator.pop(context); // Close the modal
               },
             ),
@@ -186,7 +213,7 @@ class RatingWidgetState extends State<RatingsubWidget> {
 
   Future<void> updateRating(double rating) async {
     try {
-      final ratingCollectionRef = FirebaseFirestore.instance
+      final ratingCollectionRef2 = FirebaseFirestore.instance
           .collection('songs')
           .doc(widget.song.id)
           .collection('ratings');
@@ -194,7 +221,7 @@ class RatingWidgetState extends State<RatingsubWidget> {
       final authorRef =
           FirebaseFirestore.instance.collection('users').doc(currentUser?.uid);
 
-      final existingRating = await ratingCollectionRef
+      final existingRating2 = await ratingCollectionRef2
           .where('author', isEqualTo: authorRef)
           .limit(1)
           .get();
@@ -203,16 +230,17 @@ class RatingWidgetState extends State<RatingsubWidget> {
         'author': authorRef,
         'rating': rating,
       };
-      if (existingRating.docs.isEmpty) {
-        await ratingCollectionRef.add(ratingData);
+      if (existingRating2.docs.isEmpty) {
+        await ratingCollectionRef2.add(ratingData);
         setState(() {
           userRating?.number = rating;
           userRating?.author = authorRef.path;
+          updateFullRating();
         });
       } else {
-        final existingRatingDoc = existingRating.docs.first;
-        final existingRatingRef = existingRatingDoc.reference;
-        await existingRatingRef.update({'rating': rating});
+        final existingRatingDoc2 = existingRating2.docs.first;
+        final existingRatingRef2 = existingRatingDoc2.reference;
+        await existingRatingRef2.update({'rating': rating});
         setState(() {
           userRating?.number = rating;
           updateFullRating();
@@ -224,36 +252,40 @@ class RatingWidgetState extends State<RatingsubWidget> {
   }
 
   Future<void> updateFullRating() async {
-    try {
-      final ratingCollectionRef = FirebaseFirestore.instance
-          .collection('songs')
-          .doc(widget.song.id)
-          .collection('ratings');
+    final ratingCollectionRef3 = FirebaseFirestore.instance
+        .collection('songs')
+        .doc(widget.song.id)
+        .collection('ratings');
 
-      final querySnapshot = await ratingCollectionRef.get();
-
+    return ratingCollectionRef3.get().then((querySnapshot) {
+      print(querySnapshot);
       if (querySnapshot.docs.isEmpty) {
         fullRanking = -1;
-      }
+      } else {
+        double totalRanking = 0;
+        int count = 0;
 
-      double totalRanking = 0;
-      int count = 0;
+        querySnapshot.docs.forEach((doc) {
+          final rating = doc.data()['rating'];
+          if (rating != null && rating is double) {
+            print(rating);
+            totalRanking += rating;
+            count++;
+          }
+        });
 
-      querySnapshot.docs.forEach((doc) {
-        final rating = doc.data()['rating'];
-        if (rating != null && rating is double) {
-          totalRanking += rating;
-          count++;
+        if (count == 0) {
+          // No valid rankings found in the documents
+          fullRanking = -1;
+        } else {
+          fullRanking = totalRanking / count;
+          print(fullRanking);
         }
-      });
-
-      if (count == 0) {
-        // No valid rankings found in the documents
-        fullRanking = -1;
+        print(fullRanking);
       }
-      fullRanking = totalRanking / count;
-    } catch (error) {
+      print(fullRanking);
+    }).catchError((error) {
       log("Error updating document: $error");
-    }
+    });
   }
 }

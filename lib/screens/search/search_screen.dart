@@ -24,7 +24,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Search song"),
+          title: const Text("Search a song"),
           backgroundColor: Theme.of(context).primaryColor,
         ),
         body: const Center(child: SearchBox()));

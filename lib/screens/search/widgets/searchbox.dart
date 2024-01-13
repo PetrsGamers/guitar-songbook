@@ -66,7 +66,7 @@ class SearchBoxState extends State<SearchBox> {
             child: TextField(
               controller: _controller,
               decoration: InputDecoration(
-                hintText: 'Search...',
+                hintText: 'Start typing to search a song...',
                 suffixIcon: _controller.text.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear),

@@ -54,32 +54,38 @@ class _DetailSongViewState extends State<DetailSongView> {
     List<Widget> textWidgets = []; // Store widgets to display
     textWidgets.add(Row(
       children: [
-        ElevatedButton(
-            onPressed: () {
-              setState(() {
-                transposition =
-                    (transposition - 1) % DetailSongView.circleOfFifthsLen;
-                if (widget.songKey == "") {
-                  return;
-                }
-                songKeyChord.transpose(-1);
-              });
-            },
-            child: const Icon(Icons.arrow_downward)),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  transposition =
+                      (transposition - 1) % DetailSongView.circleOfFifthsLen;
+                  if (widget.songKey == "") {
+                    return;
+                  }
+                  songKeyChord.transpose(-1);
+                });
+              },
+              child: const Icon(Icons.arrow_downward)),
+        ),
         Text(songKeyChord.toString()),
         Text(formatTransposition()),
-        ElevatedButton(
-            onPressed: () {
-              setState(() {
-                transposition =
-                    (transposition + 1) % DetailSongView.circleOfFifthsLen;
-                if (widget.songKey == "") {
-                  return;
-                }
-                songKeyChord.transpose(1);
-              });
-            },
-            child: const Icon(Icons.arrow_upward))
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  transposition =
+                      (transposition + 1) % DetailSongView.circleOfFifthsLen;
+                  if (widget.songKey == "") {
+                    return;
+                  }
+                  songKeyChord.transpose(1);
+                });
+              },
+              child: const Icon(Icons.arrow_upward)),
+        )
       ],
     ));
     for (var line in lines) {

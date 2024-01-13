@@ -55,19 +55,23 @@ class SongDetailState extends State<SongDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Column(
+        automaticallyImplyLeading: true,
+        centerTitle: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Center(
-              child: Text(
-                widget.song.name,
-                style: const TextStyle(fontSize: 20.0),
-              ),
-            ),
-            Center(
-              child: Text(
-                widget.song.author,
-                style: const TextStyle(fontSize: 14.0),
-              ),
+            Column(
+              children: [
+                Text(
+                  widget.song.name,
+                  style: const TextStyle(fontSize: 20.0),
+                ),
+                Text(
+                  widget.song.author,
+                  style: const TextStyle(fontSize: 14.0),
+                ),
+              ],
             ),
           ],
         ),
@@ -83,20 +87,26 @@ class SongDetailState extends State<SongDetail> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // Rating Widget
                     RatingsubWidget(song: widget.song),
                     // Comments Button
                     Column(
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            context.go('/search/${widget.song.id}/comments');
-                          },
-                          child: const Text("Comments"),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              context.go('/search/${widget.song.id}/comments');
+                            },
+                            child: const Text("Comments"),
+                          ),
                         ),
-                        FavouriteCheckbox(songId: widget.song.id),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: FavouriteCheckbox(songId: widget.song.id),
+                        ),
                       ],
                     ),
                   ],
