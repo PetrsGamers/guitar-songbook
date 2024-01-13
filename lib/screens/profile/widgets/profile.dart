@@ -31,7 +31,7 @@ class _ProfileState extends State<Profile> {
       aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
       uiSettings: [
         AndroidUiSettings(
-            toolbarTitle: 'Cropper',
+            toolbarTitle: 'Crop Profile Image',
             toolbarColor: Colors.deepOrange,
             toolbarWidgetColor: Colors.white,
             lockAspectRatio: true),
@@ -42,11 +42,11 @@ class _ProfileState extends State<Profile> {
           mouseWheelZoom: true,
           presentStyle: CropperPresentStyle.dialog,
           boundary: const CroppieBoundary(
-            width: 400,
-            height: 400,
+            width: 300,
+            height: 300,
           ),
           viewPort:
-              const CroppieViewPort(width: 380, height: 380, type: 'circle'),
+              const CroppieViewPort(width: 280, height: 280, type: 'circle'),
           enableExif: false,
           enableZoom: true,
           showZoomer: true,
@@ -78,77 +78,80 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: <Widget>[
-        Container(
-          height: 140,
-          color: Theme.of(context).canvasColor,
-        ),
-        Positioned(
-          top: 80,
-          right: 40,
-          child: CircleAvatar(
-            radius: 60,
-            backgroundImage: widget.user.picture.isEmpty
-                ? null
-                : NetworkImage(profilePicAddress!),
-            backgroundColor: Colors.black,
-            child: Material(
-              shape: const CircleBorder(),
-              clipBehavior: Clip.hardEdge,
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () => {
-                  if (widget.user.id == Auth().currentUser!.uid)
-                    {
-                      showDialog(
-                          barrierDismissible: true,
-                          context: context,
-                          builder: (_) => AlertDialog(
-                                title: const Text("Change Profile picture"),
-                                content: const Text(
-                                    'Do you really want to change your profile picture?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () => Navigator.of(context,
-                                            rootNavigator: true)
-                                        .pop("dialog"),
-                                    child: const Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => {
-                                      changeProfilePicture(context),
-                                      Navigator.of(context, rootNavigator: true)
-                                          .pop("dialog")
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              ))
-                    }
-                },
+    return ListView(children: [
+      Stack(
+        clipBehavior: Clip.none,
+        children: <Widget>[
+          Container(
+            height: 140,
+            color: Theme.of(context).canvasColor,
+          ),
+          Positioned(
+            top: 80,
+            right: 40,
+            child: CircleAvatar(
+              radius: 60,
+              backgroundImage: widget.user.picture.isEmpty
+                  ? null
+                  : NetworkImage(profilePicAddress!),
+              backgroundColor: Colors.black,
+              child: Material(
+                shape: const CircleBorder(),
+                clipBehavior: Clip.hardEdge,
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () => {
+                    if (widget.user.id == Auth().currentUser!.uid)
+                      {
+                        showDialog(
+                            barrierDismissible: true,
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: const Text("Change Profile picture"),
+                                  content: const Text(
+                                      'Do you really want to change your profile picture?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context,
+                                              rootNavigator: true)
+                                          .pop("dialog"),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => {
+                                        changeProfilePicture(context),
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop("dialog")
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ))
+                      }
+                  },
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-            padding: const EdgeInsets.only(
-                top: 140), // pad the top profile background
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Text(widget.user.name,
-                      style: const TextStyle(fontSize: 34)),
-                ),
-                FavoritePreview(userId: widget.user.id),
-                CreatedPreview(userId: widget.user.id)
-              ],
-            ))
-      ],
-    );
+          Padding(
+              padding: const EdgeInsets.only(
+                  top: 140), // pad the top profile background
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Text(widget.user.name,
+                        style: const TextStyle(fontSize: 34)),
+                  ),
+                  FavoritePreview(userId: widget.user.id),
+                  CreatedPreview(userId: widget.user.id)
+                ],
+              ))
+        ],
+      ),
+    ]);
   }
 }
