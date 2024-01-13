@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +14,10 @@ class RatingsubWidget extends StatefulWidget {
   const RatingsubWidget({required this.song, Key? key}) : super(key: key);
 
   @override
-  _RatingWidgetState createState() => _RatingWidgetState();
+  RatingWidgetState createState() => RatingWidgetState();
 }
 
-class _RatingWidgetState extends State<RatingsubWidget> {
+class RatingWidgetState extends State<RatingsubWidget> {
   final User? currentUser = Auth().currentUser;
 
   Rating? userRating;
@@ -35,7 +37,7 @@ class _RatingWidgetState extends State<RatingsubWidget> {
       future: fetchUserRating(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -45,40 +47,38 @@ class _RatingWidgetState extends State<RatingsubWidget> {
           } else {
             userRating = snapshot.data!;
           }
-          return Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (userRating?.number == -1)
-                  ElevatedButton(
-                    onPressed: _openRatingWindow,
-                    child: Text("Rate a song"),
-                  ),
-                if (userRating?.number != -1)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      ElevatedButton(
-                        onPressed: _openRatingWindow,
-                        child: Row(
-                          children: [
-                            Text(
-                                "Your rating: ${userRating!.number.toString()}"),
-                            Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
-                          ],
-                        ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (userRating?.number == -1)
+                ElevatedButton(
+                  onPressed: _openRatingWindow,
+                  child: const Text("Rate a song"),
+                ),
+              if (userRating?.number != -1)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _openRatingWindow,
+                      child: Row(
+                        children: [
+                          Text("Your rating: ${userRating!.number.toString()}"),
+                          const Icon(
+                              IconData(0xe5f9, fontFamily: 'MaterialIcons')),
+                        ],
                       ),
-                    ],
-                  ),
-                if ('${fullRanking}' != 'NaN')
-                  Row(
-                    children: [
-                      Text('User\'s rating of the song :  ${fullRanking}'),
-                      Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
-                    ],
-                  ),
-              ],
-            ),
+                    ),
+                  ],
+                ),
+              if ('$fullRanking' != 'NaN')
+                Row(
+                  children: [
+                    Text('User\'s rating of the song :  $fullRanking'),
+                    const Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
+                  ],
+                ),
+            ],
           );
         }
       },
@@ -111,12 +111,12 @@ class _RatingWidgetState extends State<RatingsubWidget> {
         number: ratingDocSnapshot['rating'],
       );
     } catch (error) {
-      print("No existing user-rating");
-      return null; // Return null if there's an error
+      log("No existing user-rating");
+      return null;
     }
   }
 
-  Future<void> DeleteRating() async {
+  Future<void> deleteRating() async {
     try {
       final ratingCollectionRef = FirebaseFirestore.instance
           .collection('songs')
@@ -134,17 +134,14 @@ class _RatingWidgetState extends State<RatingsubWidget> {
       if (existingRating.size > 0) {
         final docIdToDelete = existingRating.docs.first.id;
         await ratingCollectionRef.doc(docIdToDelete).delete();
-        print('Document deleted successfully');
         setState(() {
           userRating = Rating(author: 'noone', number: -1, id: 'noone');
           updateFullRating();
         });
         Navigator.pop(context);
-      } else {
-        print('No document found matching the query');
       }
     } catch (error) {
-      print("Error deleting document: $error");
+      log("Error deleting document: $error");
     }
   }
 
@@ -152,39 +149,36 @@ class _RatingWidgetState extends State<RatingsubWidget> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-            child: Center(
-          child: Column(
-            children: [
-              if (userRating?.number != null && userRating!.number != -1)
-                ElevatedButton(
-                  onPressed: DeleteRating,
-                  child: Icon(
-                    Icons.close,
-                    size: 24,
-                    color: Colors.red,
-                  ),
+        return Center(
+            child: Column(
+          children: [
+            if (userRating?.number != null && userRating!.number != -1)
+              ElevatedButton(
+                onPressed: deleteRating,
+                child: const Icon(
+                  Icons.close,
+                  size: 24,
+                  color: Colors.red,
                 ),
-              RatingBar.builder(
-                initialRating: userRating?.number ?? 3,
-                minRating: 1,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemCount: 5,
-                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => Icon(
-                  Icons.star,
-                  color: Colors.amber,
-                ),
-                onRatingUpdate: (rating) {
-                  print(rating);
-                  updateRating(rating);
-                  updateFullRating();
-                  Navigator.pop(context); // Close the modal
-                },
               ),
-            ],
-          ),
+            RatingBar.builder(
+              initialRating: userRating?.number ?? 3,
+              minRating: 1,
+              direction: Axis.horizontal,
+              allowHalfRating: true,
+              itemCount: 5,
+              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+              itemBuilder: (context, _) => const Icon(
+                Icons.star,
+                color: Colors.amber,
+              ),
+              onRatingUpdate: (rating) {
+                updateRating(rating);
+                updateFullRating();
+                Navigator.pop(context); // Close the modal
+              },
+            ),
+          ],
         ));
       },
     );
@@ -225,7 +219,7 @@ class _RatingWidgetState extends State<RatingsubWidget> {
         });
       }
     } catch (error) {
-      print("Error updating document: $error");
+      log("Error updating document: $error");
     }
   }
 
@@ -257,11 +251,9 @@ class _RatingWidgetState extends State<RatingsubWidget> {
         // No valid rankings found in the documents
         fullRanking = -1;
       }
-      print('Total');
-      print(totalRanking);
       fullRanking = totalRanking / count;
     } catch (error) {
-      print("Error updating document: $error");
+      log("Error updating document: $error");
     }
   }
 }

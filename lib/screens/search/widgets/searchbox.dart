@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,10 +12,10 @@ class SearchBox extends StatefulWidget {
   const SearchBox({super.key});
 
   @override
-  _SearchBoxState createState() => _SearchBoxState();
+  SearchBoxState createState() => SearchBoxState();
 }
 
-class _SearchBoxState extends State<SearchBox> {
+class SearchBoxState extends State<SearchBox> {
   List<Song> _filteredSongs = [];
   var _favouriteSongs = [];
 
@@ -60,7 +61,7 @@ class _SearchBoxState extends State<SearchBox> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Container(
+          SizedBox(
             width: 250,
             child: TextField(
               controller: _controller,
@@ -68,7 +69,7 @@ class _SearchBoxState extends State<SearchBox> {
                 hintText: 'Search...',
                 suffixIcon: _controller.text.isNotEmpty
                     ? IconButton(
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                         onPressed: () {
                           _controller.clear();
                           _onSearchChanged();
@@ -96,7 +97,8 @@ class _SearchBoxState extends State<SearchBox> {
                     title: Text(_filteredSongs[index].name),
                     subtitle: Text(_filteredSongs[index].author),
                     trailing: isFavorite
-                        ? Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons'))
+                        ? const Icon(
+                            IconData(0xe5f9, fontFamily: 'MaterialIcons'))
                         : null, // Set the icon only if it's a favorite
                   ),
                 );
@@ -133,11 +135,10 @@ class _SearchBoxState extends State<SearchBox> {
 
         if (userData != null) {
           _favouriteSongs = (userData['favorites'] as List<dynamic>?)!;
-          print(_favouriteSongs);
         }
       }
     } catch (error) {
-      print("Error fetching document: $error");
+      log("Error fetching document: $error");
     }
   }
 }

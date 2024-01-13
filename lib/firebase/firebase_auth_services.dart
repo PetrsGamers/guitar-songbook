@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
@@ -18,7 +20,7 @@ class Auth {
       );
       return true; // Login successful
     } catch (e) {
-      print("Login error: $e");
+      log("Login error: $e");
       return false; // Login failed
     }
   }
@@ -32,10 +34,10 @@ class Auth {
         email: email,
         password: password,
       );
-      print("User $email succesfully registered to Auth");
+      log("User $email succesfully registered to Auth");
       return true;
     } catch (e) {
-      print("error registering the user: $e");
+      log("error registering the user: $e");
       return false;
     }
   }
@@ -45,7 +47,7 @@ class Auth {
       await _firebaseAuth.signOut();
       return true; // logout successful
     } catch (e) {
-      print("Logout error: $e");
+      log("Logout error: $e");
       return false; // logout failed
     }
   }

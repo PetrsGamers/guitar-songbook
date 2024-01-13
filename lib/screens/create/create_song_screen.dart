@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -31,9 +33,8 @@ class _CreateSongScreenState extends State<CreateSongScreen> {
         for (int j = sortedIndices.length - 1; j >= 0; j--) {
           int index = sortedIndices[j];
           String chord = annotations[index]!;
-          lines[i] = lines[i].substring(0, index) +
-              '{$chord}' +
-              lines[i].substring(index);
+          lines[i] =
+              '${lines[i].substring(0, index)}{$chord}${lines[i].substring(index)}';
         }
       }
     }
@@ -55,7 +56,7 @@ class _CreateSongScreenState extends State<CreateSongScreen> {
       'text': serializedAnnotatedText,
       'key': songKey,
     }).then((DocumentReference doc) {
-      print("New song added");
+      log("New song added");
       // add the song id to the user's list of created songs
       DocumentReference userRef = FirebaseFirestore.instance
           .collection('users')
@@ -64,10 +65,10 @@ class _CreateSongScreenState extends State<CreateSongScreen> {
           .update({
             'created': FieldValue.arrayUnion([doc.id]),
           })
-          .then((value) =>
-              print("Added new entry in the user's \"created\" songs"))
+          .then(
+              (value) => log("Added new entry in the user's \"created\" songs"))
           .catchError(
-              (error) => print("Failed to add song to user's created: $error"));
+              (error) => log("Failed to add song to user's created: $error"));
       // redirect user to the detail screen of the song
       context.go("/search/${doc.id}");
     }).catchError((error) => print("Failed to add song: $error"));

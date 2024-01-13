@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -38,7 +40,7 @@ class CreatedPreview extends StatelessWidget {
       }
       return songs;
     } catch (error) {
-      print('Error fetching songs: $error');
+      log('Error fetching songs: $error');
       rethrow;
     }
   }
@@ -58,8 +60,8 @@ class CreatedPreview extends StatelessWidget {
                 children: [
                   ListTile(
                       onTap: () => context.push("/profile/${userId}/created"),
-                      title: Text("Created by user"),
-                      trailing: Icon(Icons.arrow_forward_ios)),
+                      title: const Text("Created by user"),
+                      trailing: const Icon(Icons.arrow_forward_ios)),
                   ListView.builder(
                       shrinkWrap: true,
                       itemCount: snapshot.data!.length,

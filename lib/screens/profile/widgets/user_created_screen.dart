@@ -21,7 +21,7 @@ class CreatedSongsScreen extends StatelessWidget {
         builder: (BuildContext context,
             AsyncSnapshot<DocumentSnapshot> userDocSnapshot) {
           if (userDocSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (!userDocSnapshot.hasData || userDocSnapshot.data == null) {

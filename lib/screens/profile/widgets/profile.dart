@@ -41,11 +41,12 @@ class _ProfileState extends State<Profile> {
           context: context,
           mouseWheelZoom: true,
           presentStyle: CropperPresentStyle.dialog,
-          boundary: CroppieBoundary(
-            width: 520,
-            height: 520,
+          boundary: const CroppieBoundary(
+            width: 400,
+            height: 400,
           ),
-          viewPort: CroppieViewPort(width: 480, height: 480, type: 'circle'),
+          viewPort:
+              const CroppieViewPort(width: 380, height: 380, type: 'circle'),
           enableExif: false,
           enableZoom: true,
           showZoomer: true,
@@ -94,7 +95,7 @@ class _ProfileState extends State<Profile> {
                 : NetworkImage(profilePicAddress!),
             backgroundColor: Colors.black,
             child: Material(
-              shape: CircleBorder(),
+              shape: const CircleBorder(),
               clipBehavior: Clip.hardEdge,
               color: Colors.transparent,
               child: InkWell(
@@ -105,7 +106,7 @@ class _ProfileState extends State<Profile> {
                           barrierDismissible: true,
                           context: context,
                           builder: (_) => AlertDialog(
-                                title: Text("Change Profile picture"),
+                                title: const Text("Change Profile picture"),
                                 content: const Text(
                                     'Do you really want to change your profile picture?'),
                                 actions: <Widget>[

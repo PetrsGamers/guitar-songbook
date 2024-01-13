@@ -1,27 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guitar_app/entities/songs.dart';
-import 'package:go_router/go_router.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../firebase/firebase_auth_services.dart';
 
 class CommentScreen extends StatefulWidget {
-  final songId;
+  final String? songId;
   const CommentScreen({required this.songId, Key? key}) : super(key: key);
 
   @override
-  _CommentScreenState createState() => _CommentScreenState();
+  CommentScreenState createState() => CommentScreenState();
 }
 
-class _CommentScreenState extends State<CommentScreen> {
+class CommentScreenState extends State<CommentScreen> {
   final User? currentUser = Auth().currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Comments"),
+        title: const Text("Comments"),
         backgroundColor: Colors.deepOrange,
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -32,14 +30,13 @@ class _CommentScreenState extends State<CommentScreen> {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: CircularProgressIndicator()); // Show loading indicator
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}'); // Show error message
+            return Text('Error: ${snapshot.error}');
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('No comments yet'),
             ); // Display when no comments are available
           }
@@ -50,11 +47,10 @@ class _CommentScreenState extends State<CommentScreen> {
             builder: (BuildContext context,
                 AsyncSnapshot<List<Widget>> userSnapshot) {
               if (userSnapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Show loading indicator while fetching user details
+                return const CircularProgressIndicator();
               }
               if (userSnapshot.hasError) {
-                return Text(
-                    'Error: ${userSnapshot.error}'); // Show error message if fetching fails
+                return Text('Error: ${userSnapshot.error}');
               }
 
               // Display comments with user details
@@ -67,8 +63,8 @@ class _CommentScreenState extends State<CommentScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: openCommentWindow,
-        child: Icon(Icons.add),
         backgroundColor: Colors.deepOrange,
+        child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
@@ -84,23 +80,19 @@ class _CommentScreenState extends State<CommentScreen> {
       Map<String, dynamic> commentData = comment.data() as Map<String, dynamic>;
       DocumentReference userRef = commentData['author'];
 
-      print(userRef.id);
       final userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(userRef.id)
           .get();
       Map<String, dynamic>? userData = userSnapshot.data();
-      print(commentData);
-      print(userData);
-      // Build the comment widget with user details
       commentWidgets.add(
         Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(5.0),
           ),
-          margin: EdgeInsets.all(8.0),
-          padding: EdgeInsets.all(5.0),
+          margin: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(5.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -121,24 +113,24 @@ class _CommentScreenState extends State<CommentScreen> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         userData?['name'] ?? '',
-                        style: TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: Colors.grey),
                       ),
                     ),
                   ),
                   Text(
                     _formatTimestamp(commentData['time']),
-                    style: TextStyle(fontSize: 12.0, color: Colors.grey),
+                    style: const TextStyle(fontSize: 12.0, color: Colors.grey),
                   ),
                 ],
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Wrap(
                   children: [
                     Text(
                       commentData['text'] ?? '',
-                      style: TextStyle(fontSize: 16.0),
+                      style: const TextStyle(fontSize: 16.0),
                     ),
                     if (userRef.id == currentUser?.uid)
                       Align(
@@ -147,9 +139,8 @@ class _CommentScreenState extends State<CommentScreen> {
                           onPressed: () {
                             final commentRef = comment.reference;
                             commentRef.delete();
-                            print('Delete comment');
                           },
-                          child: Icon(Icons.close, color: Colors.red),
+                          child: const Icon(Icons.close, color: Colors.red),
                         ),
                       ),
                   ],
@@ -160,7 +151,6 @@ class _CommentScreenState extends State<CommentScreen> {
         ),
       );
     }
-
     return commentWidgets;
   }
 
@@ -171,17 +161,17 @@ class _CommentScreenState extends State<CommentScreen> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: textController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Type your comment here',
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -189,21 +179,20 @@ class _CommentScreenState extends State<CommentScreen> {
                     onPressed: () {
                       String commentText = textController.text.trim();
                       if (commentText.isNotEmpty) {
-                        print('Comment sent: $commentText');
                         _sendComment(commentText);
                       }
 
                       Navigator.of(context).pop(); // Close modal bottom sheet
                     },
-                    child: Text("Send!"),
+                    child: const Text("Send!"),
                   ),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop(); // Close modal bottom sheet
                     },
-                    child: Text("Close"),
+                    child: const Text("Close"),
                   ),
-                  SizedBox(height: 32.0),
+                  const SizedBox(height: 32.0),
                 ],
               ),
             ],

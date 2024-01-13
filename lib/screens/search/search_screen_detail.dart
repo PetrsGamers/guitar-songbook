@@ -14,7 +14,7 @@ class SearchScreenDetail extends StatelessWidget {
       future: getSongbyId(songId),
       builder: (BuildContext context, AsyncSnapshot<Song> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           // TODO vymazat else(s)
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -22,7 +22,7 @@ class SearchScreenDetail extends StatelessWidget {
           // TODO tady též
           return SongDetail(song: snapshot.data!);
         } else {
-          return Text('No song found');
+          return const Text('No song found');
         }
       },
     ));
@@ -40,6 +40,6 @@ Future<Song> getSongbyId(String documentId) async {
         documentId, documentSnapshot.data() as Map<String, dynamic>);
   } else {
     // Handle the case where the document does not exist
-    throw Exception('Song not found ${documentId}');
+    throw Exception('Song not found $documentId');
   }
 }

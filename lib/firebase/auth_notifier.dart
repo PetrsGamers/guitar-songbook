@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/cupertino.dart';
 import 'package:guitar_app/firebase/firebase_auth_services.dart';
 
