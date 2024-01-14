@@ -26,7 +26,7 @@ class SongDetail extends StatefulWidget {
 }
 
 class SongDetailState extends State<SongDetail> {
-  final User? currentUser = Auth().currentUser;
+  final User? _currentUser = Auth().currentUser;
   final ScrollController _scrollController = ScrollController();
   bool _isScrolling = false;
   int songDuration = 0;

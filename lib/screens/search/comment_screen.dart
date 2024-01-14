@@ -14,7 +14,7 @@ class CommentScreen extends StatefulWidget {
 }
 
 class CommentScreenState extends State<CommentScreen> {
-  final User? currentUser = Auth().currentUser;
+  final User? _currentUser = Auth().currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +74,7 @@ class CommentScreenState extends State<CommentScreen> {
     comments.sort(
         (a, b) => (b['time'] as Timestamp).compareTo(a['time'] as Timestamp));
 
-    List<Widget> commentWidgets = [];
+    List<Widget> _commentWidgets = [];
 
     for (DocumentSnapshot comment in comments) {
       Map<String, dynamic> commentData = comment.data() as Map<String, dynamic>;
@@ -85,7 +85,7 @@ class CommentScreenState extends State<CommentScreen> {
           .doc(userRef.id)
           .get();
       Map<String, dynamic>? userData = userSnapshot.data();
-      commentWidgets.add(
+      _commentWidgets.add(
         Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
@@ -132,7 +132,7 @@ class CommentScreenState extends State<CommentScreen> {
                       commentData['text'] ?? '',
                       style: const TextStyle(fontSize: 16.0),
                     ),
-                    if (userRef.id == currentUser?.uid)
+                    if (userRef.id == _currentUser?.uid)
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
@@ -151,11 +151,11 @@ class CommentScreenState extends State<CommentScreen> {
         ),
       );
     }
-    return commentWidgets;
+    return _commentWidgets;
   }
 
   void openCommentWindow() {
-    TextEditingController textController = TextEditingController();
+    TextEditingController _textController = TextEditingController();
 
     showModalBottomSheet(
       context: context,
@@ -166,7 +166,7 @@ class CommentScreenState extends State<CommentScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: textController,
+                controller: _textController,
                 decoration: const InputDecoration(
                   hintText: 'Type your comment here',
                 ),
@@ -177,7 +177,7 @@ class CommentScreenState extends State<CommentScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      String commentText = textController.text.trim();
+                      String commentText = _textController.text.trim();
                       if (commentText.isNotEmpty) {
                         _sendComment(commentText);
                       }
@@ -204,21 +204,21 @@ class CommentScreenState extends State<CommentScreen> {
 
   Future<void> _sendComment(text) async {
     try {
-      final ratingCollectionRef = FirebaseFirestore.instance
+      final _ratingCollectionRef = FirebaseFirestore.instance
           .collection('songs')
           .doc(widget.songId)
           .collection('comments');
 
-      final authorRef =
-          FirebaseFirestore.instance.collection('users').doc(currentUser?.uid);
+      final _authorRef =
+          FirebaseFirestore.instance.collection('users').doc(_currentUser?.uid);
       Timestamp timestamp = Timestamp.fromDate(DateTime.now());
 
-      final commentData = {
-        'author': authorRef,
+      final _commentData = {
+        'author': _authorRef,
         'text': text,
         'time': timestamp,
       };
-      await ratingCollectionRef.add(commentData);
+      await _ratingCollectionRef.add(_commentData);
     } catch (error) {
       print("Error updating document: $error");
     }

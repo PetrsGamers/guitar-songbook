@@ -42,11 +42,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   _onUsernameChanged() {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      checkUsernameAvailability(_controllerUsername.text);
+      _checkUsernameAvailability(_controllerUsername.text);
     });
   }
 
-  void checkUsernameAvailability(String username) async {
+  void _checkUsernameAvailability(String username) async {
     if (_controllerUsername.text.isEmpty) {
       setState(() {
         isUsernameAvailable = false;

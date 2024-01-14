@@ -11,7 +11,7 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authController = ref.watch(authProvider);
+    final _authController = ref.watch(authProvider);
 
     return Scaffold(
         appBar: AppBar(
@@ -28,7 +28,7 @@ class SettingsScreen extends ConsumerWidget {
               ListTile(
                 onTap: () async {
                   if (await Auth().signOut() == true) {
-                    authController.signOut();
+                    _authController.signOut();
                     context.go('/login');
                   }
                 },

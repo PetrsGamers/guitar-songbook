@@ -27,15 +27,15 @@ class RatingsubWidget extends StatefulWidget {
 }
 
 class RatingWidgetState extends State<RatingsubWidget> {
-  final User? currentUser = Auth().currentUser;
+  final User? _currentUser = Auth().currentUser;
 
-  Rating? userRating;
-  double fullRanking = -1;
+  Rating? _userRating;
+  double _fullRanking = -1;
   @override
   void initState() {
     super.initState();
-    userRating = widget.rating;
-    fullRanking = widget.fullRating;
+    _userRating = widget.rating;
+    _fullRanking = widget.fullRating;
   }
 
   @override
@@ -43,7 +43,7 @@ class RatingWidgetState extends State<RatingsubWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (userRating?.number == -1)
+        if (_userRating?.number == -1)
           Column(
             children: [
               Padding(
@@ -57,7 +57,7 @@ class RatingWidgetState extends State<RatingsubWidget> {
               ),
             ],
           ),
-        if (userRating?.number != -1)
+        if (_userRating?.number != -1)
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -68,7 +68,7 @@ class RatingWidgetState extends State<RatingsubWidget> {
                     onPressed: _openRatingWindow,
                     child: Row(
                       children: [
-                        Text("Your rating: ${userRating!.number.toString()}"),
+                        Text("Your rating: ${_userRating!.number.toString()}"),
                         const Icon(
                             IconData(0xe5f9, fontFamily: 'MaterialIcons')),
                       ],
@@ -78,17 +78,17 @@ class RatingWidgetState extends State<RatingsubWidget> {
               ),
             ],
           ),
-        if ('$fullRanking' != 'NaN' && fullRanking.toInt() >= 1)
+        if ('$_fullRanking' != 'NaN' && _fullRanking.toInt() >= 1)
           Padding(
             padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 18.0),
             child: Row(
               children: [
-                Text('User\'s rating: $fullRanking'),
+                Text('User\'s rating: $_fullRanking'),
                 const Icon(IconData(0xe5f9, fontFamily: 'MaterialIcons')),
               ],
             ),
           ),
-        if (!('$fullRanking' != 'NaN' && fullRanking.toInt() >= 1))
+        if (!('$_fullRanking' != 'NaN' && _fullRanking.toInt() >= 1))
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -110,7 +110,7 @@ class RatingWidgetState extends State<RatingsubWidget> {
           child: Center(
               child: Column(
             children: [
-              if (userRating?.number != null && userRating!.number != -1)
+              if (_userRating?.number != null && _userRating!.number != -1)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
@@ -123,9 +123,9 @@ class RatingWidgetState extends State<RatingsubWidget> {
                             await RatingServices.updateFullRating(
                                 widget.song.id);
                         setState(() {
-                          userRating =
+                          _userRating =
                               Rating(author: 'noone', number: -1, id: 'noone');
-                          fullRanking = fullRanking2;
+                          _fullRanking = fullRanking2;
                         });
                         Navigator.pop(context);
                       },
@@ -146,7 +146,7 @@ class RatingWidgetState extends State<RatingsubWidget> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: RatingBar.builder(
-                  initialRating: userRating?.number ?? 3,
+                  initialRating: _userRating?.number ?? 3,
                   minRating: 1,
                   direction: Axis.horizontal,
                   allowHalfRating: true,
@@ -161,8 +161,8 @@ class RatingWidgetState extends State<RatingsubWidget> {
                     var fullRanking2 =
                         await RatingServices.updateFullRating(widget.song.id);
                     setState(() {
-                      userRating?.number = rating;
-                      fullRanking = fullRanking2;
+                      _userRating?.number = rating;
+                      _fullRanking = fullRanking2;
                     });
                     Navigator.pop(context);
                   },

@@ -13,7 +13,7 @@ class SearchScreenDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<Song>(
-        future: SearchboxServices.getSongbyId(songId),
+        future: SearchBoxServices.getSongbyId(songId),
         builder: (BuildContext context, AsyncSnapshot<Song> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: const CircularProgressIndicator());
@@ -26,7 +26,8 @@ class SearchScreenDetail extends StatelessWidget {
                 future: RatingServices.fetchUserRating(songId),
                 builder: (BuildContext context,
                     AsyncSnapshot<Rating?> ratingSnapshot) {
-                  var rating = Rating(author: 'noone', number: -1, id: 'noone');
+                  Rating _rating =
+                      Rating(author: 'noone', number: -1, id: 'noone');
 
                   if (ratingSnapshot.connectionState ==
                       ConnectionState.waiting) {
@@ -37,13 +38,13 @@ class SearchScreenDetail extends StatelessWidget {
                         child: Text('Error: ${ratingSnapshot.error}'));
                   }
                   if (ratingSnapshot.hasData) {
-                    rating = ratingSnapshot.data!;
+                    _rating = ratingSnapshot.data!;
                   }
                   return FutureBuilder<double>(
                       future: RatingServices.updateFullRating(songId),
                       builder: (BuildContext context,
                           AsyncSnapshot<double> fullRatingSnapshot) {
-                        double fullRating = -1;
+                        double _fullRating = -1;
                         if (fullRatingSnapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Center(
@@ -55,12 +56,12 @@ class SearchScreenDetail extends StatelessWidget {
                                   Text('Error: ${fullRatingSnapshot.error}'));
                         }
                         if (fullRatingSnapshot.hasData) {
-                          fullRating = fullRatingSnapshot.data!;
+                          _fullRating = fullRatingSnapshot.data!;
                         }
                         return SongDetail(
                             song: snapshot.data!,
-                            rating: rating,
-                            fullRating: fullRating);
+                            rating: _rating,
+                            fullRating: _fullRating);
                       });
                 });
           } else {

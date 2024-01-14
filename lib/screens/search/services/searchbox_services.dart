@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../entities/songs.dart';
 
-class SearchboxServices {
+class SearchBoxServices {
   static Future<Song> getSongbyId(String documentId) async {
     final firestore = FirebaseFirestore.instance;
     final songCollection = firestore.collection('songs');
