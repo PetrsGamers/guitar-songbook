@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:guitar_app/screens/auth/register_validator.dart';
 
 import '../../firebase/firebase_auth_services.dart';
 
@@ -16,6 +17,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final _registerFormKey = GlobalKey<FormState>();
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
@@ -110,82 +112,94 @@ class _RegisterScreenState extends State<RegisterScreen> {
         title: const Text('Register'),
       ),
       body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SizedBox(
-                width: 300,
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    hintText: 'Username',
-                    labelText: 'User name',
-                    errorText:
-                        isUsernameAvailable == false ? errorMessage : null,
-                    suffixIcon: isUsernameAvailable == null
-                        ? null
-                        : isUsernameAvailable!
-                            ? const Icon(Icons.check_circle,
-                                color: Colors.green)
-                            : const Icon(Icons.error, color: Colors.red),
+        child: Form(
+          key: _registerFormKey,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox(
+                  width: 300,
+                  child: TextFormField(
+                    validator: RegisterFormValidator.validateUsername,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: 'Username',
+                      labelText: 'User name',
+                      errorText:
+                          isUsernameAvailable == false ? errorMessage : null,
+                      suffixIcon: isUsernameAvailable == null
+                          ? null
+                          : isUsernameAvailable!
+                              ? const Icon(Icons.check_circle,
+                                  color: Colors.green)
+                              : const Icon(Icons.error, color: Colors.red),
+                    ),
+                    controller: _controllerUsername,
                   ),
-                  controller: _controllerUsername,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 300,
-                child: TextField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), hintText: 'Email'),
-                  controller: _controllerEmail,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 300,
+                  child: TextFormField(
+                    validator: RegisterFormValidator.validateEmail,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(), hintText: 'Email'),
+                    controller: _controllerEmail,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 300,
-                child: TextField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), hintText: 'Password'),
-                  controller: _controllerPassword,
-                  onSubmitted: (_) => {register()},
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 300,
+                  child: TextFormField(
+                    obscureText: true,
+                    validator: RegisterFormValidator.validatePassword,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(), hintText: 'Password'),
+                    controller: _controllerPassword,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 300,
-                child: ElevatedButton(
-                    onPressed: () async {
-                      register();
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('register'),
-                    )),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 300,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (!(_registerFormKey.currentState!.validate())) {
+                          print("validation failed");
+                          return;
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Registering user')));
+                        register();
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('register'),
+                      )),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 300,
-                child: OutlinedButton(
-                    onPressed: () {
-                      context.go('/login');
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('Go back to login screen'),
-                    )),
-              ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 300,
+                  child: OutlinedButton(
+                      onPressed: () {
+                        context.go('/login');
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Go back to login screen'),
+                      )),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
