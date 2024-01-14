@@ -3,14 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:guitar_app/screens/search/widgets/rating_widget.dart';
 import 'package:guitar_app/entities/songs.dart';
+import '../../../entities/ratings.dart';
 import 'detail_song_view.dart';
 import 'favourite_checkbox.dart';
 import '../../../firebase/firebase_auth_services.dart';
 
 class SongDetail extends StatefulWidget {
   final Song song;
-
-  const SongDetail({Key? key, required this.song}) : super(key: key);
+  final Rating rating;
+  final double fullRating;
+  const SongDetail(
+      {Key? key,
+      required this.song,
+      required this.rating,
+      required this.fullRating})
+      : super(key: key);
 
   @override
   SongDetailState createState() => SongDetailState();
@@ -90,7 +97,10 @@ class SongDetailState extends State<SongDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // Rating Widget
-                    RatingsubWidget(song: widget.song),
+                    RatingsubWidget(
+                        song: widget.song,
+                        rating: widget.rating,
+                        fullRating: widget.fullRating),
                     // Comments Button
                     Column(
                       children: [
