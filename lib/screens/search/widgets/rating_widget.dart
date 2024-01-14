@@ -105,52 +105,72 @@ class RatingWidgetState extends State<RatingsubWidget> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Center(
-            child: Column(
-          children: [
-            if (userRating?.number != null && userRating!.number != -1)
-              ElevatedButton(
-                onPressed: () async {
-                  await RatingServices.deleteRating(widget.song.id);
-                  var fullRanking2 =
-                      await RatingServices.updateFullRating(widget.song.id);
-                  setState(() {
-                    userRating =
-                        Rating(author: 'noone', number: -1, id: 'noone');
-                    fullRanking = fullRanking2;
-                  });
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.close,
-                  size: 24,
-                  color: Colors.red,
+        return Padding(
+          padding: const EdgeInsets.only(top: 30.0),
+          child: Center(
+              child: Column(
+            children: [
+              if (userRating?.number != null && userRating!.number != -1)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 175,
+                    height: 35,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await RatingServices.deleteRating(widget.song.id);
+                        var fullRanking2 =
+                            await RatingServices.updateFullRating(
+                                widget.song.id);
+                        setState(() {
+                          userRating =
+                              Rating(author: 'noone', number: -1, id: 'noone');
+                          fullRanking = fullRanking2;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text('Remove rating'),
+                          const Icon(
+                            Icons.close,
+                            size: 24,
+                            color: Colors.red,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RatingBar.builder(
+                  initialRating: userRating?.number ?? 3,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) async {
+                    await RatingServices.updateRating(rating, widget.song.id);
+                    var fullRanking2 =
+                        await RatingServices.updateFullRating(widget.song.id);
+                    setState(() {
+                      userRating?.number = rating;
+                      fullRanking = fullRanking2;
+                    });
+                    Navigator.pop(context);
+                  },
                 ),
               ),
-            RatingBar.builder(
-              initialRating: userRating?.number ?? 3,
-              minRating: 1,
-              direction: Axis.horizontal,
-              allowHalfRating: true,
-              itemCount: 5,
-              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) => const Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              onRatingUpdate: (rating) async {
-                await RatingServices.updateRating(rating, widget.song.id);
-                var fullRanking2 =
-                    await RatingServices.updateFullRating(widget.song.id);
-                setState(() {
-                  userRating?.number = rating;
-                  fullRanking = fullRanking2;
-                });
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ));
+            ],
+          )),
+        );
       },
     );
   }
