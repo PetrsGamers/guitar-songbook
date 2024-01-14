@@ -4,7 +4,7 @@ import '../../firebase/firebase_auth_services.dart';
 import 'widgets/searchbox.dart';
 
 class SearchScreen extends StatelessWidget {
-  SearchScreen({super.key, required this.content});
+  const SearchScreen({super.key, required this.content});
   final String content;
 
   @override

@@ -13,11 +13,14 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String userID;
+    String profileUserId;
+    // when null id is passed, show the base profile screen with
+    // current user's information, otherwise show a profile
+    // of a user from visitor perspective
     if (userId == null) {
-      userID = currentUser!.uid;
+      profileUserId = currentUser!.uid;
     } else {
-      userID = userId!;
+      profileUserId = userId!;
     }
 
     return Scaffold(
@@ -26,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
         ),
         body: Center(
           child: FutureBuilder<AppUser>(
-            future: UserProfileService.getUserById(userID),
+            future: UserProfileService.getUserById(profileUserId),
             builder: (BuildContext context, AsyncSnapshot<AppUser> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();

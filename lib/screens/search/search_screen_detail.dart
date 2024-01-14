@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:guitar_app/entities/ratings.dart';
 import 'package:guitar_app/screens/search/services/rating_services.dart';
@@ -44,7 +43,7 @@ class SearchScreenDetail extends StatelessWidget {
                       future: RatingServices.updateFullRating(songId),
                       builder: (BuildContext context,
                           AsyncSnapshot<double> fullRatingSnapshot) {
-                        double _fullRating = -1;
+                        double fullRating = -1;
                         if (fullRatingSnapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Center(
@@ -56,12 +55,12 @@ class SearchScreenDetail extends StatelessWidget {
                                   Text('Error: ${fullRatingSnapshot.error}'));
                         }
                         if (fullRatingSnapshot.hasData) {
-                          _fullRating = fullRatingSnapshot.data!;
+                          fullRating = fullRatingSnapshot.data!;
                         }
                         return SongDetail(
                             song: snapshot.data!,
                             rating: _rating,
-                            fullRating: _fullRating);
+                            fullRating: fullRating);
                       });
                 });
           } else {

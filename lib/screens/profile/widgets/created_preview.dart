@@ -14,7 +14,7 @@ class CreatedPreview extends StatelessWidget {
         child: Column(
       children: [
         ListTile(
-            onTap: () => context.push("/profile/${userId}/created"),
+            onTap: () => context.push("/profile/$userId/created"),
             title: const Text("Created by user"),
             trailing: const Icon(Icons.arrow_forward_ios)),
         ListView.builder(

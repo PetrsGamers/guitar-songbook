@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:guitar_app/common/helpers.dart';
 import 'package:guitar_app/screens/create/widgets/add_metadata.dart';
 import 'package:guitar_app/screens/create/widgets/add_text.dart';
 import 'package:guitar_app/screens/create/widgets/annotate.dart';
@@ -16,36 +17,13 @@ class CreateSongScreen extends StatefulWidget {
 }
 
 class _CreateSongScreenState extends State<CreateSongScreen> {
-  int subScreenIndex = 0;
-  String text = "";
-  List<Map<int, String>> annotationsList = [];
+  int _subScreenIndex = 0;
+  String _text = "";
+  List<Map<int, String>> _annotationsList = [];
 
-  String serializeLyrics() {
-    // clean the text from curly braces
-    String cleanText = text.replaceAll(RegExp(r'[{}]', multiLine: true), '');
-    List<String> lines = cleanText.split('\n');
-
-    for (int i = 0; i < lines.length; i++) {
-      if (i < annotationsList.length) {
-        Map<int, String> annotations = annotationsList[i];
-        List<int> sortedIndices = annotations.keys.toList()..sort();
-
-        for (int j = sortedIndices.length - 1; j >= 0; j--) {
-          int index = sortedIndices[j];
-          String chord = annotations[index]!;
-          lines[i] =
-              '${lines[i].substring(0, index)}{$chord}${lines[i].substring(index)}';
-        }
-      }
-    }
-    return lines.join('\n');
-  }
-
-  void sumbitSongToServerCallback(String songName, String musician, String bpm,
+  void _submitSongToServerCallback(String songName, String musician, String bpm,
       String year, String songKey) {
-    // 1) parse the data into db-friendly format
-    String serializedAnnotatedText = serializeLyrics();
-    // 2) save the data properly
+    String serializedAnnotatedText = serializeLyrics(_text, _annotationsList);
     CollectionReference songs = FirebaseFirestore.instance.collection('songs');
     songs.add({
       'name': songName,
@@ -56,7 +34,6 @@ class _CreateSongScreenState extends State<CreateSongScreen> {
       'text': serializedAnnotatedText,
       'key': songKey,
     }).then((DocumentReference doc) {
-      log("New song added");
       // add the song id to the user's list of created songs
       DocumentReference userRef = FirebaseFirestore.instance
           .collection('users')
@@ -72,39 +49,37 @@ class _CreateSongScreenState extends State<CreateSongScreen> {
       // redirect user to the detail screen of the song
       context.go("/search/${doc.id}");
     }).catchError((error) => print("Failed to add song: $error"));
-
-    // 3) clear out state
     setState(() {
-      annotationsList = [];
-      text = "";
+      _annotationsList = [];
+      _text = "";
     });
   }
 
-  void goToNextSubScreenCallback(bool proceedNormally) {
+  void _goToNextSubScreenCallback(bool proceedNormally) {
     setState(() {
       if (!proceedNormally) {
         // in case the user wishes to go back to the starting screen
         // the state remains saved when needing to do some editing tho
         // the data gets flushed only on song submit
-        subScreenIndex = 0;
+        _subScreenIndex = 0;
         return;
       }
-      subScreenIndex++;
-      if (subScreenIndex > 2) {
-        subScreenIndex = 0;
+      _subScreenIndex++;
+      if (_subScreenIndex > 2) {
+        _subScreenIndex = 0;
       }
     });
   }
 
-  void saveTextCallback(String lyrics) {
+  void _saveTextCallback(String lyrics) {
     setState(() {
-      text = lyrics;
+      _text = lyrics;
     });
   }
 
-  void saveAnnotationsCallback(List<Map<int, String>> annotations) {
+  void _saveAnnotationsCallback(List<Map<int, String>> annotations) {
     setState(() {
-      annotationsList = annotations;
+      _annotationsList = annotations;
     });
   }
 
@@ -112,22 +87,22 @@ class _CreateSongScreenState extends State<CreateSongScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create new song - Step ${subScreenIndex + 1} / 3'),
+        title: Text('Create new song - Step ${_subScreenIndex + 1} / 3'),
       ),
       body: Center(
           child: <Widget>[
         AddText(
-            text: text,
-            nextScreenCallback: goToNextSubScreenCallback,
-            saveText: saveTextCallback),
+            text: _text,
+            nextScreenCallback: _goToNextSubScreenCallback,
+            saveText: _saveTextCallback),
         Annotate(
-            text: text,
-            nextScreenCallback: goToNextSubScreenCallback,
-            saveAnnotations: saveAnnotationsCallback),
+            text: _text,
+            nextScreenCallback: _goToNextSubScreenCallback,
+            saveAnnotations: _saveAnnotationsCallback),
         AddMetadata(
-            nextScreenCallback: goToNextSubScreenCallback,
-            onSubmit: sumbitSongToServerCallback)
-      ][subScreenIndex]),
+            nextScreenCallback: _goToNextSubScreenCallback,
+            onSubmit: _submitSongToServerCallback)
+      ][_subScreenIndex]),
     );
   }
 }

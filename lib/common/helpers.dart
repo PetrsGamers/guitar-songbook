@@ -34,3 +34,24 @@ class LineLengthLimitingTextInputFormatter extends TextInputFormatter {
     return TextEditingValue(text: limitedText);
   }
 }
+
+String serializeLyrics(String text, List<Map<int, String>> annotationsList) {
+  // clean curly braces from the text (sanity)
+  String cleanText = text.replaceAll(RegExp(r'[{}]', multiLine: true), '');
+  List<String> lines = cleanText.split('\n');
+
+  for (int i = 0; i < lines.length; i++) {
+    if (i < annotationsList.length) {
+      Map<int, String> annotations = annotationsList[i];
+      List<int> sortedIndices = annotations.keys.toList()..sort();
+
+      for (int j = sortedIndices.length - 1; j >= 0; j--) {
+        int index = sortedIndices[j];
+        String chord = annotations[index]!;
+        lines[i] =
+            '${lines[i].substring(0, index)}{$chord}${lines[i].substring(index)}';
+      }
+    }
+  }
+  return lines.join('\n');
+}
