@@ -47,7 +47,7 @@ class CommentScreenState extends State<CommentScreen> {
             builder: (BuildContext context,
                 AsyncSnapshot<List<Widget>> userSnapshot) {
               if (userSnapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               }
               if (userSnapshot.hasError) {
                 return Text('Error: ${userSnapshot.error}');
@@ -107,7 +107,7 @@ class CommentScreenState extends State<CommentScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      context.go('/profile/${userRef.id}');
+                      context.push('/profile/${userRef.id}');
                     },
                     child: Align(
                       alignment: Alignment.centerLeft,

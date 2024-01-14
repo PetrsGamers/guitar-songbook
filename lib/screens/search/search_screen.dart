@@ -5,7 +5,6 @@ import 'widgets/searchbox.dart';
 
 class SearchScreen extends StatelessWidget {
   SearchScreen({super.key, required this.content});
-  final User? user = Auth().currentUser;
   final String content;
 
   @override
