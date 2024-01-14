@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:guitar_app/screens/search/song_detail.dart';
+import 'package:guitar_app/screens/search/widgets/song_detail.dart';
 import 'package:guitar_app/entities/songs.dart';
 
 class SearchScreenDetail extends StatelessWidget {
@@ -29,6 +29,7 @@ class SearchScreenDetail extends StatelessWidget {
   }
 }
 
+// TODO: toto extrahovat do extra service
 Future<Song> getSongbyId(String documentId) async {
   var firestore = FirebaseFirestore.instance;
   var songCollection = firestore.collection('songs');
@@ -39,7 +40,6 @@ Future<Song> getSongbyId(String documentId) async {
     return Song.fromMap(
         documentId, documentSnapshot.data() as Map<String, dynamic>);
   } else {
-    // Handle the case where the document does not exist
     throw Exception('Song not found $documentId');
   }
 }

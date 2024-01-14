@@ -1,13 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:guitar_app/entities/app_user.dart';
+import 'package:guitar_app/screens/profile/services/user_profile_service.dart';
 import 'package:guitar_app/screens/profile/widgets/created_preview.dart';
 import 'package:guitar_app/screens/profile/widgets/favorite_preview.dart';
 import 'package:guitar_app/firebase/firebase_auth_services.dart';
-import 'package:guitar_app/common/helpers.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key, required this.user});
@@ -19,58 +15,11 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late String? profilePicAddress = widget.user.picture;
   Future changeProfilePicture(context) async {
-    XFile? selectedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    // XFile? selectedImage = await ImagePicker.platform
-    //     .getImageFromSource(source: ImageSource.gallery);
-    if (selectedImage == null) {
-      return; // user has canceled
+    String? downloadURL =
+        await UserProfileService.changeProfilePicture(context);
+    if (downloadURL == null) {
+      return; // user has cancelled the select
     }
-    CroppedFile? croppedImage = await ImageCropper().cropImage(
-      sourcePath: selectedImage.path,
-      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
-      uiSettings: [
-        AndroidUiSettings(
-            toolbarTitle: 'Crop Profile Image',
-            toolbarColor: Colors.deepOrange,
-            toolbarWidgetColor: Colors.white,
-            lockAspectRatio: true),
-
-        /// this settings is required for Web
-        WebUiSettings(
-          context: context,
-          mouseWheelZoom: true,
-          presentStyle: CropperPresentStyle.dialog,
-          boundary: const CroppieBoundary(
-            width: 300,
-            height: 300,
-          ),
-          viewPort:
-              const CroppieViewPort(width: 280, height: 280, type: 'circle'),
-          enableExif: false,
-          enableZoom: true,
-          showZoomer: true,
-        )
-      ],
-    );
-    if (croppedImage == null) {
-      return;
-    }
-    final storageRef = FirebaseStorage.instance.ref();
-    String fileExtension = getFileExtensionFromMime(selectedImage.mimeType);
-    final destinationReference = storageRef
-        .child("/profile_pictures/${DateTime.timestamp()}.$fileExtension");
-    //final File uploadFile = File(croppedImage.path);
-    final uploadFile = await croppedImage.readAsBytes();
-    await destinationReference.putData(uploadFile);
-
-    String downloadURL = await destinationReference.getDownloadURL();
-    final collection = FirebaseFirestore.instance.collection('users');
-    collection
-        .doc(widget.user.id)
-        .update({'picture': downloadURL})
-        .then((_) => print('Successfully added new pictureURL to user'))
-        .catchError((error) => print('Failed: $error'));
     setState(() {
       profilePicAddress = downloadURL;
     });
@@ -102,33 +51,7 @@ class _ProfileState extends State<Profile> {
                 child: InkWell(
                   onTap: () => {
                     if (widget.user.id == Auth().currentUser!.uid)
-                      {
-                        showDialog(
-                            barrierDismissible: true,
-                            context: context,
-                            builder: (_) => AlertDialog(
-                                  title: const Text("Change Profile picture"),
-                                  content: const Text(
-                                      'Do you really want to change your profile picture?'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () => Navigator.of(context,
-                                              rootNavigator: true)
-                                          .pop("dialog"),
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () => {
-                                        changeProfilePicture(context),
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop("dialog")
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                ))
-                      }
+                      {buildShowDialog(context)}
                   },
                 ),
               ),
@@ -153,5 +76,30 @@ class _ProfileState extends State<Profile> {
         ],
       ),
     ]);
+  }
+
+  Future<dynamic> buildShowDialog(BuildContext context) {
+    return showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (_) => AlertDialog(
+              title: const Text("Change Profile picture"),
+              content: const Text(
+                  'Do you really want to change your profile picture?'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () =>
+                      Navigator.of(context, rootNavigator: true).pop("dialog"),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => {
+                    changeProfilePicture(context),
+                    Navigator.of(context, rootNavigator: true).pop("dialog")
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ));
   }
 }
