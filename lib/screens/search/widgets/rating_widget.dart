@@ -258,7 +258,6 @@ class RatingWidgetState extends State<RatingsubWidget> {
         .collection('ratings');
 
     return ratingCollectionRef3.get().then((querySnapshot) {
-      print(querySnapshot);
       if (querySnapshot.docs.isEmpty) {
         fullRanking = -1;
       } else {
@@ -268,7 +267,6 @@ class RatingWidgetState extends State<RatingsubWidget> {
         querySnapshot.docs.forEach((doc) {
           final rating = doc.data()['rating'];
           if (rating != null && rating is double) {
-            print(rating);
             totalRanking += rating;
             count++;
           }
@@ -279,11 +277,8 @@ class RatingWidgetState extends State<RatingsubWidget> {
           fullRanking = -1;
         } else {
           fullRanking = totalRanking / count;
-          print(fullRanking);
         }
-        print(fullRanking);
       }
-      print(fullRanking);
     }).catchError((error) {
       log("Error updating document: $error");
     });

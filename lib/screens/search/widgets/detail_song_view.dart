@@ -72,8 +72,14 @@ class _DetailSongViewState extends State<DetailSongView> {
               },
               child: const Icon(Icons.arrow_downward)),
         ),
-        Text(songKeyChord.toString()),
-        Text(formatTransposition(transposition)),
+        Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Text(songKeyChord.toString()),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Text(formatTransposition(transposition)),
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(

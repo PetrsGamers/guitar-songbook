@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:guitar_app/screens/search/song_detail.dart';
+import 'package:guitar_app/screens/search/widgets/song_detail.dart';
 import 'package:guitar_app/entities/songs.dart';
 
 class SearchScreenDetail extends StatelessWidget {

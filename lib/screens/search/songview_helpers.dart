@@ -9,7 +9,6 @@ String transposeSong(int semitones, List<String> chordsAndText) {
   for (String chord in chordString.split(" ")) {
     if (!RegExp(r'^[ABCDEFGH]#?m?7?$').hasMatch(chord)) {
       // if a proper chord isn't parsed, ignore it
-      print("ignoruju $chord");
       continue;
     }
     Chord ch = Chord(chord);
