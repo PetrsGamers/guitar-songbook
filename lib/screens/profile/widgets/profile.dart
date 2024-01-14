@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:guitar_app/entities/app_user.dart';
 import 'package:guitar_app/screens/profile/services/user_profile_service.dart';
-import 'package:guitar_app/screens/profile/widgets/created_preview.dart';
-import 'package:guitar_app/screens/profile/widgets/favorite_preview.dart';
 import 'package:guitar_app/firebase/firebase_auth_services.dart';
+import 'package:guitar_app/screens/profile/widgets/preview_widgets.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key, required this.user});
@@ -57,22 +56,7 @@ class _ProfileState extends State<Profile> {
               ),
             ),
           ),
-          Padding(
-              padding: const EdgeInsets.only(
-                  top: 140), // pad the top profile background
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text(widget.user.name,
-                        style: const TextStyle(fontSize: 34)),
-                  ),
-                  FavoritePreview(userId: widget.user.id),
-                  CreatedPreview(userId: widget.user.id)
-                ],
-              ))
+          PreviewWidgets(user: widget.user)
         ],
       ),
     ]);
