@@ -13,9 +13,6 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: remove this autologin
-    _controllerEmail.text = "c@c.com";
-    _controllerPassword.text = "cccccc";
     final authController = ref.watch(authProvider);
     void login() async {
       try {
@@ -72,8 +69,6 @@ class LoginScreen extends ConsumerWidget {
               child: SizedBox(
                 width: 250,
                 child: ElevatedButton(
-                  // TODO: remove this autologin
-                  autofocus: true,
                   onPressed: () async {
                     login();
                   },
