@@ -6,16 +6,20 @@ import 'package:guitar_app/entities/songs.dart';
 import 'package:guitar_app/screens/search/services/searchbox_services.dart';
 
 class SearchScreenDetail extends StatelessWidget {
-  final songId;
-  const SearchScreenDetail({Key? key, this.songId}) : super(key: key);
+  final String? songId;
+  const SearchScreenDetail({Key? key, required this.songId}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
+    if (songId == null) {
+      return const Text("SongId error: no song available");
+    }
     return Scaffold(
       body: FutureBuilder<Song>(
-        future: SearchBoxServices.getSongbyId(songId),
+        future: SearchBoxServices.getSongbyId(songId!),
         builder: (BuildContext context, AsyncSnapshot<Song> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: const CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -25,19 +29,19 @@ class SearchScreenDetail extends StatelessWidget {
                 future: RatingServices.fetchUserRating(songId),
                 builder: (BuildContext context,
                     AsyncSnapshot<Rating?> ratingSnapshot) {
-                  Rating _rating =
+                  Rating rating =
                       Rating(author: 'noone', number: -1, id: 'noone');
 
                   if (ratingSnapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return Center(child: const CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                   if (ratingSnapshot.hasError) {
                     return Center(
                         child: Text('Error: ${ratingSnapshot.error}'));
                   }
                   if (ratingSnapshot.hasData) {
-                    _rating = ratingSnapshot.data!;
+                    rating = ratingSnapshot.data!;
                   }
                   return FutureBuilder<double>(
                       future: RatingServices.updateFullRating(songId),
@@ -46,8 +50,8 @@ class SearchScreenDetail extends StatelessWidget {
                         double fullRating = -1;
                         if (fullRatingSnapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(
-                              child: const CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
                         if (fullRatingSnapshot.hasError) {
                           return Center(
@@ -59,7 +63,7 @@ class SearchScreenDetail extends StatelessWidget {
                         }
                         return SongDetail(
                             song: snapshot.data!,
-                            rating: _rating,
+                            rating: rating,
                             fullRating: fullRating);
                       });
                 });
