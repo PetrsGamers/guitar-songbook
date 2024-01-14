@@ -5,8 +5,6 @@ import 'package:guitar_app/entities/preview_data.dart';
 import 'package:guitar_app/entities/profile_picture.dart';
 import 'package:guitar_app/entities/songs.dart';
 import 'package:guitar_app/screens/profile/services/media_service.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 
 class UserProfileService {
   static Future<AppUser> getUserById(String documentId) async {
@@ -32,8 +30,7 @@ class UserProfileService {
 
     if (querySnapshot.docs.isNotEmpty) {
       var userDoc = querySnapshot.docs.first;
-      return AppUser.fromMap(
-          userDoc.id, userDoc.data() as Map<String, dynamic>);
+      return AppUser.fromMap(userDoc.id, userDoc.data());
     } else {
       throw Exception('User not found');
     }

@@ -46,8 +46,6 @@ class Chord {
   Chord(this.chord) {
     if (!RegExp(r'^[ABCDEFGH]#?m?7?$').hasMatch(chord)) {
       baseChord = "X";
-      // throw ArgumentError.value(
-      //     "Passing invalid value to the Chord class constructor: $chord");
     }
     if (chord.contains("m")) {
       isMinor = true;

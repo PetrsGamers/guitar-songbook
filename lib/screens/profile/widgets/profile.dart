@@ -13,7 +13,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late String? profilePicAddress = widget.user.picture;
-  Future changeProfilePicture(context) async {
+  Future _changeProfilePicture(context) async {
     String? downloadURL =
         await UserProfileService.changeProfilePicture(context);
     if (downloadURL == null) {
@@ -50,7 +50,7 @@ class _ProfileState extends State<Profile> {
                 child: InkWell(
                   onTap: () => {
                     if (widget.user.id == Auth().currentUser!.uid)
-                      {buildShowDialog(context)}
+                      {_buildShowDialog(context)}
                   },
                 ),
               ),
@@ -62,7 +62,7 @@ class _ProfileState extends State<Profile> {
     ]);
   }
 
-  Future<dynamic> buildShowDialog(BuildContext context) {
+  Future<dynamic> _buildShowDialog(BuildContext context) {
     return showDialog(
         barrierDismissible: true,
         context: context,
@@ -78,7 +78,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 TextButton(
                   onPressed: () => {
-                    changeProfilePicture(context),
+                    _changeProfilePicture(context),
                     Navigator.of(context, rootNavigator: true).pop("dialog")
                   },
                   child: const Text('OK'),

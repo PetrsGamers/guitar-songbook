@@ -17,7 +17,7 @@ class Annotate extends StatefulWidget {
 }
 
 class _AnnotateState extends State<Annotate> {
-  List<Map<int, String>> listMap = [];
+  List<Map<int, String>> _listMap = [];
 
   List<Map<int, String>> _createListMapFromText(String text) {
     List<String> lines = text.split('\n');
@@ -54,23 +54,22 @@ class _AnnotateState extends State<Annotate> {
     return result.toString();
   }
 
-  // todo: dát metody private
-  void annotateChar(lineIndex, charIndex, chord) {
+  void _annotateChar(lineIndex, charIndex, chord) {
     setState(() {
-      if (listMap.isNotEmpty && listMap[lineIndex][charIndex] == chord) {
+      if (_listMap.isNotEmpty && _listMap[lineIndex][charIndex] == chord) {
         // if the same chord is selected again, remove it
-        listMap[lineIndex].remove(charIndex);
+        _listMap[lineIndex].remove(charIndex);
         return;
       }
-      listMap[lineIndex][charIndex] = chord;
+      _listMap[lineIndex][charIndex] = chord;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    if (listMap.isEmpty) {
-      listMap = _createListMapFromText(widget.text);
+    if (_listMap.isEmpty) {
+      _listMap = _createListMapFromText(widget.text);
     }
   }
 
@@ -107,7 +106,7 @@ class _AnnotateState extends State<Annotate> {
                   // afterall it's a music book, it is possible to insert
                   // just lyrics
                   widget.nextScreenCallback(true);
-                  widget.saveAnnotations(listMap);
+                  widget.saveAnnotations(_listMap);
                 },
                 child: const Text("Proceed to add song metadata")),
           )
@@ -118,7 +117,9 @@ class _AnnotateState extends State<Annotate> {
 
   Widget buildAnnotationLine(int lineIndex, int lineLength) {
     return Text(
-      listMap.isNotEmpty ? _generateString(lineLength, listMap[lineIndex]) : "",
+      _listMap.isNotEmpty
+          ? _generateString(lineLength, _listMap[lineIndex])
+          : "",
       style: const TextStyle(fontSize: 20, fontFamily: "Monospace"),
     );
   }
@@ -142,7 +143,7 @@ class _AnnotateState extends State<Annotate> {
                     character: character,
                     lineIndex: lineIndex,
                     charIndex: i,
-                    annotateChar: annotateChar),
+                    annotateChar: _annotateChar),
               );
             },
         ),

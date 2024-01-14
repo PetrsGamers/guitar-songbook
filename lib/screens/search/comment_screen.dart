@@ -63,7 +63,7 @@ class CommentScreenState extends State<CommentScreen> {
     comments.sort(
         (a, b) => (b['time'] as Timestamp).compareTo(a['time'] as Timestamp));
 
-    List<Widget> _commentWidgets = [];
+    List<Widget> commentWidgets = [];
 
     for (DocumentSnapshot comment in comments) {
       Map<String, dynamic> commentData = comment.data() as Map<String, dynamic>;
@@ -74,7 +74,7 @@ class CommentScreenState extends State<CommentScreen> {
           .doc(userRef.id)
           .get();
       Map<String, dynamic>? userData = userSnapshot.data();
-      _commentWidgets.add(
+      commentWidgets.add(
         Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
@@ -140,7 +140,7 @@ class CommentScreenState extends State<CommentScreen> {
         ),
       );
     }
-    return _commentWidgets;
+    return commentWidgets;
   }
 
   void openCommentWindow() {
