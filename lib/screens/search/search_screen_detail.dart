@@ -6,69 +6,41 @@ import 'package:guitar_app/screens/search/widgets/song_detail.dart';
 import 'package:guitar_app/entities/songs.dart';
 import 'package:guitar_app/screens/search/services/searchbox_services.dart';
 
+import '../../common/handlingfuturebuilder.dart';
+
 class SearchScreenDetail extends StatelessWidget {
   final songId;
   const SearchScreenDetail({Key? key, this.songId}) : super(key: key);
 
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<Song>(
-        future: SearchBoxServices.getSongbyId(songId),
-        builder: (BuildContext context, AsyncSnapshot<Song> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: const CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          if (snapshot.hasData) {
-            return FutureBuilder<Rating?>(
-                future: RatingServices.fetchUserRating(songId),
-                builder: (BuildContext context,
-                    AsyncSnapshot<Rating?> ratingSnapshot) {
-                  Rating _rating =
-                      Rating(author: 'noone', number: -1, id: 'noone');
+        body: HandlingFutureBuilder<Song>(
+      future: SearchBoxServices.getSongbyId(songId),
+      builder: (BuildContext context, Song? song) {
+        if (song != null) {
+          return HandlingFutureBuilder<Rating?>(
+            future: RatingServices.fetchUserRating(songId),
+            builder: (BuildContext context, Rating? rating) {
+              Rating _rating =
+                  rating ?? Rating(author: 'noone', number: -1, id: 'noone');
 
-                  if (ratingSnapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return Center(child: const CircularProgressIndicator());
-                  }
-                  if (ratingSnapshot.hasError) {
-                    return Center(
-                        child: Text('Error: ${ratingSnapshot.error}'));
-                  }
-                  if (ratingSnapshot.hasData) {
-                    _rating = ratingSnapshot.data!;
-                  }
-                  return FutureBuilder<double>(
-                      future: RatingServices.updateFullRating(songId),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<double> fullRatingSnapshot) {
-                        double _fullRating = -1;
-                        if (fullRatingSnapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                              child: const CircularProgressIndicator());
-                        }
-                        if (fullRatingSnapshot.hasError) {
-                          return Center(
-                              child:
-                                  Text('Error: ${fullRatingSnapshot.error}'));
-                        }
-                        if (fullRatingSnapshot.hasData) {
-                          _fullRating = fullRatingSnapshot.data!;
-                        }
-                        return SongDetail(
-                            song: snapshot.data!,
-                            rating: _rating,
-                            fullRating: _fullRating);
-                      });
-                });
-          } else {
-            return const Text('No song found');
-          }
-        },
-      ),
-    );
+              return HandlingFutureBuilder<double>(
+                future: RatingServices.updateFullRating(songId),
+                builder: (BuildContext context, double? fullRating) {
+                  double _fullRating = fullRating ?? -1;
+                  return SongDetail(
+                    song: song,
+                    rating: _rating,
+                    fullRating: _fullRating,
+                  );
+                },
+              );
+            },
+          );
+        } else {
+          return const Text('No song found');
+        }
+      },
+    ));
   }
 }
