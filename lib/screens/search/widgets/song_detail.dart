@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -27,11 +29,34 @@ class SongDetailState extends State<SongDetail> {
   final User? currentUser = Auth().currentUser;
   final ScrollController _scrollController = ScrollController();
   bool _isScrolling = false;
+  int songDuration = 0;
+
+  int calculateSongDuration() {
+    int songBpm;
+    if (widget.song.bpm == "") {
+      songBpm = 120; // default bpm in case of some db inconsistencies
+    }
+    songBpm = int.parse(widget.song.bpm);
+    int textLength = widget.song.text.length;
+    // compute the duration of the song based on the bpm and length of the text
+    // -- to account for smaller influence of bpm on the perceived speed, we are
+    // using log function to smooth out the difference between different bpm
+    // values
+    int songDuration = (textLength * 0.14 * (5 / log(songBpm))).round();
+    return songDuration;
+  }
 
   void _startAutoScroll() {
+    double percentageScrolled = _scrollController.position.pixels /
+        _scrollController.position.maxScrollExtent;
+    double remainingPercentage = 1 - percentageScrolled;
+    int remainingTime = (remainingPercentage * songDuration).round();
+    if (remainingTime < 1) {
+      return;
+    }
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: const Duration(seconds: 5),
+      duration: Duration(seconds: remainingTime),
       curve: Curves.linear,
     );
   }
@@ -39,7 +64,7 @@ class SongDetailState extends State<SongDetail> {
   void _stopAutoScroll() {
     _scrollController.animateTo(
       _scrollController.position.pixels,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 10),
       curve: Curves.easeInOut,
     );
   }
@@ -47,7 +72,9 @@ class SongDetailState extends State<SongDetail> {
   @override
   void initState() {
     super.initState();
-    //TODO buggy initial scroll to botom of song
+    setState(() {
+      songDuration = calculateSongDuration();
+    });
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {

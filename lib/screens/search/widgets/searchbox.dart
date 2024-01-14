@@ -64,9 +64,10 @@ class SearchBoxState extends State<SearchBox> {
           SizedBox(
             width: 250,
             child: TextField(
+              autofocus: true,
               controller: _controller,
               decoration: InputDecoration(
-                hintText: 'Start typing to search a song...',
+                hintText: 'Start typing to search for song...',
                 suffixIcon: _controller.text.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear),
