@@ -1,43 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:guitar_app/entities/app_user.dart';
 import 'package:guitar_app/firebase/firebase_auth_services.dart';
+import 'package:guitar_app/screens/profile/services/user_profile_service.dart';
 import 'package:guitar_app/screens/profile/widgets/profile.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key, this.userId});
   final String? userId;
-
-  Future<AppUser> getUserById(String documentId) async {
-    var firestore = FirebaseFirestore.instance;
-    var usersCollection = firestore.collection('users');
-
-    var documentSnapshot = await usersCollection.doc(documentId).get();
-
-    if (documentSnapshot.exists) {
-      return AppUser.fromMap(
-          documentId, documentSnapshot.data() as Map<String, dynamic>);
-    } else {
-      throw Exception('User not found');
-    }
-  }
-
-  Future<AppUser> getUserByNickname(String nickname) async {
-    var firestore = FirebaseFirestore.instance;
-    var usersCollection = firestore.collection('users');
-
-    var querySnapshot =
-        await usersCollection.where('name', isEqualTo: nickname).limit(1).get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      var userDoc = querySnapshot.docs.first;
-      return AppUser.fromMap(
-          userDoc.id, userDoc.data() as Map<String, dynamic>);
-    } else {
-      throw Exception('User not found');
-    }
-  }
 
   final User? currentUser = Auth().currentUser;
 
@@ -56,7 +26,7 @@ class ProfileScreen extends StatelessWidget {
         ),
         body: Center(
           child: FutureBuilder<AppUser>(
-            future: getUserById(userID),
+            future: UserProfileService.getUserById(userID),
             builder: (BuildContext context, AsyncSnapshot<AppUser> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
@@ -75,5 +45,3 @@ class ProfileScreen extends StatelessWidget {
         ));
   }
 }
-
-enum ListType { created, favorites }
