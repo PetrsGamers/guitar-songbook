@@ -47,7 +47,7 @@ class SettingsScreen extends ConsumerWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.all(4.0),
-                      child: Text("created by PetrsGamer and Tejd"),
+                      child: Text("created by PetrsGamer and Ted"),
                     ),
                   ],
                 ),
