@@ -27,7 +27,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
     // bottom navbar to rail or vice versa)
     final currentWidth = MediaQuery.of(context).size.width;
     // list of supported destinations to be shown on the navbar
-    List<NavigationDestination> destinations = const [
+    List<NavigationDestination> _destinations = const [
       NavigationDestination(icon: Icon(Icons.search), label: "Search songs"),
       NavigationDestination(icon: Icon(Icons.add), label: "Create song"),
       NavigationDestination(icon: Icon(Icons.person), label: "Profile"),
@@ -39,7 +39,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
         body: navigationShell,
         bottomNavigationBar: NavigationBar(
           selectedIndex: navigationShell.currentIndex,
-          destinations: destinations,
+          destinations: _destinations,
           onDestinationSelected: _goBranch,
           indicatorColor: Colors.deepOrange,
         ),
@@ -54,7 +54,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
               onDestinationSelected: _goBranch,
               labelType: NavigationRailLabelType.all,
               indicatorColor: Colors.deepOrange,
-              destinations: destinations.map((destination) {
+              destinations: _destinations.map((destination) {
                 return NavigationRailDestination(
                   icon: destination.icon,
                   label: Text(destination.label),

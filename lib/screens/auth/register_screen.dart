@@ -23,8 +23,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _controllerPassword = TextEditingController();
 
   Timer? _debounce;
-  bool? isUsernameAvailable;
-  String errorMessage = "";
+  bool? _isUsernameAvailable;
+  String _errorMessage = "";
 
   @override
   void initState() {
@@ -49,8 +49,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _checkUsernameAvailability(String username) async {
     if (_controllerUsername.text.isEmpty) {
       setState(() {
-        isUsernameAvailable = false;
-        errorMessage = "Invalid username";
+        _isUsernameAvailable = false;
+        _errorMessage = "Invalid username";
       });
       return;
     }
@@ -61,8 +61,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         .get();
 
     setState(() {
-      isUsernameAvailable = querySnapshot.docs.isEmpty;
-      errorMessage = "Name already taken";
+      _isUsernameAvailable = querySnapshot.docs.isEmpty;
+      _errorMessage = "Name already taken";
     });
   }
 
@@ -127,10 +127,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hintText: 'Username',
                       labelText: 'User name',
                       errorText:
-                          isUsernameAvailable == false ? errorMessage : null,
-                      suffixIcon: isUsernameAvailable == null
+                          _isUsernameAvailable == false ? _errorMessage : null,
+                      suffixIcon: _isUsernameAvailable == null
                           ? null
-                          : isUsernameAvailable!
+                          : _isUsernameAvailable!
                               ? const Icon(Icons.check_circle,
                                   color: Colors.green)
                               : const Icon(Icons.error, color: Colors.red),

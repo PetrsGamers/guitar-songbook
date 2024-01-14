@@ -14,7 +14,7 @@ class AddMetadata extends StatefulWidget {
 }
 
 class _AddMetadataState extends State<AddMetadata> {
-  String dropdownSongKeyValue = Chord.circleOfFifths.first;
+  String _dropdownSongKeyValue = Chord.circleOfFifths.first;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _controllerSongName = TextEditingController();
   final TextEditingController _controllerMusician = TextEditingController();
@@ -32,60 +32,7 @@ class _AddMetadataState extends State<AddMetadata> {
             width: 400,
             child: Column(
               children: [
-                Form(
-                    key: _formKey,
-                    child: Column(children: [
-                      TextFormField(
-                          validator: SongSubmitValidator.validateInputDefault,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Song Name'),
-                          controller: _controllerSongName),
-                      TextFormField(
-                          validator: SongSubmitValidator.validateInputDefault,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Musician / band'),
-                          controller: _controllerMusician),
-                      TextFormField(
-                          validator: SongSubmitValidator.validateBPM,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Song BPM'),
-                          controller: _controllerBPM),
-                      TextFormField(
-                          validator: SongSubmitValidator.validateYear,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Year (release date)'),
-                          controller: _controllerYear),
-                      SizedBox(
-                        width: 400,
-                        child: DropdownButton(
-                            value: dropdownSongKeyValue,
-                            items: Chord.songKeys
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                dropdownSongKeyValue = value!;
-                              });
-                            }),
-                      )
-                    ])),
-                //const Spacer(),
+                _buildSongSubmitForm(),
                 Padding(
                   padding: const EdgeInsets.only(top: 16, bottom: 46),
                   child: Row(
@@ -110,7 +57,7 @@ class _AddMetadataState extends State<AddMetadata> {
                                 _controllerMusician.text,
                                 _controllerBPM.text,
                                 _controllerYear.text,
-                                dropdownSongKeyValue);
+                                _dropdownSongKeyValue);
                             widget.nextScreenCallback(true);
                           },
                           child: const Text("Submit song!")),
@@ -123,5 +70,54 @@ class _AddMetadataState extends State<AddMetadata> {
         ),
       ),
     );
+  }
+
+  Form _buildSongSubmitForm() {
+    return Form(
+        key: _formKey,
+        child: Column(children: [
+          TextFormField(
+              validator: SongSubmitValidator.validateInputDefault,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), hintText: 'Song Name'),
+              controller: _controllerSongName),
+          TextFormField(
+              validator: SongSubmitValidator.validateInputDefault,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), hintText: 'Musician / band'),
+              controller: _controllerMusician),
+          TextFormField(
+              validator: SongSubmitValidator.validateBPM,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), hintText: 'Song BPM'),
+              controller: _controllerBPM),
+          TextFormField(
+              validator: SongSubmitValidator.validateYear,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Year (release date)'),
+              controller: _controllerYear),
+          SizedBox(
+            width: 400,
+            child: DropdownButton(
+                value: _dropdownSongKeyValue,
+                items: Chord.songKeys
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _dropdownSongKeyValue = value!;
+                  });
+                }),
+          )
+        ]));
   }
 }
