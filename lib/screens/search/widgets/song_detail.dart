@@ -35,8 +35,9 @@ class SongDetailState extends State<SongDetail> {
     int songBpm;
     if (widget.song.bpm == "") {
       songBpm = 120; // default bpm in case of some db inconsistencies
+    } else {
+      songBpm = int.parse(widget.song.bpm);
     }
-    songBpm = int.parse(widget.song.bpm);
     int textLength = widget.song.text.length;
     // compute the duration of the song based on the bpm and length of the text
     // -- to account for smaller influence of bpm on the perceived speed, we are
