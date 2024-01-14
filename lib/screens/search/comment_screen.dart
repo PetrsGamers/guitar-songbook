@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../../common/handlingfuturebuilder.dart';
+import '../../common/handlingstreambuilder.dart';
 import '../../firebase/firebase_auth_services.dart';
 
 class CommentScreen extends StatefulWidget {
@@ -22,41 +24,28 @@ class CommentScreenState extends State<CommentScreen> {
         title: const Text("Comments"),
         backgroundColor: Colors.deepOrange,
       ),
-      body: StreamBuilder<QuerySnapshot>(
+      body: HandlingStreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('songs')
             .doc(widget.songId)
             .collection('comments')
             .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(
-              child: Text('No comments yet'),
-            ); // Display when no comments are available
-          }
-
-          // Process comments and user details
-          return FutureBuilder<List<Widget>>(
-            future: _getUserComments(snapshot.data!.docs),
-            builder: (BuildContext context,
-                AsyncSnapshot<List<Widget>> userSnapshot) {
-              if (userSnapshot.connectionState == ConnectionState.waiting) {
+        builder: (context, snapshot) {
+          return HandlingFutureBuilder<List<Widget>>(
+            future: _getUserComments(snapshot?.docs ?? []),
+            builder: (context, userComments) {
+              if (userComments == null) {
                 return const Center(child: CircularProgressIndicator());
-              }
-              if (userSnapshot.hasError) {
-                return Text('Error: ${userSnapshot.error}');
               }
 
               // Display comments with user details
-              return ListView(
-                children: userSnapshot.data ?? [],
-              );
+              if (userComments.isEmpty) {
+                return const Center(child: Text('No comments yet'));
+              } else {
+                return ListView(
+                  children: userComments,
+                );
+              }
             },
           );
         },
