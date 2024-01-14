@@ -43,7 +43,7 @@ class RatingServices {
     final User? currentUser = Auth().currentUser;
 
     try {
-      final ratingCollectionRef2 = FirebaseFirestore.instance
+      final ratingCollectionRef = FirebaseFirestore.instance
           .collection('songs')
           .doc(songId)
           .collection('ratings');
@@ -51,7 +51,7 @@ class RatingServices {
       final authorRef =
           FirebaseFirestore.instance.collection('users').doc(currentUser?.uid);
 
-      final existingRating2 = await ratingCollectionRef2
+      final existingRating = await ratingCollectionRef
           .where('author', isEqualTo: authorRef)
           .limit(1)
           .get();
@@ -60,12 +60,12 @@ class RatingServices {
         'author': authorRef,
         'rating': rating,
       };
-      if (existingRating2.docs.isEmpty) {
-        await ratingCollectionRef2.add(ratingData);
+      if (existingRating.docs.isEmpty) {
+        await ratingCollectionRef.add(ratingData);
       } else {
-        final existingRatingDoc2 = existingRating2.docs.first;
-        final existingRatingRef2 = existingRatingDoc2.reference;
-        await existingRatingRef2.update({'rating': rating});
+        final existingRatingDoc = existingRating.docs.first;
+        final existingRatingRef = existingRatingDoc.reference;
+        await existingRatingRef.update({'rating': rating});
       }
     } catch (error) {
       log("Error updating document: $error");
@@ -99,13 +99,13 @@ class RatingServices {
   }
 
   static Future<double> updateFullRating(songId) async {
-    final ratingCollectionRef3 = FirebaseFirestore.instance
+    final ratingCollectionRef = FirebaseFirestore.instance
         .collection('songs')
         .doc(songId)
         .collection('ratings');
 
     try {
-      QuerySnapshot querySnapshot = await ratingCollectionRef3.get();
+      QuerySnapshot querySnapshot = await ratingCollectionRef.get();
 
       if (querySnapshot.docs.isEmpty) {
         return -1;
@@ -123,7 +123,6 @@ class RatingServices {
         });
 
         if (count == 0) {
-          // No valid rankings found in the documents
           return -1;
         } else {
           return totalRanking / count;

@@ -1,7 +1,7 @@
 class Rating {
-  String author;
+  final String author;
   double number;
-  String id;
+  final String id;
 
   Rating({required this.author, required this.number, required this.id});
 

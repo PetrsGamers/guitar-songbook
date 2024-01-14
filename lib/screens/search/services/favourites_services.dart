@@ -29,7 +29,7 @@ class FavouritesServices {
           'favorites': FieldValue.arrayRemove([songId])
         });
         return newValue;
-        ; // Update the local state
+        // Update the local state
       } catch (error) {
         print("Error updating document: $error");
       }
@@ -55,7 +55,7 @@ class FavouritesServices {
           if (favoriteIds != null) {
             for (var favoriteId in favoriteIds) {
               if (favoriteId == songId) {
-                return true; // Song is a favorite
+                return true;
               }
             }
           }

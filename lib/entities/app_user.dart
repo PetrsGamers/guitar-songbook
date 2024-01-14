@@ -1,9 +1,9 @@
 class AppUser {
-  String id;
-  String name;
-  String bio;
-  String picture;
-  String email;
+  final String id;
+  final String name;
+  final String bio;
+  final String picture;
+  final String email;
 
   AppUser(
       {required this.id,

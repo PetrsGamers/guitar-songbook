@@ -1,12 +1,12 @@
 class Song {
-  String author;
-  String userId;
-  String text;
-  String name;
-  String bpm;
-  String year;
-  String key;
-  String id;
+  final String author;
+  final String userId;
+  final String text;
+  final String name;
+  final String bpm;
+  final String year;
+  final String key;
+  final String id;
 
   double? rating;
 

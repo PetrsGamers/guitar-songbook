@@ -14,14 +14,14 @@ class FavouriteCheckbox extends StatefulWidget {
 }
 
 class FavouriteCheckboxState extends State<FavouriteCheckbox> {
-  late bool isChecked = false;
+  late bool _isChecked = false;
 
   @override
   void initState() {
     super.initState();
     FavouritesServices.fetchUserFavourites(widget.songId).then((isFavorite) {
       setState(() {
-        isChecked = isFavorite;
+        _isChecked = isFavorite;
       });
     });
   }
@@ -30,16 +30,16 @@ class FavouriteCheckboxState extends State<FavouriteCheckbox> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        if (!isChecked) const Text('Add to favourite?'),
-        if (isChecked) const Text('Favourite'),
+        if (!_isChecked) const Text('Add to favourite?'),
+        if (_isChecked) const Text('Favourite'),
         Checkbox(
-          value: isChecked,
+          value: _isChecked,
           onChanged: (bool? newValue) async {
             if (newValue != null) {
               bool? result = await FavouritesServices.updateFavourites(
                   newValue, widget.songId);
               setState(() {
-                isChecked = result ?? isChecked;
+                _isChecked = result ?? _isChecked;
               });
             }
           },
