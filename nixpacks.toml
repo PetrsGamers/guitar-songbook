@@ -1,0 +1,22 @@
+# nixpacks.toml in repo root
+[phases.setup]
+apt_pkgs = ["curl", "wget", "unzip"]
+nixpkgs = ["flutter", "libGL"]
+
+[phases.install]
+commands = [
+    "wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.4-stable.tar.xz -O flutter.tar.xz",
+    "tar xf flutter.tar.xz",
+    "git config --global --add safe.directory /app/flutter",
+    "./flutter/bin/flutter config --enable-web"
+]
+
+[phases.build]
+commands = [
+    "./flutter/bin/flutter pub get",
+    "./flutter/bin/flutter build web"
+]
+
+[environment]
+PORT = "80"
+FLUTTER_WEB_ENVIRONMENT = "production"
