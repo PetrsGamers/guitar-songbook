@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'constants.dart';
+
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
@@ -51,19 +53,13 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static FirebaseOptions get web => FirebaseOptions(
-        apiKey: dotenv.env['FIREBASE_API_KEY_WEB'] ??
-            String.fromEnvironment('FIREBASE_API_KEY_WEB'),
-        appId: dotenv.env['FIREBASE_APP_ID_WEB'] ??
-            String.fromEnvironment('FIREBASE_APP_ID_WEB'),
-        messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID'] ??
-            String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID'),
-        projectId: dotenv.env['FIREBASE_PROJECT_ID'] ??
-            String.fromEnvironment('FIREBASE_PROJECT_ID'),
-        authDomain: dotenv.env['FIREBASE_AUTH_DOMAIN'] ??
-            String.fromEnvironment('FIREBASE_AUTH_DOMAIN'),
-        storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET'] ??
-            String.fromEnvironment('FIREBASE_STORAGE_BUCKET'),
+  static FirebaseOptions get web => const FirebaseOptions(
+        apiKey: FirebaseConstants.apiKey,
+        appId: FirebaseConstants.appId,
+        messagingSenderId: FirebaseConstants.messagingSenderId,
+        projectId: FirebaseConstants.projectId,
+        authDomain: FirebaseConstants.authDomain,
+        storageBucket: FirebaseConstants.storageBucket,
       );
 
   static FirebaseOptions get android => FirebaseOptions(
