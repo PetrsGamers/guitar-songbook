@@ -5,7 +5,7 @@ nixpkgs = ["flutter", "libGL"]
 
 [phases.install]
 commands = [
-    "wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.4-stable.tar.xz -O flutter.tar.xz",
+    "wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.4-stable.tar.xz -O flutter.tar.xz",
     "tar xf flutter.tar.xz",
     "git config --global --add safe.directory /app/flutter",
     "./flutter/bin/flutter config --enable-web"
